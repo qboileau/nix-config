@@ -73,16 +73,28 @@
 
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild --flake .#your-hostname'
-    nixosConfigurations = forAllHosts (hostname: 
-        {
-            ${hostname} = nixpkgs.lib.nixosSystem {
-                specialArgs = {inherit inputs outputs ${hostname} hostsSettings.${hostname}.users;};
-                modules = [
-                ./nixos/${hostname}/configuration.nix
-                ];
-             };
-        }
-      );
+
+	nixosConfigurations = {
+	  ${builtins.concatStringsSep "\n  " (builtins.map forAllHosts (hostname:
+	    "${hostname} = nixpkgs.lib.nixosSystem {
+	      specialArgs = {inherit inputs outputs ${hostname} hostsSettings.${hostname}.users;};
+	      modules = [
+		    ./nixos/${hostname}/configuration.nix
+	      ];
+	    };"))}
+	};
+
+#    nixosConfigurations = forAllHosts (hostname: 
+#        {
+#            ${hostname} = nixpkgs.lib.nixosSystem {
+#                specialArgs = {inherit inputs outputs ${hostname} hostsSettings.${hostname}.users;};
+#                modules = [
+#                ./nixos/${hostname}/configuration.nix
+#                ];
+#             };
+#        }
+#      );
+
     #   vm = nixpkgs.lib.nixosSystem {
     #     specialArgs = {inherit inputs outputs;};
     #     modules = [

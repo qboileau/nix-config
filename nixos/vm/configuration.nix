@@ -6,7 +6,6 @@
   lib,
   config,
   pkgs,
-  hostname,
   hostUsers,
   ...
 }: {
@@ -83,7 +82,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "${hostname}"; # Define your hostname.
+  networking.hostName = "vm"; # Define your hostname.
   networking.networkmanager.enable = true;
 
   time.timeZone = "Europe/Paris";
@@ -147,7 +146,7 @@
         ];
         # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
         extraGroups = ["wheel" "networkmanager" ];
-      }
+      };
     );
     # FIXME: Replace with your username
     # test = {
