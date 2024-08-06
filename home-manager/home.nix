@@ -55,6 +55,9 @@
   # programs.neovim.enable = true;
   home.packages = with pkgs; [ 
    htop
+   vscode
+   vscode-extensions.bbenoist.nix
+   vscode-extensions.jnoortheen.nix-ide
  ];
 
   # Enable home-manager and git
