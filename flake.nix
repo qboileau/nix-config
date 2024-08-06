@@ -75,19 +75,27 @@
     # Available through 'nixos-rebuild --flake .#your-hostname'
 
 	nixosConfigurations = {
-	  ${builtins.concatStringsSep "\n  " (builtins.map forAllHosts (hostname:
-	    "${hostname} = nixpkgs.lib.nixosSystem {
-	      specialArgs = {inherit inputs outputs ${hostname} hostsSettings.${hostname}.users;};
-	      modules = [
-		    ./nixos/${hostname}/configuration.nix
-	      ];
-	    };"))}
-	};
+        vm = nixpkgs.lib.nixosSystem {
+        specialArgs = {inherit inputs outputs hostsSettings.vm.users ;};
+        modules = [
+          ./nixos/vm/configuration.nix
+        ];
+      };
+    };
+
+	#   ${builtins.concatStringsSep "\n  " (builtins.map forAllHosts (hostname:
+	#     "${hostname} = nixpkgs.lib.nixosSystem {
+	#       specialArgs = {inherit inputs outputs hostsSettings.${hostname}.users;};
+	#       modules = [
+	# 	    ./nixos/${hostname}/configuration.nix
+	#       ];
+	#     };"))}
+	# };
 
 #    nixosConfigurations = forAllHosts (hostname: 
 #        {
 #            ${hostname} = nixpkgs.lib.nixosSystem {
-#                specialArgs = {inherit inputs outputs ${hostname} hostsSettings.${hostname}.users;};
+#                specialArgs = {inherit inputs outputs hostsSettings.${hostname}.users;};
 #                modules = [
 #                ./nixos/${hostname}/configuration.nix
 #                ];
@@ -95,13 +103,7 @@
 #        }
 #      );
 
-    #   vm = nixpkgs.lib.nixosSystem {
-    #     specialArgs = {inherit inputs outputs;};
-    #     modules = [
-    #       # > Our main nixos configuration file <
-    #       ./nixos/vm/configuration.nix
-    #     ];
-    #   };
+    #   
     
 
     # Standalone home-manager configuration entrypoint
