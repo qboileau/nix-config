@@ -25,8 +25,32 @@
     systems = [
       "x86_64-linux"
     ];
+
+    hostsSettings = {
+        vm = {
+           users = [ "test" "qboileau"];
+        };
+    };
+
+    forAllHosts = builtins.attrNames hostsSettings;
+
+
+    # hostsSettings = [
+    #     {
+    #       name = "vm";
+    #       users = [ "test" "qboileau" ];
+    #     }
+    # ];
+
+    # forAllHosts = builtins.map hostsSettings ({ hostname }: hostname);
+
+    # forAllUserHost = builtins.concatMap hostsSettings ({ hostname, users }:
+    # builtins.map users (username: {
+    #     userHost = "${username}@${hostname}";
+    #     username = username;
+    # }));
+
     user = "test";
-    my_var = "Trololo";
     # This is a function that generates an attribute by calling a function you
     # pass to it, with each system as an argument
     forAllSystems = nixpkgs.lib.genAttrs systems;
@@ -49,16 +73,24 @@
 
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild --flake .#your-hostname'
-    nixosConfigurations = {
-      # FIXME replace with your hostname
-      vm = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        modules = [
-          # > Our main nixos configuration file <
-          ./nixos/configuration.nix
-        ];
-      };
-    };
+    nixosConfigurations = forAllHosts (hostname: 
+        {
+            ${hostname} = nixpkgs.lib.nixosSystem {
+                specialArgs = {inherit inputs outputs ${hostname} hostsSettings.${hostname}.users;};
+                modules = [
+                ./nixos/${hostname}/configuration.nix
+                ];
+             };
+        }
+      );
+    #   vm = nixpkgs.lib.nixosSystem {
+    #     specialArgs = {inherit inputs outputs;};
+    #     modules = [
+    #       # > Our main nixos configuration file <
+    #       ./nixos/vm/configuration.nix
+    #     ];
+    #   };
+    
 
     # Standalone home-manager configuration entrypoint
     # Available through 'home-manager --flake .#your-username@your-hostname'
@@ -66,7 +98,7 @@
       # FIXME replace with your username@hostname
       "test@vm" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-        extraSpecialArgs = {inherit inputs outputs user my_var;};
+        extraSpecialArgs = {inherit inputs outputs user;};
         modules = [
           # > Our main home-manager configuration file <
           ./home-manager/home.nix

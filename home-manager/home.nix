@@ -7,7 +7,6 @@
   config,
   pkgs,
   user,
-  my_var,
   ...
 }: {
   # You can import other home-manager modules here
@@ -51,10 +50,6 @@
     username = "${user}";
     homeDirectory = "/home/${user}";
   };
-
- home.file.".config/test.txt".text = ''
-  This is a test with variable ${my_var}
-'';
 
   # Add stuff for your user as you see fit:
   # programs.neovim.enable = true;
