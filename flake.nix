@@ -53,31 +53,31 @@
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild --flake .#your-hostname'
 
-	nixosConfigurations = {
-    vm = nixpkgs.lib.nixosSystem {
-      specialArgs = {
-        hostUsers = hostsSettings.vm.users;
-        inherit inputs outputs ;
+    nixosConfigurations = {
+      vm = nixpkgs.lib.nixosSystem {
+        specialArgs = {
+          hostUsers = hostsSettings.vm.users;
+          inherit inputs outputs ;
+        };
+        modules = [
+          ./nixos/vm/configuration.nix
+        ];
       };
-      modules = [
-        ./nixos/vm/configuration.nix
-      ];
+    };
+
+    # Standalone home-manager configuration entrypoint
+    # Available through 'home-manager --flake .#your-username@your-hostname'
+    homeConfigurations = {
+      "test@vm" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux; 
+        extraSpecialArgs = { inherit inputs outputs; };
+        modules = [ ./home-manager/test/home.nix ];
+      };
+      "qboileau@vm" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux; 
+        extraSpecialArgs = { inherit inputs outputs; };
+        modules = [ ./home-manager/qboileau/home.nix ];
+      };
     };
   };
-
-  # Standalone home-manager configuration entrypoint
-  # Available through 'home-manager --flake .#your-username@your-hostname'
-  homeConfigurations = {
-    "test@vm" = home-manager.lib.homeManagerConfiguration {
-      pkgs = nixpkgs.legacyPackages.x86_64-linux; 
-      extraSpecialArgs = { inherit inputs outputs; };
-      modules = [ ./home-manager/test/home.nix ];
-    };
-    "qboileau@vm" = home-manager.lib.homeManagerConfiguration {
-      pkgs = nixpkgs.legacyPackages.x86_64-linux; 
-      extraSpecialArgs = { inherit inputs outputs; };
-      modules = [ ./home-manager/qboileau/home.nix ];
-    };
-  };
-
 }
