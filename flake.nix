@@ -50,7 +50,6 @@
     #     username = username;
     # }));
 
-    user = "test";
     # This is a function that generates an attribute by calling a function you
     # pass to it, with each system as an argument
     forAllSystems = nixpkgs.lib.genAttrs systems;
@@ -75,49 +74,46 @@
     # Available through 'nixos-rebuild --flake .#your-hostname'
 
 	nixosConfigurations = {
-        vm = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs hostsSettings.vm.users ;};
+      vm = nixpkgs.lib.nixosSystem {
+        specialArgs = {
+          hostUsers = hostsSettings.vm.users;
+          inherit inputs outputs ;
+        };
         modules = [
           ./nixos/vm/configuration.nix
         ];
       };
     };
 
-	#   ${builtins.concatStringsSep "\n  " (builtins.map forAllHosts (hostname:
-	#     "${hostname} = nixpkgs.lib.nixosSystem {
-	#       specialArgs = {inherit inputs outputs hostsSettings.${hostname}.users;};
-	#       modules = [
-	# 	    ./nixos/${hostname}/configuration.nix
-	#       ];
-	#     };"))}
-	# };
 
-#    nixosConfigurations = forAllHosts (hostname: 
-#        {
-#            ${hostname} = nixpkgs.lib.nixosSystem {
-#                specialArgs = {inherit inputs outputs hostsSettings.${hostname}.users;};
-#                modules = [
-#                ./nixos/${hostname}/configuration.nix
-#                ];
-#             };
-#        }
-#      );
-
-    #   
-    
+    homeConfigurations = builtins.concatMapAttrs (builtins.attrNames hostsSettings) (hostname:
+    let
+      users = hostsSettings.${hostname}.users;
+    in
+      builtins.mapAttrs (username: true) users (username: {
+        "${username}@${hostname}" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          extraSpecialArgs = { inherit inputs outputs; };
+          modules = [ ./home-manager/${username}/home.nix ];
+        };
+      })
+    );
 
     # Standalone home-manager configuration entrypoint
     # Available through 'home-manager --flake .#your-username@your-hostname'
-    homeConfigurations = {
-      # FIXME replace with your username@hostname
-      "test@vm" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-        extraSpecialArgs = {inherit inputs outputs user;};
-        modules = [
-          # > Our main home-manager configuration file <
-          ./home-manager/home.nix
-        ];
-      };
-    };
+    # homeConfigurations = {
+    #   # FIXME replace with your username@hostname
+    #   "test@vm" = home-manager.lib.homeManagerConfiguration {
+    #     pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+    #     extraSpecialArgs = {
+    #       inherit inputs outputs user;
+    #     };
+    #     modules = [
+    #       # > Our main home-manager configuration file <
+    #       ./home-manager/home.nix
+    #     ];
+    #   };
+    # };
+
   };
 }

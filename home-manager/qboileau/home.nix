@@ -6,7 +6,6 @@
   lib,
   config,
   pkgs,
-  user,
   ...
 }: {
   # You can import other home-manager modules here
@@ -47,8 +46,8 @@
   };
 
   home = {
-    username = "${user}";
-    homeDirectory = "/home/${user}";
+    username = "qboileau";
+    homeDirectory = "/home/qboileau";
   };
 
   # Add stuff for your user as you see fit:
