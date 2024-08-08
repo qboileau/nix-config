@@ -11,17 +11,17 @@
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-label/nixos";
-      fsType = "btrfs";
-      options = [ "subvol=@" ];
-    };
+  # fileSystems."/" =
+  #   { device = "/dev/disk/by-label/nixos";
+  #     fsType = "btrfs";
+  #     options = [ "subvol=@" ];
+  #   };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-label/ESP";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
-    };
+  # fileSystems."/boot" =
+  #   { device = "/dev/disk/by-label/ESP";
+  #     fsType = "vfat";
+  #     options = [ "fmask=0022" "dmask=0022" ];
+  #   };
 
   swapDevices = [ ];
 
