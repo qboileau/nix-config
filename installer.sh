@@ -40,5 +40,7 @@ mount | grep /mnt
 echo "Install nixOs"
 nixos-install --flake .#$HOSTNAME
 
+echo "Create user setup dir"
+nixos-enter -c "su -c 'git clone https://github.com/qboileau/nix-config /home/qboileau/.setup' qboileau"
 
 echo "You can now reboot"
