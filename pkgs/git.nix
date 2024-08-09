@@ -1,4 +1,4 @@
-{lib, pkgs, ...} :
+{pkgs, ...} :
 {
 
   home.packages = with pkgs; [ 
@@ -56,18 +56,17 @@
         editor = "interactive-rebase-tool";
       };
       credential = {
-        helper = "cache --timeout=3600"
+        helper = "cache --timeout=3600";
       };
       program = { 
-        pgp = "gpg"
+        pgp = "gpg";
       };
       color = {
           status = "always";
           diff = "always";
           branch = "always";
       };
-
-    }
+    };
   };
 
   home.file.".gitconfig-personal".text = ''

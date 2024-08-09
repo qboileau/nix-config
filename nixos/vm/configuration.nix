@@ -135,6 +135,7 @@
    wget
    git
    gnumake
+   statix
   ];
 
   # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
