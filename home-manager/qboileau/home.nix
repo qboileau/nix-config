@@ -18,6 +18,7 @@
 
     # You can also split up your configuration and import pieces of it here:
     # ./nvim.nix
+    ../../pkgs/git.nix
   ];
 
   nixpkgs = {
@@ -59,9 +60,8 @@
    vscode-extensions.jnoortheen.nix-ide
  ];
 
-  # Enable home-manager and git
+  # Enable home-manager
   programs.home-manager.enable = true;
-  programs.git.enable = true;
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
