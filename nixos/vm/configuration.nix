@@ -131,6 +131,7 @@
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
    home-manager
+   pavucontrol
    gparted
    wget
    git
@@ -142,6 +143,7 @@
   users.users = builtins.listToAttrs (map (user: lib.nameValuePair user {
     isNormalUser = true;
     initialPassword = "changeme";
+    shell = pkgs.bash;
     openssh.authorizedKeys.keys = [
       # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
     ];
