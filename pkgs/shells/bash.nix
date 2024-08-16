@@ -24,5 +24,11 @@
   };
   
   environment.pathsToLink = [ "/share/bash-completion" ];
+  
+  programs.direnv.enableBashIntegration = true;
 
+  programs.bash.shellAliases = {
+    source_bash = "source ~/.bashrc";
+    updateBash = "source ~/.bashrc";
+  };
 }

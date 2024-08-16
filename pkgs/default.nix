@@ -8,6 +8,6 @@
 
       # ./dev
       # ./editors
-      # ./i3/i3-condig.nix
+      # ./i3/i3-config.nix
     ];
 }

@@ -6,6 +6,7 @@
   imports = [
     ./picom.nix
     ./i3-status-rs.nix
+    ./dunst.nix
   ];
 
   xsession.enable = true;
@@ -14,10 +15,14 @@
   };
 
 
-  home.file.".i3/config" {
+  home.file.i3 {
     enable = true;
     source = "./cfg/i3";
+    target = ".i3/config"
     onChange = "restart";
   }
+
+  
+
 
 }

@@ -1,10 +1,11 @@
 {pkgs, ...} :
 {
   imports = [
+    ./tools.nix
     ./kube.nix
-    #./virt.nix # FIXME
     ./build-tools.nix
     ./sdk.nix
+    #./virt.nix # FIXME
   ];
 
   

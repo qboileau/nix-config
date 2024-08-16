@@ -4,8 +4,8 @@
   home.packages = with pkgs; [ 
     maven
     sbt
-    
     rustc 
+    cargo
     nodejs
     go  
   ];
