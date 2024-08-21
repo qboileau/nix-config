@@ -38,6 +38,7 @@
         };
     };
     forAllHosts = builtins.attrNames hostsSettings;
+    inherit (nixpkgs) lib;
     configLib = import ./lib { inherit lib; };
     specialArgs = {
       inherit inputs outputs configLib nixpkgs;
