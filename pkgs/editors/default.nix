@@ -1,6 +1,7 @@
 {pkgs, ...} :
 {
   imports = [
+    ./fonts.nix
     ./vim.nix
     ./nano.nix
     ./xed.nix
@@ -9,4 +10,5 @@
   ];
 
   programs.vim.defaultEditor = true;
+  
 }

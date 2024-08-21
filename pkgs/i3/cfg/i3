@@ -323,7 +323,9 @@ bindsym $mod+Shift+Delete exec ~/.i3/scripts/power-profiles
 
 # Lock screen
 #bindsym $mod+l exec --no-startup-id blurlock
-bindsym $mod+l exec --no-startup-id ~/.i3/scripts/lock-blur.sh
+bindsym $mod+l exec --no-startup-id  "~/.i3/scripts/lock-blur.sh"
+exec --no-startup-id xautolock -time 5 -locker '~/.i3/scripts/lock-blur.sh' &
+
 
 #Toggle trackpad
 #bindsym $mod+p exec ~/.local/bin/trackpad_toogle.sh
@@ -342,7 +344,7 @@ exec --no-startup-id pamac-tray
 exec --no-startup-id blueman-applet
 #exec --no-startup-id start_conky_maia
 #exec --no-startup-id start_conky_green
-exec --no-startup-id xset s 300; xss-lock -- ~/.i3/scripts/lock-blur.sh #blurlock
+#exec --no-startup-id xset s 300; xss-lock -- ~/.i3/scripts/lock-blur.sh #blurlock
 exec_always --no-startup-id fix_xcursor
 exec --no-startup-id dropbox start
 #exec --no-startup-id sbxkb

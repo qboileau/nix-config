@@ -1,0 +1,44 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = true
+scan_timeout = 30
+
+[username]
+show_always = true
+
+[directory]
+truncation_length = 8
+truncate_to_repo = false
+
+[git_commit]
+commit_hash_length = 5
+
+[git_status]
+#modified.enabled = true
+#untracked.enabled = true
+#staged.enabled = true
+#deleted.enabled = true
+#renamed.enabled = true
+
+[aws]
+disabled = false
+
+[gcloud]
+disabled = true
+format = 'on [$symbol($region)(\($project\))]($style) '
+
+[ruby]
+disabled = true
+
+[kubernetes]
+disabled = false
+
+[[kubernetes.contexts]]
+context_pattern = ".*-k0-gke-conduktor-dev-eu-01-stg-apps" 
+context_alias = "conduktor/staging"
+
+[[kubernetes.contexts]]
+context_pattern = ".*-k0-gke-conduktor-prod-eu-01-prd-apps"
+context_alias =  "conduktor/production"
+style = "bold red"
+

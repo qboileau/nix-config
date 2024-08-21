@@ -13,4 +13,6 @@
 
   };
 
+  programs.direnv.enableZshIntegration = true;
+
 }
