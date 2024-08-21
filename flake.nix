@@ -38,6 +38,10 @@
         };
     };
     forAllHosts = builtins.attrNames hostsSettings;
+    configLib = import ./lib { inherit lib; };
+    specialArgs = {
+      inherit inputs outputs configLib nixpkgs;
+    };
   in {
     # Your custom packages
     # Accessible through 'nix build', 'nix shell', etc
@@ -60,9 +64,8 @@
 
     nixosConfigurations = {
       vm = nixpkgs.lib.nixosSystem {
-        specialArgs = {
+        specialArgs = specialArgs // {
           hostUsers = hostsSettings.vm.users;
-          inherit inputs outputs ;
         };
         modules = [
           ./nixos/vm/configuration.nix
@@ -76,12 +79,12 @@
     homeConfigurations = {
       "test@vm" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; 
-        extraSpecialArgs = { inherit inputs outputs; };
+        extraSpecialArgs = specialArgs;
         modules = [ ./home-manager/test/home.nix ];
       };
       "qboileau@vm" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; 
-        extraSpecialArgs = { inherit inputs outputs; };
+        extraSpecialArgs = specialArgs;
         modules = [ ./home-manager/qboileau/home.nix ];
       };
     };
