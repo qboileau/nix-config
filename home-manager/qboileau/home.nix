@@ -5,6 +5,7 @@
   outputs,
   lib,
   config,
+  configLib,
   pkgs,
   ...
 }: {
