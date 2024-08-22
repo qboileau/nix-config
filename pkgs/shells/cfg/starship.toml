@@ -32,13 +32,3 @@ disabled = true
 
 [kubernetes]
 disabled = false
-
-[[kubernetes.contexts]]
-context_pattern = ".*-k0-gke-conduktor-dev-eu-01-stg-apps" 
-context_alias = "conduktor/staging"
-
-[[kubernetes.contexts]]
-context_pattern = ".*-k0-gke-conduktor-prod-eu-01-prd-apps"
-context_alias =  "conduktor/production"
-style = "bold red"
-

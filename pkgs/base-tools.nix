@@ -17,6 +17,7 @@
     tealdeer # TLDR
     fzf
     font-manager
+    dropbox
 
     # system monitoring 
     htop
@@ -59,6 +60,6 @@
   home.sessionVariables = {
     TERMINAL = "alacritty";
     TERM = "alacritty";
-  }
+  };
 
 }

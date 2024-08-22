@@ -1,0 +1,84 @@
+#!/bin/bash
+
+COUNTERNAME='ca'
+BG_FOLDER=~/Dropbox/wallpapers/1x1/
+
+#fallback to default backgrounds
+if [ ! -d "$BG_FOLDER" ]; then 
+    BG_FOLDER=/usr/share/backgrounds/
+fi
+
+resetCounter()
+{
+    rm "$COUNTERNAME"
+}
+
+
+setMinCounter()
+{
+    newcounter=0
+    test -e "$COUNTERNAME" || echo "$newcounter" > "$COUNTERNAME"
+
+}
+
+setMaxCounter()
+{
+    newcounter=$(ls $BG_FOLDER/* | wc -l)
+    test -e "$COUNTERNAME" || echo "$newcounter" > "$COUNTERNAME"
+}
+
+
+addCounter()
+{
+    value=$1
+    oldcounter=$(cat $COUNTERNAME)
+    newcounter=$(expr $oldcounter + $value)
+    echo $newcounter > $COUNTERNAME
+}
+
+showSelectedImage()
+{
+    echo "## $newcounter ##"
+    BG_FILENAME=$(ls $BG_FOLDER/* | head -n$newcounter  | tail -n 1)
+    feh --bg-scale $BG_FILENAME
+}
+
+showRandomImage()
+{
+    BG_FILENAME=$(find $BG_FOLDER -type f | shuf -n 1)
+    feh --randomize  --bg-scale $BG_FILENAME
+}
+
+case $1 in
+        "next")
+            setMinCounter
+            addCounter 1
+            showSelectedImage
+            ;;
+
+        "prev")
+            setMaxCounter
+            addCounter -1
+            showSelectedImage
+            ;;
+
+        "top")
+            resetCounter
+            setMaxCounter
+            showSelectedImage
+            ;;
+
+        "bottom")
+            resetCounter
+            setMinCounter
+            addCounter 1
+            showSelectedImage
+            ;;
+
+        "rand")
+            showRandomImage
+            ;;
+
+        * )
+            feh --bg-scale $BG_FOLDER/$1
+    esac

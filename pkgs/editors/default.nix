@@ -4,9 +4,10 @@
     ./fonts.nix
     ./vim.nix
     ./nano.nix
-    ./xed.nix
     ./vscode.nix
     ./intellij.nix
+    ./zed.nix
+    ./xed.nix
   ];
 
   programs.vim.defaultEditor = true;

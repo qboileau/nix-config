@@ -6,8 +6,8 @@
     shadow = true;
     shadowOpacity = 0.75;
     shadowOffsets = [
-      -7
-      -7
+      (-7)
+      (-7)
     ];
     shadowExclude = [
       "name = 'Notification'"

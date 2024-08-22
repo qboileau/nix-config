@@ -16,27 +16,28 @@
           {
             block = "music";
             player = "spotify";
-            buttons = ["play" "next"];
-            #max_width = 20;
+            format = "$icon {$combo.str(max_w:25,rot_interval:0.5) $prev $play $next |}";
           }
           {
             block = "memory";
-            display_type = "memory";
-            format_mem = " $icon $mem_used_percents ";
-            format_swap = " $icon $swap_used_percents ";
+            format = " $icon $mem_used.eng(prefix:Mi)/$mem_total.eng(prefix:Mi)($mem_avail_percents.eng(w:2))";
+            #display_type = "memory";
+            #format_mem = " $icon $mem_used_percents ";
+            #format_swap = " $icon $swap_used_percents ";
             
             # format_mem = "{mem_total_used;G} {mem_used_percents}";
             # format_swap = "{swap_used;G} {swap_used_percents}";
           }
           {
-            block = "networkmanager";
+            block = "net";
             primary_only = true;
+            block = "networkmanager";
             on_click = "nm-connection-editor";
           }
           {
             block = "cpu";
             interval = 1;
-            format = "{barchart} {utilization} {frequency}";
+            format = "$barchart $utilization $frequency";
           }
           {
             block = "battery";
@@ -46,13 +47,21 @@
           {
             block = "keyboard_layout";
             driver = "setxkbmap";
-            interval = 15;
+            interval = 60;
           }
           # { block = "sound"; }
           {
             block = "time";
             interval = 60;
-            format = "%a %d/%m %R";
+            format = "$timestamp.datetime(f:'%R')";
+            timezone = "Europe/Paris";
+            on_click = "toggle_gsimplecal";
+          }
+          {
+            block = "time";
+            interval = 60;
+            format = "$icon $timestamp.datetime(f:'%Y %d/%m')";
+            timezone = "Europe/Paris";
             on_click = "toggle_gsimplecal";
           }
         ];

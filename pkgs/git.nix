@@ -56,7 +56,7 @@
         editor = "interactive-rebase-tool";
       };
       credential = {
-        helper = "cache --timeout=3600";
+        helper = "store";
       };
       program = { 
         pgp = "gpg";

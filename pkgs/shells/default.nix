@@ -13,14 +13,14 @@
     home.file.alacritty = {
       enable = true;
       source = ./cfg/alacritty.yml;
-      target = ".config/alacritty/alacritty.yml"
-    }
+      target = ".config/alacritty/alacritty.yml";
+    };
 
     home.file.starship = {
       enable = true;
       source = ./cfg/starship.toml;
-      target = ".config/starship.toml"
-    }
+      target = ".config/starship.toml";
+    };
 
     programs.direnv = {
       enable = true;
