@@ -7,9 +7,10 @@
   imports = [
   ];
 
-  boot.initrd.availableKernelModules = [ "ohci_pci" "ehci_pci" "ahci" "sd_mod" "sr_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" ];
+
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ ];
+  boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
   # fileSystems."/" =
@@ -34,5 +35,6 @@
   # networking.interfaces.enp0s3.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  virtualisation.virtualbox.guest.enable = true;
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  services.fwupd.enable = true;
 }

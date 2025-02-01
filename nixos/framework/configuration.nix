@@ -83,7 +83,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "vm"; # Define your hostname.
+  networking.hostName = "framework"; # Define your hostname.
   networking.networkmanager.enable = true;
 
   time.timeZone = "Europe/Paris";
@@ -105,13 +105,26 @@
   services.fwupd.enable = true;
 
   services.xserver.enable = true;
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.xfce.enable = true;
-  services.xserver.xkb.layout = "us";
-  services.xserver.xkb.variant = "alt-intl";
+
+  # Enable the KDE Plasma Desktop Environment.
+  services.displayManager.sddm.enable = true;
+  services.desktopManager.plasma6.enable = true;
+
+  # XFCE
+  #services.xserver.desktopManager.xfce.enable = true;
+ 
+  # Configure keymap in X11
+  services.xserver.xkb = {
+    layout = "us";
+    variant = "alt-intl";
+  };
+
+  # Configure console keymap
   console.keyMap = "us";
 
   services.printing.enable = false;
+
+  # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
