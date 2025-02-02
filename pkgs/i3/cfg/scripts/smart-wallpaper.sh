@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 
 NORMAL_WALLPAPERS_DIR="$HOME/Dropbox/wallpapers/1x1" 
