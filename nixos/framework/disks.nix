@@ -23,6 +23,14 @@
                 mountOptions = [ "fmask=0022" "dmask=0022"  ];
               };
             };
+            #plainSwap = {
+            #  size = "69G";
+            #  content = {
+            #    type = "swap";
+            #    discardPolicy = "both";
+            #    resumeDevice = true; # resume from hiberation from this device
+            #  };
+            #};
             luks = {
               name="crypted-nixos";
               size = "100%";
@@ -43,37 +51,25 @@
                   subvolumes = {
                     "/root" = {
                       mountpoint = "/";
-                      mountOptions = [ "compress=zstd" "noatime" ];
+                      mountOptions = [ "subvol=root" "compress=zstd" "noatime" ];
                     };
                     "/home" = {
                       mountpoint = "/home";
-                      mountOptions = [ "compress=zstd" "noatime" ];
+                      mountOptions = [ "subvol=home" "compress=zstd" "noatime" ];
                     };
                     "/nix" = {
                       mountpoint = "/nix";
-                      mountOptions = [ "compress=zstd" "noatime" ];
+                      mountOptions = [ "subvol=nix" "compress=zstd" "noatime" ];
                     };
+                    # get swap offset with : btrfs inspect-internal map-swapfile -r /swap
                     "/swap" = {
-                      mountpoint = "/.swapvol";
+                      mountpoint = "/swap";
                       swap.swapfile.size = "69G";
                     };
                   };
                 };
               };
             };
-
-            # root = {
-            #   name = "nixos";
-            #   size = "90%";
-            #   label = "nixos";
-            #   content = {
-            #     type = "btrfs";
-            #     extraArgs = [ "-L" "nixos" "-f" ]; # Override existing partition
-            #     mountpoint = "/";
-            #     mountOptions = [ "subvol=@" "compress=zstd" "noatime" ];
-            #   };
-            # };
-
           };
         };
       };

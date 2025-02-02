@@ -12,6 +12,10 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
+  
+  # TODO get offset with : btrfs inspect-internal map-swapfile -r /swap
+  #boot.kernelParams = ["resume_offset=TODO"];
+  #boot.resumeDevice = "/dev/disk/by-label/nixos";
 
   # fileSystems."/" =
   #   { device = "/dev/disk/by-label/nixos";
@@ -25,7 +29,7 @@
   #     options = [ "fmask=0022" "dmask=0022" ];
   #   };
 
-  swapDevices = [ ];
+  #swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
