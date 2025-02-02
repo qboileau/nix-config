@@ -16,6 +16,8 @@
     #Disko
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
+
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
   };
 
   outputs = {
@@ -35,6 +37,9 @@
     hostsSettings = {
         vm = {
            users = [ "test" "qboileau"];
+        };
+        framework = {
+           users = [ "qboileau"];
         };
     };
     forAllHosts = builtins.attrNames hostsSettings;
@@ -73,6 +78,16 @@
           disko.nixosModules.disko
         ];
       };
+      framework = nixpkgs.lib.nixosSystem {
+        specialArgs = specialArgs // {
+          hostUsers = hostsSettings.framework.users;
+        };
+        modules = [
+          ./nixos/framework/configuration.nix
+          disko.nixosModules.disko
+          nixos-hardware.nixosModules.framework-11th-gen-intel
+        ];
+      };
     };
 
     # Standalone home-manager configuration entrypoint
@@ -84,6 +99,11 @@
         modules = [ ./home-manager/test/home.nix ];
       };
       "qboileau@vm" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux; 
+        extraSpecialArgs = specialArgs;
+        modules = [ ./home-manager/qboileau/home.nix ];
+      };
+      "qboileau@framework" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; 
         extraSpecialArgs = specialArgs;
         modules = [ ./home-manager/qboileau/home.nix ];
