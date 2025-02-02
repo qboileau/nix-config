@@ -6,26 +6,15 @@
   ];
 
   home.packages = with pkgs; [ 
-    alacritty
-    starship
     # replacement tools
-    bat # better cat
-    eza # better ls
-    ripgrep-all # better grep
-    fd # better find
     duf # better du / df
-    tealdeer # TLDR
-    fzf
     font-manager
-    dropbox
 
     # system monitoring 
-    htop
     glances
     bottom
 
     # dev tools
-    jq
     yq
     dig
     httpie
@@ -35,6 +24,27 @@
     # others
     spotify
   ];
+
+  programs.alacritty.enable=true;
+  programs.starship.enable=true;
+
+  # replacement tools
+  programs.bat.enable=true; # better cat
+  programs.eza.enable=true; # better ls
+  programs.ripgrep.enable=true;# better grep
+  programs.fd.enable=true; # better find
+  programs.tealdeer.enable=true;  # TLDR
+  programs.fzf.enable=true;  # TLDR
+
+  services.dropbox.enable=true;
+  services.flameshot.enable=true;
+
+  # system monitoring 
+  programs.htop.enable=true;
+  programs.bottom.enable=true;
+
+  programs.jq.enable=true;
+
 
   home.shellAliases = {
     ls = "eza --group-directories-first --time-style=long-iso --git --color=auto -F --octal-permissions";
