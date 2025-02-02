@@ -24,6 +24,7 @@
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
     ./disks.nix
+    ../../pkgs/i3/system.nix
   ];
 
   nixpkgs = {

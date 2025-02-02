@@ -6,8 +6,8 @@ pkgs: {
       ./shells
       ./base-tools.nix
 
-      # ./dev
-      # ./editors
-      # ./i3/i3-config.nix
+      ./dev
+      ./editors
+      ./i3/i3-config.nix
     ];
 }
