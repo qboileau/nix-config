@@ -172,8 +172,8 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.05"; 
+  system.stateVersion = "24.11"; 
   #system.autoUpgrade.enable = true;
-  #system.autoUpgrade.channel = "https://channels.nixos.org/nixos-24.05";
+  #system.autoUpgrade.channel = "https://channels.nixos.org/nixos-24.11";
 
 }
