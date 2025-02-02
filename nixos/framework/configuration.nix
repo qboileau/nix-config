@@ -124,6 +124,7 @@
   console.keyMap = "us";
 
   services.printing.enable = false;
+  services.libinput.enable = true;
 
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
@@ -155,6 +156,9 @@
    git
    gnumake
    statix
+   pciutils
+   usbutils
+   hwinfo
   ];
 
   # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
