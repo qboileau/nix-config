@@ -5,6 +5,7 @@ pkgs: {
   import = [
       ./shells
       ./base-tools.nix
+      ./work-tools.nix
 
       ./dev
       ./editors

@@ -7,7 +7,7 @@ help: ## Prints help for targets with comments
 
 .PHONY: update-system
 update-system:
-	sudo nixos-rebuild switch --flake ".#$(HOSTNAME)"
+	sudo nixos-rebuild switch --flake ".#$(HOSTNAME)" --use-remote-sudo 
 
 .PHONY: update-home
 update-home:

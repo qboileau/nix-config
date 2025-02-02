@@ -25,6 +25,7 @@
     ./hardware-configuration.nix
     ./disks.nix
     ../../pkgs/i3/system.nix
+    ../../pkgs/sway/system.nix
   ];
 
   nixpkgs = {
@@ -111,6 +112,8 @@
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
 
+  programs.hyprland.enable = true;
+
   # XFCE
   #services.xserver.desktopManager.xfce.enable = true;
  
@@ -146,6 +149,8 @@
   virtualisation.docker.storageDriver = "btrfs";
   
   programs.firefox.enable = true;
+  
+  environment.pathsToLink = [ "/share/bash-completion" ]; # needed for bash completion
 
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
@@ -159,7 +164,9 @@
    pciutils
    usbutils
    hwinfo
+   kitty # needed by hyperland
   ];
+  services.clamav.daemon.enable = true;
 
   # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
   users.users = builtins.listToAttrs (map (user: lib.nameValuePair user {

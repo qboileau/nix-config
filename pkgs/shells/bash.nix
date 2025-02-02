@@ -6,8 +6,8 @@
     enableCompletion = true;
     
     # home-manager settings
-    historyControl = "ignoreboth";
-    historyFile = "${config.xdg.dataHome}/.bash/history";
+    historyControl = [ "ignoreboth" ];
+    historyFile = "~/.bash/history";
     historyFileSize = 100000;
     historySize = 100000;
     
@@ -22,8 +22,7 @@
       "hostcomplete"
     ];
   };
-  
-  environment.pathsToLink = [ "/share/bash-completion" ];
+
   
   programs.direnv.enableBashIntegration = true;
 

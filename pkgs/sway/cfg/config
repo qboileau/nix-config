@@ -9,8 +9,8 @@ set $alt Mod1
 # workspace_layout tabbed <stacking|tabbed>
 
 # Configure border style <normal|1pixel|pixel xx|none|pixel>
-new_window pixel 1
-new_float normal
+default_border pixel 1
+default_floating_border normal
 
 # Hide borders
 hide_edge_borders none
@@ -132,7 +132,7 @@ bindsym $mod+Print --release exec --no-startup-id flameshot launcher #i3-scrot -
 #bindsym $mod+Shift+Print --release exec --no-startup-id i3-scrot -s
 
 focus_follows_mouse yes
-mouse_warping none # mouse do not move to focus 
+#mouse_warping none # mouse do not move to focus 
 
 # change focus
 bindsym $mod+Left focus left

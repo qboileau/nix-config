@@ -11,7 +11,15 @@
 }: {
   # You can import other home-manager modules here
   imports = map configLib.relativeToRoot [
-    "pkgs/git.nix"
+    "pkgs/shells"
+    "pkgs/base-tools.nix"
+    "pkgs/work-tools.nix"
+
+    "pkgs/dev"
+    "pkgs/editors"
+    "pkgs/i3"
+    "pkgs/sway"
+    "pkgs/hyperland"
   ];
 
   nixpkgs = {
@@ -49,8 +57,6 @@
   home.packages = with pkgs; [ 
    htop
    vscode
-   vscode-extensions.bbenoist.nix
-   vscode-extensions.jnoortheen.nix-ide
  ];
 
   # Enable home-manager

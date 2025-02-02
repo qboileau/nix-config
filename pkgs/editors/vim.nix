@@ -4,7 +4,7 @@
   programs.vim = {
     enable = true;
     plugins = with pkgs.vimPlugins; [ 
-      vimPlugins.vim-vagrant
+      vim-vagrant
     ];
     settings = { ignorecase = true; };
     extraConfig = ''

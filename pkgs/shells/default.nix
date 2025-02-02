@@ -1,6 +1,6 @@
 {pkgs, ...} :
 {
-    import = [
+    imports = [
       ./bash.nix
       ./zsh.nix
     ];
@@ -12,8 +12,8 @@
 
     home.file.alacritty = {
       enable = true;
-      source = ./cfg/alacritty.yml;
-      target = ".config/alacritty/alacritty.yml";
+      source = ./cfg/alacritty.toml;
+      target = ".config/alacritty/alacritty.toml";
     };
 
     home.file.starship = {

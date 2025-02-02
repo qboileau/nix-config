@@ -30,12 +30,16 @@
 
     includes = [
       {
-        path = "~/.gitconfig-personal";
+        path = "~/.config/git/personal";
         condition = "gitdir:~/projects/perso/";
       }
       {
-        path = "~/.gitconfig-work";
+        path = "~/.config/git/work";
         condition = "gitdir:~/projects/work/";
+      }
+      {
+        path = "~/.config/git/conduktor";
+        condition = "gitdir:~/projects/conduktor/";
       }
     ];
 
@@ -69,7 +73,7 @@
     };
   };
 
-  home.file.".gitconfig-personal".text = ''
+  xdg.configFile."git/personal".text = ''
   [user]
     name = Quentin Boileau
     username = qboileau
@@ -82,10 +86,15 @@
     username = qboileau
   '';
 
-  home.file.".gitconfig-work".text = ''
+  xdg.configFile."git/work".text = ''
   [user]
     name = Quentin Boileau
     username = qboileau
     # TODO
   '';
+
+  home.file."projects/perso/.placeholder".text = "#placeholder";
+  home.file."projects/work/.placeholder".text = "#placeholder";
+  home.file."projects/conduktor/.placeholder".text = "#placeholder";
 }
+

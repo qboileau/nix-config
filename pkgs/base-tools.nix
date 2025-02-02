@@ -31,6 +31,9 @@
     httpie
     curl
     wget
+
+    # others
+    spotify
   ];
 
   home.shellAliases = {
@@ -44,7 +47,7 @@
     ip = "ip --color";
     ipb = "ip --color --brief";
     cat = "bat";
-    git = "LANG="en_US.UTF-8" git";
+    git = "LANG=\"en_US.UTF-8\" git";
     ssh = "TERM=xterm-color ssh";
     source_bash = "source ~/.bashrc";
     updateBash = "source ~/.bashrc";

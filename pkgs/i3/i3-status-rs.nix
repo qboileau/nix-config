@@ -30,9 +30,14 @@
           }
           {
             block = "net";
-            primary_only = true;
-            block = "networkmanager";
-            on_click = "nm-connection-editor";
+            #primary_only = true;
+            click = [
+              {
+                button = "left";
+                cmd = "nm-connection-editor";
+              }
+            ];
+            #on_click = "nm-connection-editor";
           }
           {
             block = "cpu";
@@ -55,14 +60,24 @@
             interval = 60;
             format = "$timestamp.datetime(f:'%R')";
             timezone = "Europe/Paris";
-            on_click = "toggle_gsimplecal";
+            click = [
+              {
+                button = "left";
+                cmd = "gsimplecal";
+              }
+            ];
           }
           {
             block = "time";
             interval = 60;
             format = "$icon $timestamp.datetime(f:'%Y %d/%m')";
             timezone = "Europe/Paris";
-            on_click = "toggle_gsimplecal";
+             click = [
+              {
+                button = "left";
+                cmd = "gsimplecal";
+              }
+            ];
           }
         ];
         icons = "awesome5";
