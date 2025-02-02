@@ -3,7 +3,7 @@
 set -eu
 
 HOSTNAME=${1:?Missing target HOSTNAME}
-
+TMP_SOURCE_DIR=$(mktemp -d)
 
 check_command(){
     if ! command -v "${1}" &> /dev/null
@@ -22,11 +22,11 @@ check_command nix
 check_command git
 check_command nixos-install
 
-cd /tmp
+mkdir -p "$TMP_SOURCE_DIR"
 
-git clone https://github.com/qboileau/nix-config
+git clone https://github.com/qboileau/nix-config "$TMP_SOURCE_DIR"
 
-cd nix-config
+cd "$TMP_SOURCE_DIR"
 echo "Format disk using ./nixos/$HOSTNAME/disks.nix"
 read -p "Are you sure? (Y/n)" -n 1 -r
 echo    # (optional) move to a new line
