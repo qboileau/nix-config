@@ -31,6 +31,10 @@
     includes = [
       {
         path = "~/.config/git/personal";
+        condition = "gitdir:~/.setup/";
+      }
+      {
+        path = "~/.config/git/personal";
         condition = "gitdir:~/projects/perso/";
       }
       {
