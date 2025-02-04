@@ -15,6 +15,8 @@
   # };
 
 
+  services.gnome-keyring.enable = true;
+  
   home.file.i3 = {
     enable = true;
     source = ./cfg/i3;

@@ -30,6 +30,8 @@
         dmenu-rs
         rofi
         rofi-emoji
+        scrot
+        imagemagick
 
         arandr 
         dunst

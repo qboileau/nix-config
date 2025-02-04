@@ -23,6 +23,7 @@
 
     # others
     spotify
+    cameractrls-gtk4
   ];
 
   programs.alacritty.enable=true;

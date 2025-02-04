@@ -7,6 +7,7 @@
     # work tools 
     slack
     brave
+    _1password-gui
   ];
 
 }

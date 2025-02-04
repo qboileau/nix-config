@@ -8,6 +8,8 @@
     cargo
     nodejs
     go  
+    gcc
+    libllvm
   ];
     
   home.shellAliases = {

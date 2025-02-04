@@ -3,9 +3,10 @@
 
   programs.vscode = {
     enable = true;
-    extensions = [
-      pkgs.vscode-extensions.bbenoist.nix
-      pkgs.vscode-extensions.jnoortheen.nix-ide
+    extensions = with pkgs; [ 
+      vscode-extensions.bbenoist.nix
+      vscode-extensions.jnoortheen.nix-ide
+      vscode-extensions.hashicorp.terraform
     ];
     keybindings = [
       # TODO
