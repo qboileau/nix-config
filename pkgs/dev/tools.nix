@@ -14,6 +14,7 @@
     terraform
     harbor-cli
     dive
+    golangci-lint
   ];
     
 }

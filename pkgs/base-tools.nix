@@ -60,15 +60,6 @@
     cat = "bat";
     git = "LANG=\"en_US.UTF-8\" git";
     ssh = "TERM=xterm-color ssh";
-    source_bash = "source ~/.bashrc";
-    updateBash = "source ~/.bashrc";
-    updateXresources = "xrdb ~/.Xresources";
-    mvncis = "mvn clean install -DskipTests --show-version";
-    mvnc = "mvn clean --show-version";
-    mvni = "mvn install --show-version";
-    mvnis = "mvn install -DskipTests --show-version";
-    mvnci = "mvn clean install --show-version";
-    mvnt = "mvn test --show-version";
   };
 
   home.sessionVariables = {

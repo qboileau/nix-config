@@ -61,7 +61,7 @@
                       mountpoint = "/nix";
                       mountOptions = [ "subvol=nix" "compress=zstd" "noatime" ];
                     };
-                    # get swap offset with : btrfs inspect-internal map-swapfile -r /swap
+                    # get swap offset with : btrfs inspect-internal map-swapfile -r /swap/swapfile
                     "/swap" = {
                       mountpoint = "/swap";
                       swap.swapfile.size = "69G";

@@ -11,6 +11,13 @@
       path = "~/zsh/history";
     };
 
+    initExtra = ''
+    # sources bash extensions
+    for file in ~/.bashrc.d/*.bashrc; do
+      source "$file"
+      unset file
+    done
+    '';
   };
 
   programs.direnv.enableZshIntegration = true;

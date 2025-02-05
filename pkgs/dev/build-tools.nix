@@ -20,4 +20,10 @@
     mvnci = "mvn clean install --show-version";
     mvnt = "mvn test --show-version";
   };
+
+
+  home.sessionVariables = {
+    MAVEN_OPTS = "-Xmx1g -XX:MaxPermSize=512m";
+    SBT_OPTS = "-Xms256m -Xmx2G";
+  };
 }

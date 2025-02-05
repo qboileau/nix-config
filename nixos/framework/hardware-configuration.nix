@@ -13,9 +13,9 @@
   boot.kernelModules = [ "kvm-intel" "iwlwifi" ];
   boot.extraModulePackages = [ ];
   
-  # TODO get offset with : btrfs inspect-internal map-swapfile -r /swap
-  #boot.kernelParams = ["resume_offset=TODO"];
-  #boot.resumeDevice = "/dev/disk/by-label/nixos";
+  # TODO get offset with : btrfs inspect-internal map-swapfile -r /swap/swapfile
+  boot.kernelParams = ["resume_offset=533760"];
+  boot.resumeDevice = "/dev/disk/by-label/nixos";
 
   # fileSystems."/" =
   #   { device = "/dev/disk/by-label/nixos";

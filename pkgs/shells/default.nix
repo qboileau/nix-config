@@ -22,6 +22,12 @@
       target = ".config/starship.toml";
     };
 
+    home.file.bashFunctions = {
+      enable = true;
+      source =./cfg/functions.bashrc;
+      target = ".bashrc.d/functions.bashrc";
+    };
+
     programs.direnv = {
       enable = true;
       nix-direnv.enable = true;
@@ -38,4 +44,5 @@
         };
       };
     };
+
 }

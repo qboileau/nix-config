@@ -21,13 +21,21 @@
       "histappend"
       "hostcomplete"
     ];
+
+    shellAliases = {
+      source_bash = "source ~/.bashrc";
+      updateBash = "source ~/.bashrc";
+    };
+
+    bashrcExtra = ''
+    # sources bash extensions
+    for file in ~/.bashrc.d/*.bashrc; do
+      source "$file"
+      unset file
+    done
+    '';
   };
 
   
   programs.direnv.enableBashIntegration = true;
-
-  programs.bash.shellAliases = {
-    source_bash = "source ~/.bashrc";
-    updateBash = "source ~/.bashrc";
-  };
 }
