@@ -17,7 +17,11 @@
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Nixos hardware
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
+    auto-cpufreq.url = "github:AdnanHodzic/auto-cpufreq";
+    auto-cpufreq.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -26,6 +30,7 @@
     home-manager,
     disko,
     nixos-hardware,
+    auto-cpufreq,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -87,6 +92,7 @@
           ./nixos/framework/configuration.nix
           disko.nixosModules.disko
           nixos-hardware.nixosModules.framework-11th-gen-intel
+          auto-cpufreq.nixosModules.default
         ];
       };
     };

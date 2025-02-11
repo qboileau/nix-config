@@ -82,6 +82,12 @@
     name = Quentin Boileau
     username = qboileau
     email = quentin.boileau@gmail.com
+    signingkey = 1EE3013384394A30
+  
+  [commit]
+    gpgsign = true
+  [tag]
+    gpgsign = true
 
   [credential "https://github.com"]
     username = qboileau

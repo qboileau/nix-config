@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "auto-cpufreq": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1737497253,
+        "narHash": "sha256-sOLwi/3oQiNWA2I3WiGneK988YdKVHbH1P5lEjxypIg=",
+        "owner": "AdnanHodzic",
+        "repo": "auto-cpufreq",
+        "rev": "4cee388c1bbea3adc333b597717d5d8d12375705",
+        "type": "github"
+      },
+      "original": {
+        "owner": "AdnanHodzic",
+        "repo": "auto-cpufreq",
+        "type": "github"
+      }
+    },
     "disko": {
       "inputs": {
         "nixpkgs": [
@@ -91,6 +111,7 @@
     },
     "root": {
       "inputs": {
+        "auto-cpufreq": "auto-cpufreq",
         "disko": "disko",
         "home-manager": "home-manager",
         "nixos-hardware": "nixos-hardware",

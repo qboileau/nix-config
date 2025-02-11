@@ -4,8 +4,9 @@
   home.packages = with pkgs; [ 
     maven
     sbt
-    rustc 
-    cargo
+    rustup # run `rustup default stable` to setup rustc/cargo
+    #rustc 
+    #cargo
     nodejs
     go  
     gcc

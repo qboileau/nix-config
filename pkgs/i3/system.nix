@@ -30,12 +30,16 @@
         dmenu-rs
         rofi
         rofi-emoji
+        
+        # program for custom scripts
         scrot
         imagemagick
+        bc
+        feh
 
         arandr 
         dunst
-        feh
+        libnotify
         pcmanfm
      ];
     };

@@ -26,6 +26,7 @@
     ./disks.nix
     ../../pkgs/i3/system.nix
     ../../pkgs/sway/system.nix
+    #../../pkgs/hyprland/system.nix
   ];
 
   nixpkgs = {
@@ -112,8 +113,6 @@
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
 
-  programs.hyprland.enable = true;
-
   # XFCE
   #services.xserver.desktopManager.xfce.enable = true;
  
@@ -144,6 +143,32 @@
     # no need to redefine it in your config for now)
     #media-session.enable = true;
   };
+  
+  powerManagement.enable = true;
+  programs.auto-cpufreq.enable = true;
+  programs.auto-cpufreq.settings = {
+    battery = {
+      governor = "powersave";
+      turbo = "never";
+    };
+    charger = {
+      governor = "performance";
+      turbo = "auto";
+    };
+  };
+
+  # Start the driver at boot
+  systemd.services.fprintd = {
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig.Type = "simple";
+  };
+
+  # Install the driver
+  services.fprintd.enable = true;
+  # If simply enabling fprintd is not enough, try enabling fprintd.tod...
+  services.fprintd.tod.enable = true;
+  # ...and use one of the next four drivers
+  services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix; # Goodix driver module
 
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "btrfs";
@@ -164,7 +189,6 @@
    pciutils
    usbutils
    hwinfo
-   kitty # needed by hyperland
   ];
   services.clamav.daemon.enable = true;
 
@@ -180,6 +204,8 @@
     extraGroups = ["wheel" "networkmanager" "docker"];
   }) hostUsers);
 
+
+  programs.gnupg.agent.enable = true;
 
   # This setups a SSH server. Very important if you're setting up a headless system.
   # Feel free to remove if you don't need it.

@@ -55,6 +55,8 @@ enable_confirmation=true
 # Preferred launcher if both are available
 preferred_launcher="rofi"
 
+lock="sh ~/.config/i3/scripts/lock-blur.sh"
+
 usage="$(basename "$0") [-h] [-c] [-p name] -- display a menu for shutdown, reboot, lock etc.
 
 where:
@@ -124,9 +126,9 @@ typeset -A menu
 menu=(
   [ Shutdown]="systemctl poweroff"
   [ Reboot]="systemctl reboot"
-  [ Suspend]="blurlock && systemctl suspend"
-  [ Hibernate]="blurlock && systemctl hibernate"
-  [ Lock]="blurlock"
+  [ Suspend]="$lock && systemctl suspend"
+  [ Hibernate]="$lock && systemctl hibernate"
+  [ Lock]="$lock"
   [ Logout]="i3-msg exit"
   [ Cancel]=""
 )

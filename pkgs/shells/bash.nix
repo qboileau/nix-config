@@ -7,7 +7,7 @@
     
     # home-manager settings
     historyControl = [ "ignoreboth" ];
-    historyFile = "~/.bash/history";
+    historyFile = "~/.bash_history";
     historyFileSize = 100000;
     historySize = 100000;
     
@@ -38,4 +38,7 @@
 
   
   programs.direnv.enableBashIntegration = true;
+
+  # already enabled in configuration.nix
+  services.gpg-agent.enableBashIntegration = true;
 }

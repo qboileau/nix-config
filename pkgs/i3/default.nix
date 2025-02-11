@@ -31,6 +31,7 @@
     target = ".config/i3/scripts/lock-blur.sh";
   };
 
+
   home.file.monitor-switcher = {
     enable = true;
     source = ./cfg/scripts/monitor-switcher.py;
