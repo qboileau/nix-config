@@ -86,8 +86,15 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "framework"; # Define your hostname.
-  networking.networkmanager.enable = true;
+  networking = {
+    hostName = "framework"; # Define your hostname.
+    networkmanager.enable = true;
+    nat.enable = true;
+    hosts = {
+      "127.0.0.1" = ["framework" "conduktor.localhost" "gateway.localhost"];
+      "::1" = ["framework"];
+    };
+  };
 
   time.timeZone = "Europe/Paris";
   i18n.defaultLocale = "en_US.UTF-8";
@@ -189,6 +196,9 @@
    pciutils
    usbutils
    hwinfo
+   age
+   sops 
+   openssl
   ];
   services.clamav.daemon.enable = true;
 

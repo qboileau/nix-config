@@ -40,6 +40,24 @@
         "type": "github"
       }
     },
+    "flake-utils": {
+      "inputs": {
+        "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1710146030,
+        "narHash": "sha256-SZ5L6eA7HJ/nmkzGG7/ISclqe6oZdOZTNoesiInkXPQ=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "b1d9ab70662946ef0850d488da1c9019f3a9752a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -58,6 +76,27 @@
         "owner": "nix-community",
         "ref": "release-24.11",
         "repo": "home-manager",
+        "type": "github"
+      }
+    },
+    "krewfile": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1737497949,
+        "narHash": "sha256-xvwx82Wia73UL9Sow/LBhIJ5O2kw4fxPWwUpZdAE4x0=",
+        "owner": "brumhard",
+        "repo": "krewfile",
+        "rev": "b53aa0d0fa8e18c5c672c8f8fdb9a3bf0a1745a0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "brumhard",
+        "repo": "krewfile",
         "type": "github"
       }
     },
@@ -114,9 +153,25 @@
         "auto-cpufreq": "auto-cpufreq",
         "disko": "disko",
         "home-manager": "home-manager",
+        "krewfile": "krewfile",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable"
+      }
+    },
+    "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
       }
     }
   },

@@ -2,9 +2,60 @@
 {
 
   services.dunst.enable=true;
-  home.file.dunst = {
-    enable = true;
-    source = ./cfg/dunstrc;
-    target = "./.config/dunst/dunstrc";
+  services.dunst.settings = {
+    global = {
+      width = 300;
+      height = 300;
+      line_height = 0;
+      separator_height = 1;
+      padding = 8;
+      horizontal_padding = 10;
+      separator_color = "#454947";
+      alignment = "left";
+      offset = "30x50";
+      origin = "top-right";
+      transparency = 15;
+      bounce_freq = 5;
+      show_age_threshold = 60;
+      frame_color = "#eceff1";
+      font = "Droid Sans 9";
+      icon_position = "left";
+      max_icon_size = 80;
+      idle_threshold = 120;
+      follow = "mouse";
+      sticky_history = "yes";
+      history_length = 20;
+      show_indicators = "yes";
+      allow_markup = "yes";
+      startup_notification = false;
+      browser = "brave";
+      format = "%s %p\n%b";
+      word_wrap = "no";
+      ignore_newline = "no";
+      sort = "yes";
+      indicate_hidden = "yes";
+    };
+
+    frame = {
+      width = 1;
+      color = "#16A085";
+    };
+
+    urgency_low = {
+      background = "#2B2C2B";
+      foreground = "#888888";
+      timeout = 10;
+    };
+
+    urgency_normal = {
+      background = "#2B2C2B";
+      foreground = "#F9FAF9";
+      timeout = 10;
+    };
+    urgency_critical = {
+      background = "#D62929";
+      foreground = "#F9FAF9";
+      timeout = 0;
+    };
   };
 }

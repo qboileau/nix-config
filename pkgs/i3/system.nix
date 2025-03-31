@@ -37,7 +37,8 @@
         bc
         feh
 
-        arandr 
+        arandr
+        xdotool
         dunst
         libnotify
         pcmanfm

@@ -12,9 +12,13 @@
     awscli2
     teleport_15
     terraform
+    terragrunt
     harbor-cli
     dive
     golangci-lint
+    killall
+    graphviz
+    postman
   ];
     
 }

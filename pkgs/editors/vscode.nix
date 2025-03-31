@@ -18,7 +18,19 @@
     ];
     userSettings = {
       # TODO
-      "files.autoSave" = "on";
+      "files.autoSave" = "onFocusChange";
+      "excalidraw.language" = "en";
+      "excalidraw.image" = {
+        "exportScale" = 1;
+        "exportWithBackground" = true;
+        "exportWithDarkMode" = false;
+      };
+      "workbench.editor.autoLockGroups" = {
+        "imagePreview.previewEditor" = true;
+      };
+      "workbench.editorAssociations" = {
+        "*.svg" = "editor.excalidraw";
+      };
     };
 
   };

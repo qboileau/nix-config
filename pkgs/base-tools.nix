@@ -13,6 +13,7 @@
     # system monitoring 
     glances
     bottom
+    htop
 
     # dev tools
     yq

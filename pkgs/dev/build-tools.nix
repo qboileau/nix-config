@@ -1,4 +1,4 @@
-    {pkgs, ...} :
+{pkgs, ...} :
 {
 
   home.packages = with pkgs; [ 
@@ -22,6 +22,12 @@
     mvnt = "mvn test --show-version";
   };
 
+
+  home.file.".cache/npm/global/.keep".text = "placeholder";
+  home.file.".npmrc".text = ''
+  prefix=/home/qboileau/.cache/npm/global
+  '';
+  home.sessionPath = ["/home/qboileau/.cache/npm/global/bin"];
 
   home.sessionVariables = {
     MAVEN_OPTS = "-Xmx1g -XX:MaxPermSize=512m";

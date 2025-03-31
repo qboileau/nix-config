@@ -174,3 +174,33 @@ swap_usage() {
       awk '/VmSwap|Name/{printf $2 " " $3}END{ print "" }' $file; 
   done | sort -k 2 -n -r | head -n 15
 }
+
+import_docker_creds_to_kubernetes() {
+  namespace=${1:?Missing namespace}
+  kubectl create secret generic regcred \
+    --from-file=.dockerconfigjson=${HOME}/.docker/config.json \
+    --type=kubernetes.io/dockerconfigjson \
+    --namespace "$namespace"
+  
+  echo "Docker config imported as regcred secret in $namespace of $(kubectl config current-context)"
+}
+
+battery_level() {
+  upower -i `upower -e | grep \'BAT\'`
+}
+
+generate_kubeconfig() {
+  local base_config="$HOME/.kube/config"
+  local config_dir="$HOME/.kube/config.d"
+
+  if [ -d "$config_dir" ]; then
+    local config_files=$(find "$config_dir" -type f -name "*.yaml" -exec printf ":%s" {} \;)
+    local kubeconfig="$base_config$config_files"
+
+    # Output the KUBECONFIG value
+    echo "$kubeconfig"
+  else
+    # If the directory does not exist, just use the base config
+    echo "$base_config"
+  fi
+}

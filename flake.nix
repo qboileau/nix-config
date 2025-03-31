@@ -22,6 +22,10 @@
 
     auto-cpufreq.url = "github:AdnanHodzic/auto-cpufreq";
     auto-cpufreq.inputs.nixpkgs.follows = "nixpkgs";
+
+    # https://github.com/brumhard/krewfile
+    krewfile.url = "github:brumhard/krewfile"; 
+    krewfile.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -31,6 +35,7 @@
     disko,
     nixos-hardware,
     auto-cpufreq,
+    krewfile,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -113,7 +118,10 @@
       "qboileau@framework" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; 
         extraSpecialArgs = specialArgs;
-        modules = [ ./home-manager/qboileau/home.nix ];
+        modules = [ 
+          ./home-manager/qboileau/home.nix 
+          krewfile.homeManagerModules.krewfile
+        ];
       };
     };
   };
