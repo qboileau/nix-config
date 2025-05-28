@@ -10,6 +10,7 @@
     k3d
     lens
     chart-testing
+    openshift
   ];
 
   # kubectl extensions

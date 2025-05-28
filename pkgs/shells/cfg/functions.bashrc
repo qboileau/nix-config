@@ -82,6 +82,19 @@ test_in_worktree() {
   rm -rf $test_dir
 }
 
+git_squash_main(){
+  echo "Commit all files to tmp branch"
+  git checkout --orphan tmp
+  git add -A
+  git commit -m "Initial commit"
+  echo "Replace main with tmp"
+  git branch -D main
+  git branch -m main
+  echo "Force push main update and cleanup"
+  git push -f origin main
+  git gc --aggressive --prune=all
+}
+
 
 # ex - archive extractor
 # usage: ex <file>
@@ -191,16 +204,24 @@ battery_level() {
 
 generate_kubeconfig() {
   local base_config="$HOME/.kube/config"
+  local base_config_bkp="$HOME/.kube/config.bkp"
   local config_dir="$HOME/.kube/config.d"
 
   if [ -d "$config_dir" ]; then
     local config_files=$(find "$config_dir" -type f -name "*.yaml" -exec printf ":%s" {} \;)
     local kubeconfig="$base_config$config_files"
+    cp $base_config $base_config_bkp
 
     # Output the KUBECONFIG value
-    echo "$kubeconfig"
+    export KUBECONFIG="$kubeconfig"
+    kubectl config view --raw=true > $base_config
+
+    export KUBECONFIG="$base_config"
   else
     # If the directory does not exist, just use the base config
-    echo "$base_config"
+    export KUBECONFIG="$base_config"
   fi
+  
 }
+
+$*

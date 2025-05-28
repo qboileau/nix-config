@@ -16,7 +16,6 @@
     htop
 
     # dev tools
-    yq
     dig
     httpie
     curl
@@ -25,10 +24,10 @@
     # others
     spotify
     cameractrls-gtk4
+
+    synology-drive-client
   ];
 
-  programs.alacritty.enable=true;
-  programs.starship.enable=true;
 
   # replacement tools
   programs.bat.enable=true; # better cat

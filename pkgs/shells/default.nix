@@ -10,12 +10,14 @@
       starship
     ];
 
+    programs.alacritty.enable = true;
     home.file.alacritty = {
       enable = true;
       source = ./cfg/alacritty.toml;
       target = ".config/alacritty/alacritty.toml";
     };
 
+    programs.starship.enable = true;
     home.file.starship = {
       enable = true;
       source = ./cfg/starship.toml;

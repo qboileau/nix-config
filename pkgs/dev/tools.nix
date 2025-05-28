@@ -3,15 +3,16 @@
 
   home.packages = with pkgs; [ 
     jq
-    yq
+    yq-go
     dig
     httpie
     curl
     wget
+    galculator
     gh
     awscli2
     teleport_15
-    terraform
+    unstable.terraform
     terragrunt
     harbor-cli
     dive
@@ -19,6 +20,16 @@
     killall
     graphviz
     postman
+    apacheHttpd
+    xournalpp
+    postgresql
   ];
-    
+
+  xdg.desktopEntries.calculator = {
+    name = "Calculator";
+    exec = "galculator";
+    terminal = false;
+    type = "Application";
+    categories = ["System"];
+  };
 }

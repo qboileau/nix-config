@@ -8,9 +8,11 @@
     #rustc 
     #cargo
     nodejs
-    go  
+    yarn
+    go
     gcc
     libllvm
+    python3
   ];
     
   home.shellAliases = {
