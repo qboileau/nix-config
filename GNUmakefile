@@ -7,10 +7,17 @@ help: ## Prints help for targets with comments
 
 .PHONY: update-system
 update-system:
+	nix flake update
 	sudo nixos-rebuild switch --flake ".#$(HOSTNAME)" --use-remote-sudo 
+
+.PHONY: test-system
+test-system:
+	nix flake update
+	sudo nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo 
 
 .PHONY: update-home
 update-home:
+	nix flake update
 	@echo ".#$(HOSTNAME)@${USER}"
 	home-manager switch --flake ".#${USER}@$(HOSTNAME)"
 
