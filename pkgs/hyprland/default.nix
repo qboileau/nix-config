@@ -1,7 +1,8 @@
 {pkgs, inputs, ...} :
 {
   imports = [
-    inputs.hyprland.nixosModules.default
+    # inputs.hyprland.nixosModules.default
+    ./waybar.nix
     ./binds.nix
     #./rules.nix
     #./settings.nix
@@ -14,8 +15,9 @@
   wayland.windowManager.hyprland.settings = {
     # See https://wiki.hyprland.org/Configuring/Monitors/
     "monitor" = [
-      "eDP-1,2256x1504,0x0,1"
-      "desc:Philips Consumer Electronics Company 49M2C8900 AU42415000050,highres,auto-right,1"
+      "eDP-1,2256x1504,0x0,1" #main framework laptop monitor
+      "desc:Philips Consumer Electronics Company 49M2C8900 AU42415000050,5120x1440,auto-right,1"
+      #"DP-4,5120x1440,auto-right,1"
     ];
     xwayland.force_zero_scaling = true;
 
@@ -32,6 +34,7 @@
       "_JAVA_AWT_WM_NONREPARENTING,1"
       "GDK_DPI_SCALE,1"
       "GDK_SCALE,1"
+      "NIXOS_OZONE_WL,1" # tell Electron/Chromium to run on Wayland
     ];
     
 
@@ -87,83 +90,6 @@
       # before executing flameshot
       "monitor 1, class:^(flameshot)$"
     ];
-  };
-
-  # https://github.com/Alexays/Waybar/wiki/Module:-Hyprland
-  programs.waybar = {
-    enable = true;
-    settings = [{
-      height = 20;
-      layer = "top";
-      position = "bottom";
-      modules-center = [ "hyprland/window" ];
-      modules-left = [ "hyprland/workspaces" ];
-      modules-right = [
-        "pulseaudio"
-        "network"
-        "cpu"
-        "memory"
-        "temperature"
-        "battery" 
-        "clock"
-        "tray"
-      ];
-      battery = {
-        format = "{capacity}% {icon}";
-        format-alt = "{time} {icon}";
-        format-charging = "{capacity}% ";
-        format-icons = [ "" "" "" "" "" ];
-        format-plugged = "{capacity}% ";
-        states = {
-          critical = 15;
-          warning = 30;
-        };
-      };
-      clock = {
-        format-alt = "{:%Y-%m-%d}";
-        tooltip-format = "{:%Y-%m-%d | %H:%M}";
-      };
-      cpu = {
-        format = "{usage}% ";
-        tooltip = false;
-      };
-      memory = { format = "{}% "; };
-      network = {
-        interval = 1;
-        format-alt = "{ifname}: {ipaddr}/{cidr}";
-        format-disconnected = "Disconnected ⚠";
-        format-ethernet = "{ifname}: {ipaddr}/{cidr}   up: {bandwidthUpBits} down: {bandwidthDownBits}";
-        format-linked = "{ifname} (No IP) ";
-        format-wifi = "{essid} ({signalStrength}%) ";
-        #on-click-right = ""
-      };
-      pulseaudio = {
-        format = "{volume}% {icon} {format_source}";
-        format-bluetooth = "{volume}% {icon} {format_source}";
-        format-bluetooth-muted = " {icon} {format_source}";
-        format-icons = {
-          car = "";
-          default = [ "" "" "" ];
-          handsfree = "";
-          headphones = "";
-          headset = "";
-          phone = "";
-          portable = "";
-        };
-        format-muted = " {format_source}";
-        format-source = "{volume}% ";
-        format-source-muted = "";
-        on-click = "pavucontrol";
-      };
-      temperature = {
-        critical-threshold = 80;
-        format = "{temperatureC}°C {icon}";
-        format-icons = [ "" "" "" ];
-      };
-      tray = { 
-        spacing = 10;
-      };
-    }];
   };
 
   # home.file.hyperland = {

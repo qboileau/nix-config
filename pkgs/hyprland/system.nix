@@ -39,7 +39,6 @@
     hypridle
     hyprcursor
     hyprpolkitagent
-    hyprprop
     #hyprsysteminfo
   ];
 }
