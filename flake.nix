@@ -26,6 +26,13 @@
     # https://github.com/brumhard/krewfile
     krewfile.url = "github:brumhard/krewfile"; 
     krewfile.inputs.nixpkgs.follows = "nixpkgs";
+
+    hyprland.url = "github:hyprwm/Hyprland";
+    # hy3.url = "github:outfoxxed/hy3?ref=hl{version}"; # where {version} is the hyprland release version
+    # # or "github:outfoxxed/hy3" to follow the development branch.
+    # # (you may encounter issues if you dont do the same for hyprland)
+    # hy3.inputs.hyprland.follows = "hyprland";
+
   };
 
   outputs = {
@@ -36,6 +43,7 @@
     nixos-hardware,
     auto-cpufreq,
     krewfile,
+    hyprland,
     ...
   } @ inputs: let
     inherit (self) outputs;

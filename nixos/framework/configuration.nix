@@ -26,7 +26,7 @@
     ./disks.nix
     ../../pkgs/i3/system.nix
     ../../pkgs/sway/system.nix
-    #../../pkgs/hyprland/system.nix
+    ../../pkgs/hyprland/system.nix
   ];
 
   nixpkgs = {
@@ -86,14 +86,39 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  services.dnsmasq = {
+    enable = true;
+    settings = {
+      domain-needed = true;
+      domain = "localhost";
+      expand-hosts = true;
+
+      address = [
+        "/localhost/127.0.0.1"
+        "/local/127.0.0.1"
+        "/private/127.0.0.1"
+      ];
+
+      server = [
+        "1.1.1.1"
+        "1.0.0.1"
+      ];
+    };
+  };
+
   networking = {
     hostName = "framework"; # Define your hostname.
-    networkmanager.enable = true;
     nat.enable = true;
     hosts = {
-      "127.0.0.1" = ["framework" "conduktor.localhost" "gateway.localhost"];
+      "127.0.0.1" = ["framework"];
       "::1" = ["framework"];
     };
+
+    networkmanager.enable = true;
+    networkmanager.dns = "none"; # Disable NetworkManager's internal DNS resolution
+    useDHCP = false; # These options are unnecessary when managing DNS ourselves
+    dhcpcd.enable = false;
+    nameservers = [ "127.0.0.1" ]; # use DNSmasq
   };
 
   time.timeZone = "Europe/Paris";
@@ -117,7 +142,10 @@
   services.xserver.enable = true;
 
   # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm = {
+    enable = true;
+    wayland.enable = true;
+  };
   services.desktopManager.plasma6.enable = true;
 
   # XFCE
@@ -143,6 +171,7 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+    wireplumber.enable = true;
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
 
@@ -152,7 +181,8 @@
   };
   
   powerManagement.enable = true;
-  programs.auto-cpufreq.enable = true;
+  services.power-profiles-daemon.enable = true;
+  programs.auto-cpufreq.enable = false;
   programs.auto-cpufreq.settings = {
     battery = {
       governor = "powersave";
@@ -179,7 +209,12 @@
 
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "btrfs";
+
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
   
+  services.touchegg.enable = true;
+
   programs.firefox.enable = true;
   
   environment.pathsToLink = [ "/share/bash-completion" ]; # needed for bash completion
@@ -202,6 +237,8 @@
   ];
   services.clamav.daemon.enable = true;
 
+  services.gvfs.enable = true; # https://nixos.wiki/wiki/Samba#Browsing_samba_shares_with_GVFS
+
   # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
   users.users = builtins.listToAttrs (map (user: lib.nameValuePair user {
     isNormalUser = true;
@@ -211,7 +248,7 @@
       # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
     ];
     # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
-    extraGroups = ["wheel" "networkmanager" "docker"];
+    extraGroups = ["wheel" "networkmanager" "docker" "libvirtd"];
   }) hostUsers);
 
 

@@ -19,7 +19,7 @@
     "pkgs/editors"
     "pkgs/i3"
     "pkgs/sway"
-    #"pkgs/hyprland"
+    "pkgs/hyprland"
   ];
 
   nixpkgs = {
