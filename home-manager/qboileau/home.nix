@@ -58,6 +58,11 @@
     vlc
  ];
 
+  # Background deamon
+  #nm-applet
+  services.network-manager-applet.enable = true;
+  services.dropbox.enable = true;
+
   # Enable home-manager
   programs.home-manager.enable = true;
 

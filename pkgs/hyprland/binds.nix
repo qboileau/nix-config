@@ -3,43 +3,61 @@
   
   
   wayland.windowManager.hyprland.settings = {
-    bind = [
-        # Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
-        "$mod, Return, exec, $terminal"
-        "$mod Shift, Q, killactive,"
-        "$mod, F, fullscreen,"
-        "$mod, M, exit,"
-        "$mod, E, exec, $fileManager"
-        "$mod, V, togglefloating,"
-        "$mod, D, exec, $menu"
-        "$mod, P, pseudo, # dwindle"
-        "$mod, J, togglesplit," # dwindle
+    bind = let 
+      grim = "${pkgs.grim}/bin/grim";
+      slurp = "${pkgs.slurp}/bin/slurp";
+    in [
+      # Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
+      "$mod, Return, exec, $terminal"
+      "$mod Shift, Q, killactive,"
+      "$mod, F, fullscreen,"
+      "$mod, M, exit,"
+      "$mod, E, exec, $fileManager"
+      "$mod, V, togglefloating,"
+      "$mod, D, exec, $menu"
+      "$mod, P, pseudo, # dwindle"
+      "$mod, J, togglesplit," # dwindle
 
-        # Move focus with mod + arrow keys
-        "$mod, left, movefocus, l"
-        "$mod, right, movefocus, r"
-        "$mod, up, movefocus, u"
-        "$mod, down, movefocus, d"
-        
-        # Move window with mod + SHIFT + arrow keys
-        "$mod SHIFT, left, movewindow, l"
-        "$mod SHIFT, right, movewindow, r"
-        "$mod SHIFT, up, movewindow, u"
-        "$mod SHIFT, down, movewindow, d"
+      # Move focus with mod + arrow keys
+      "$mod, left, movefocus, l"
+      "$mod, right, movefocus, r"
+      "$mod, up, movefocus, u"
+      "$mod, down, movefocus, d"
+      
+      # Move window with mod + SHIFT + arrow keys
+      "$mod SHIFT, left, movewindoworgroup, l"
+      "$mod SHIFT, right, movewindoworgroup, r"
+      "$mod SHIFT, up, movewindoworgroup, u"
+      "$mod SHIFT, down, movewindoworgroup, d"
 
-        "$mod, x, movecurrentworkspacetomonitor, r"
+      # Move workspace to monitor
+      "CTRL $mod SHIFT, right, movecurrentworkspacetomonitor, r"
+      "CTRL $mod SHIFT, left, movecurrentworkspacetomonitor, l"
 
-        # Example special workspace (scratchpad)
-        "$mod, minus, togglespecialworkspace, magic"
-        "$mod SHIFT, minus, movetoworkspace, special:magic"
+      # Example special workspace (scratchpad)
+      "$mod, minus, togglespecialworkspace, magic"
+      "$mod SHIFT, minus, movetoworkspace, special:magic"
 
-        # Scroll through existing workspaces with mod + scroll
-        "$mod, mouse_down, workspace, e+1"
-        "$mod, mouse_up, workspace, e-1"
+      # Scroll through existing workspaces with mod + scroll
+      "$mod, mouse_down, workspace, e+1"
+      "$mod, mouse_up, workspace, e-1"
 
-        ", Print, exec, XDG_CURRENT_DESKTOP=sway flameshot gui"
-      ]
-      ++ (builtins.concatLists (builtins.genList (
+      "$mod, G, togglegroup,"
+
+      # TODO fix conflict with movefocus
+      #"$mod, left, changegroupactive, b"
+      #"$mod, right, changegroupactive, f"
+
+      # TODO fix conflict with movewindoworgroup
+      #"$mod SHIFT, left, movegroupwindow, b"
+      #"$mod SHIFT, right, movegroupwindow, f"
+      
+
+      #", Print, exec, XDG_CURRENT_DESKTOP=sway flameshot gui" # use when fixed
+      ''
+       , Print, exec, ${grim} -g "$(${slurp})" - | wl-copy -t image/png
+      ''
+    ] ++ (builtins.concatLists (builtins.genList (
       x: let
         ws = let
           c = (x + 1) / 10;
@@ -52,6 +70,8 @@
     )
     10));
 
+    binds = [
+    ];
     bindm = [
       # Move/resize windows with mod + LMB/RMB and dragging
       "$mod, mouse:272, movewindow"

@@ -32,6 +32,7 @@
     wlprop
     wlr-randr
     nwg-displays
+    nwg-look
     brightnessctl
     playerctl
     hyprpaper
@@ -39,6 +40,8 @@
     hypridle
     hyprcursor
     hyprpolkitagent
+    grim
+    slurp
     #hyprsysteminfo
   ];
 }

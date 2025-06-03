@@ -3,6 +3,8 @@
   # https://github.com/Alexays/Waybar/wiki/Module:-Hyprland
   programs.waybar = {
     enable = true;
+    systemd.enable = true;
+    # systemd.target = ""; TODO target hyprland systemd target
     settings = [{
       height = 20;
       layer = "top";
@@ -15,7 +17,7 @@
         "network"
         "cpu"
         "memory"
-        "temperature"
+        #"temperature"
         "battery" 
         "clock"
         "tray"
@@ -33,9 +35,10 @@
         };
       };
 
-      "mpris" = {
-        "format" = "{player}: {player_icon} {artist} - {title}";
-        "format-paused" = "{player}: {status_icon} <i>{artist} - {title}</i>";
+      # TODO mouse previous code 275  - next code 276
+      mpris = {
+        "format" = "{player_icon}: {artist} - {title}  ";
+        "format-paused" = "{player_icon}: {status_icon} <i>{artist} - {title}</i>  ";
         "player-icons" = {
           "default" = "▶";
           "mpv" = "🎵";
