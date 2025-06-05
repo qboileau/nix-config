@@ -2,6 +2,8 @@
 {inputs, pkgs, ...} :
 {
 
+  services.displayManager.defaultSession = "hyprland";
+
   #https://wiki.hyprland.org/Nix/Cachix/
   nix.settings = {
     substituters = ["https://hyprland.cachix.org"];

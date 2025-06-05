@@ -10,7 +10,7 @@
   ];
 
 
-  changegroupactiveormovefocus = pkgs.callPackage ./changegroupactiveormovefocus { };
+  # changegroupactiveormovefocus = pkgs.callPackage ./changegroupactiveormovefocus { };
   
   programs.kitty.enable = true; # required for the default Hyprland config
   wayland.windowManager.hyprland.enable = true; # enable Hyprland
@@ -70,6 +70,8 @@
       "dropbox start"
       "synology-drive"
       "touchegg"
+      #https://gist.github.com/brunoanc/2dea6ddf6974ba4e5d26c3139ffb7580#editing-the-configuration-file
+      "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
     ];
 
 
@@ -115,6 +117,14 @@
       # set this to your leftmost monitor id, otherwise you have to move your cursor to the leftmost monitor
       # before executing flameshot
       "monitor 1, class:^(flameshot)$"
+ 
+      # Screen sharing Xwayland
+      "opacity 0.0 override, class:^(xwaylandvideobridge)$"
+      "noanim, class:^(xwaylandvideobridge)$"
+      "noinitialfocus, class:^(xwaylandvideobridge)$"
+      "maxsize 1 1, class:^(xwaylandvideobridge)$"
+      "noblur, class:^(xwaylandvideobridge)$"
+      "nofocus, class:^(xwaylandvideobridge)$"
     ];
   };
 

@@ -214,6 +214,15 @@
   
   services.touchegg.enable = true;
 
+  programs.obs-studio = {
+    enable = true;
+    enableVirtualCamera = true;
+    plugins = with pkgs; [
+      obs-studio-plugins.wlrobs
+    ];
+  };
+
+
   programs.firefox.enable = true;
   
   environment.pathsToLink = [ "/share/bash-completion" ]; # needed for bash completion
