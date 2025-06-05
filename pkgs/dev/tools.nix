@@ -4,6 +4,7 @@
   home.packages = with pkgs; [ 
     jq
     yq-go
+    socat
     dig
     httpie
     curl
@@ -11,6 +12,7 @@
     galculator
     gh
     awscli2
+    google-cloud-sdk
     teleport_15
     unstable.terraform
     terragrunt

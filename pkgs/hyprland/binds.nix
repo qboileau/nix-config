@@ -17,6 +17,7 @@
       "$mod, D, exec, $menu"
       "$mod, P, pseudo, # dwindle"
       "$mod, J, togglesplit," # dwindle
+      "$mod, L, exec, $lock"
 
       # Move focus with mod + arrow keys
       "$mod, left, movefocus, l"

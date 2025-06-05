@@ -6,7 +6,7 @@
     systemd.enable = true;
     # systemd.target = ""; TODO target hyprland systemd target
     settings = [{
-      height = 20;
+      height = 25;
       layer = "top";
       position = "bottom";
       modules-center = [ "hyprland/window" ];
@@ -20,6 +20,7 @@
         #"temperature"
         "battery" 
         "clock"
+        "group/group-power"
         "tray"
       ];
 
@@ -35,7 +36,6 @@
         };
       };
 
-      # TODO mouse previous code 275  - next code 276
       mpris = {
         "format" = "{player_icon}: {artist} - {title}  ";
         "format-paused" = "{player_icon}: {status_icon} <i>{artist} - {title}</i>  ";
@@ -53,6 +53,10 @@
       clock = {
         format-alt = "{:%Y-%m-%d}";
         tooltip-format = "{:%Y-%m-%d | %H:%M}";
+        calendar = {
+          mode = "month";
+          
+        };
       };
 
       cpu = {
@@ -79,7 +83,6 @@
         format-bluetooth = "{volume}% {icon} {format_source}";
         format-bluetooth-muted = " {icon} {format_source}";
         format-icons = {
-          car = "";
           default = [ "" "" "" ];
           handsfree = "";
           headphones = "";
@@ -91,12 +94,74 @@
         format-source = "{volume}% ";
         format-source-muted = "";
         on-click = "pavucontrol";
+        on-scroll-up = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%+";
+        on-scroll-down = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-";
       };
 
       temperature = {
         critical-threshold = 80;
         format = "{temperatureC}°C {icon}";
         format-icons = [ "" "" "" ];
+      };
+
+      "group/group-power" = {
+          orientation = "inherit";
+          drawer = {
+              "transition-duration" = 500;
+              "children-class" = "not-power";
+              "transition-left-to-right" = false;
+          };
+
+          modules = [
+              "custom/power"
+              "custom/lock"
+              "custom/quit"
+              "custom/suspend"
+              "custom/hibernate"
+              "custom/reboot"
+          ];
+      };
+
+      "custom/quit" = {
+          format = "  ";
+          tooltip = true;
+          tooltip-format = "Quit";
+          on-click = "hyprctl dispatch exit";
+      };
+
+      "custom/lock" = {
+          format = "  ";
+          tooltip = true;
+          tooltip-format = "Lock";
+          on-click = "hyprlock";
+      };
+
+      "custom/suspend" = {
+          format = "  ";
+          tooltip = true;
+          tooltip-format = "Suspend";
+          on-click = "hyprlocks && ystemctl suspend";
+      };
+      
+      "custom/hibernate" = {
+          format = "  ";
+          tooltip = true;
+          tooltip-format = "Hibernate";
+          on-click = "hyprlocks && systemctl hibernate";
+      };
+
+      "custom/reboot" = {
+          format = "  ";
+          tooltip = true;
+          tooltip-format = "Reboot";
+          on-click = "systemctl reboot";
+      };
+
+      "custom/power" = {
+          format = "  ";
+          tooltip = true;
+          tooltip-format = "Power off";
+          on-click = "systemctl poweroff";
       };
 
       tray = { 

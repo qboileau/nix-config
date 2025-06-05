@@ -9,6 +9,9 @@
     #./smartgaps.nix
   ];
 
+
+  changegroupactiveormovefocus = pkgs.callPackage ./changegroupactiveormovefocus { };
+  
   programs.kitty.enable = true; # required for the default Hyprland config
   wayland.windowManager.hyprland.enable = true; # enable Hyprland
   wayland.windowManager.hyprland.systemd.enable = true;
@@ -26,6 +29,11 @@
   };
 
   services.hypridle.enable = true;
+  home.file.hypridle = {
+    enable = true;
+    source = ./cfg/hypridle.conf;
+    target = ".config/hypr/hypridle.conf";
+  };
   services.hyprpaper.enable = true;
   #services.hyprpolkitagent.enable = true;
 
@@ -41,6 +49,7 @@
     "$mod" = "SUPER";
     "$terminal" = "alacritty";
     "$fileManager" = "dolphin";
+    "$lock" = "hyprlock";
     "$menu" = "wofi --show drun";
     env = [
       "XCURSOR_SIZE,23"
@@ -56,7 +65,6 @@
     
 
     exec-once = [
-      "waybar"
       "nm-applet"
       "systemctl --user start hyprpolkitagent"
       "dropbox start"
@@ -67,6 +75,7 @@
 
     # https://wiki.hyprland.org/Configuring/Variables/#general
     general = {
+      #layout = "hy3";
       gaps_in = 1;
       gaps_out = 1;
       border_size = 1;
@@ -83,19 +92,19 @@
 
     # https://wiki.hyprland.org/Configuring/Variables/#input
     input = {
-        kb_layout = "us";
-        kb_variant = "alt-intl";
-        kb_model = "pc104";
-        kb_options = "terminate:ctrl_alt_bksp";
-        # kb_rules =;
+      kb_layout = "us";
+      kb_variant = "alt-intl";
+      kb_model = "pc104";
+      kb_options = "terminate:ctrl_alt_bksp";
+      # kb_rules =;
 
-        follow_mouse = 1;
+      follow_mouse = 1;
 
-        sensitivity = 0; # -1.0 - 1.0, 0 means no modification.
+      sensitivity = 0; # -1.0 - 1.0, 0 means no modification.
 
-        touchpad = {
-            natural_scroll = false;
-        };
+      touchpad = {
+          natural_scroll = false;
+      };
     };
     windowrule = [
       #https://wiki.hyprland.org/FAQ/#how-do-i-screenshot
