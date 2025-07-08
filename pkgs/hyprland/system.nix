@@ -31,12 +31,20 @@
     waybar # TODO flake https://github.com/Alexays/Waybar/wiki/Installation#nixos
     #eww #https://github.com/elkowar/eww
     wofi
-    wlprop
+    wev
+    wayland
+    wayland-protocols
+    wayland-utils
+    wl-mirror
+    wf-recorder
+    wlroots
     wlr-randr
+    libsForQt5.qt5.qtwayland
     nwg-displays
     nwg-look
     brightnessctl
     playerctl
+    hyprprop
     hyprpaper
     hyprlock
     hypridle
@@ -45,5 +53,8 @@
     grim
     slurp
     #hyprsysteminfo
+    kdePackages.ark
+    kdePackages.okular
+    kdePackages.gwenview
   ];
 }

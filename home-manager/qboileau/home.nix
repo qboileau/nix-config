@@ -66,6 +66,31 @@
   # Enable home-manager
   programs.home-manager.enable = true;
 
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "inode/directory" = "pcmanfm.desktop";
+      "text/html" = "brave-browser.desktop";
+      "application/pdf" = "okular.desktop";
+      "application/yaml" = "code.desktop";
+      "application/xml" = "code.desktop";
+      "application/json" = "code.desktop";
+      "application/x-gzip" = "org.kde.ark.desktop";
+      "application/zip" = "org.kde.ark.desktop";
+      "application/rar" = "org.kde.ark.desktop";
+      "application/7z" = "org.kde.ark.desktop";
+      "application/*tar" = "org.kde.ark.desktop";
+      "image/*" = "org.kde.gwenview.desktop";
+      "image/gif" = "org.kde.gwenview.desktop";
+      "image/jpeg" = "org.kde.gwenview.desktop";
+      "image/png" = "org.kde.gwenview.desktop";
+      "image/webp" = "org.kde.gwenview.desktop";
+      "video/*" = "vlc.desktop";
+      "audio/*" = "vlc.desktop";
+      "x-scheme-handler/slack" = "slack.desktop";
+    };
+  };
+
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
 

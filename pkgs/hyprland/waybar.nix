@@ -20,8 +20,8 @@
         #"temperature"
         "battery" 
         "clock"
-        "group/group-power"
         "tray"
+        "group/group-power"
       ];
 
       battery = {
@@ -94,8 +94,8 @@
         format-source = "{volume}% ";
         format-source-muted = "";
         on-click = "pavucontrol";
-        on-scroll-up = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%+";
-        on-scroll-down = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-";
+        on-scroll-up = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
+        on-scroll-down = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
       };
 
       temperature = {
@@ -140,14 +140,14 @@
           format = "  ";
           tooltip = true;
           tooltip-format = "Suspend";
-          on-click = "hyprlocks && ystemctl suspend";
+          on-click = "systemctl suspend";
       };
       
       "custom/hibernate" = {
           format = "  ";
           tooltip = true;
           tooltip-format = "Hibernate";
-          on-click = "hyprlocks && systemctl hibernate";
+          on-click = "systemctl hibernate";
       };
 
       "custom/reboot" = {
@@ -168,6 +168,30 @@
         spacing = 10;
       };
     }];
+
+    # TODO check https://github.com/coffebar/dotfiles/blob/main/.config/waybar/style.css
+    # style = 
+    # ''
+    #   * {
+    #     border: none;
+    #     border-radius: 0;
+    #     font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+    #   }
+    #   window#waybar {
+    #     background-color: rgba(43, 48, 59, 0.5);
+    #     border-bottom: 3px solid rgba(100, 114, 125, 0.5);
+    #     color: #ffffff;
+    #     transition-property: background-color;
+    #     transition-duration: .5s;
+    #   }
+    #   window#waybar.hidden {
+    #     opacity: 0.2;
+    #   }
+
+    #   #workspaces button {
+    #     padding: 0 5px;
+    #   }
+    # ''};
   };
 
 

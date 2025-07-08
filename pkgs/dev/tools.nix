@@ -13,7 +13,7 @@
     gh
     awscli2
     google-cloud-sdk
-    teleport_15
+    teleport_16
     unstable.terraform
     terragrunt
     harbor-cli
@@ -25,6 +25,7 @@
     apacheHttpd
     xournalpp
     postgresql
+    ddcui
   ];
 
   xdg.desktopEntries.calculator = {

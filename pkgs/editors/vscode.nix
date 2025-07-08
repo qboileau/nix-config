@@ -3,7 +3,10 @@
 
   programs.vscode = {
     enable = true;
-    extensions = with pkgs; [ 
+  };
+  
+  programs.vscode.profiles.default = {
+    extensions = with pkgs; [
       vscode-extensions.bbenoist.nix
       vscode-extensions.jnoortheen.nix-ide
       vscode-extensions.hashicorp.terraform

@@ -1,4 +1,4 @@
-{pkgs, ...} :
+{config, pkgs, ...} :
 {
     imports = [
       ./bash.nix
@@ -39,9 +39,9 @@
         };
         whitelist = {
           prefix = [ 
-            "/home/qboileau/projects/perso"
-            "/home/qboileau/projects/work"
-            "/home/qboileau/projects/conduktor"
+            "${config.home.homeDirectory}/projects/perso"
+            "${config.home.homeDirectory}/projects/work"
+            "${config.home.homeDirectory}/projects/conduktor"
           ];
         };
       };

@@ -163,7 +163,7 @@
   services.libinput.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -242,6 +242,7 @@
    age
    sops 
    openssl
+   ddcutil
   ];
   services.clamav.daemon.enable = true;
 

@@ -1,4 +1,4 @@
-{pkgs, ...} :
+{config, pkgs, ...} :
 {
 
   programs.bash = {
@@ -7,7 +7,7 @@
     
     # home-manager settings
     historyControl = [ "ignoreboth" ];
-    historyFile = "~/.bash_history";
+    historyFile = "${config.home.homeDirectory}/.bash_history";
     historyFileSize = 100000;
     historySize = 100000;
     

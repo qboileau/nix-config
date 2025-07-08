@@ -6,7 +6,8 @@
   home.packages = with pkgs; [ 
     # work tools 
     slack
-    brave
+    unstable.brave
+    chromium
     _1password-gui
   ];
 

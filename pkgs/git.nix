@@ -1,4 +1,4 @@
-{pkgs, ...} :
+{config, pkgs, ...} :
 {
 
   home.packages = with pkgs; [ 
@@ -30,20 +30,20 @@
 
     includes = [
       {
-        path = "~/.config/git/personal";
-        condition = "gitdir:~/.setup/";
+        path = "${config.home.homeDirectory}/.config/git/personal";
+        condition = "gitdir:${config.home.homeDirectory}/.setup/";
       }
       {
-        path = "~/.config/git/personal";
-        condition = "gitdir:~/projects/perso/";
+        path = "${config.home.homeDirectory}/.config/git/personal";
+        condition = "gitdir:${config.home.homeDirectory}/projects/perso/";
       }
       {
-        path = "~/.config/git/work";
-        condition = "gitdir:~/projects/work/";
+        path = "${config.home.homeDirectory}/.config/git/work";
+        condition = "gitdir:${config.home.homeDirectory}/projects/work/";
       }
       {
-        path = "~/.config/git/conduktor";
-        condition = "gitdir:~/projects/conduktor/";
+        path = "${config.home.homeDirectory}/.config/git/conduktor";
+        condition = "gitdir:${config.home.homeDirectory}/projects/conduktor/";
       }
     ];
 

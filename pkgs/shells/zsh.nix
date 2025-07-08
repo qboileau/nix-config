@@ -11,7 +11,8 @@
       path = "~/zsh/history";
     };
 
-    initExtra = ''
+    #initExtra = ''
+    initContent = ''
     # sources bash extensions
     for file in ~/.bashrc.d/*.bashrc; do
       source "$file"

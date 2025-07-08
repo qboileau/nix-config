@@ -1,4 +1,4 @@
-{pkgs, ...} :
+{config, pkgs, ...} :
 {
 
   home.packages = with pkgs; [ 
@@ -27,9 +27,9 @@
 
   home.file.".cache/npm/global/.keep".text = "placeholder";
   home.file.".npmrc".text = ''
-  prefix=/home/qboileau/.cache/npm/global
+  prefix=${config.home.homeDirectory}/.cache/npm/global
   '';
-  home.sessionPath = ["/home/qboileau/.cache/npm/global/bin"];
+  home.sessionPath = ["${config.home.homeDirectory}/.cache/npm/global/bin"];
 
   home.sessionVariables = {
     MAVEN_OPTS = "-Xmx1g -XX:MaxPermSize=512m";
