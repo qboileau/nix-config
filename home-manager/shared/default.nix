@@ -3,12 +3,11 @@
 
 pkgs: {
   import = [
-      #./shells
-      #./base-tools.nix
-      #./work-tools.nix
+      ./base-tools.nix
+      ./work-tools.nix
 
-      #./dev
-      #./editors
-      #./i3/i3-config.nix
+      ./shells/default.nix
+      ./dev/default.nix
+      ./editors/default.nix
     ];
 }

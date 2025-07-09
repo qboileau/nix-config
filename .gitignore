@@ -1,0 +1,3 @@
+.sops.yaml
+secrets.yaml
+*.cache

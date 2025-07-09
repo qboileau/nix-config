@@ -9,17 +9,28 @@
   pkgs,
   ...
 }: {
+  
   # You can import other home-manager modules here
-  imports = map configLib.relativeToRoot [
-    "pkgs/shells"
-    "pkgs/base-tools.nix"
-    "pkgs/work-tools.nix"
+  imports = [
+    ../shared/base-tools.nix
+    ../shared/work-tools.nix
+    ../shared/shells
+    ../shared/dev
+    ../shared/editors
 
-    "pkgs/dev"
-    "pkgs/editors"
-    "pkgs/i3"
-    "pkgs/sway"
-    "pkgs/hyprland"
+    ../shared/desktop/hyprland
+    ../shared/desktop/i3
+    ../shared/desktop/sway
+  ] ++ map configLib.relativeToRoot [
+    #"pkgs/shells"
+    #"pkgs/base-tools.nix"
+    #"pkgs/work-tools.nix"
+
+    #"pkgs/dev"
+    #"pkgs/editors"
+    #"pkgs/i3"
+    #"pkgs/sway"
+    #"pkgs/hyprland"
   ];
 
   nixpkgs = {
