@@ -1,7 +1,10 @@
 {pkgs, ...} :
 {
   
-  
+   home.packages = with pkgs; [ 
+    hypr-i3-move
+  ];
+
   wayland.windowManager.hyprland.settings = {
     bind = let 
       grim = "${pkgs.grim}/bin/grim";
@@ -20,16 +23,16 @@
       "$mod, L, exec, $lock"
 
       # Move focus with mod + arrow keys
-      "$mod, left, movefocus, l"
-      "$mod, right, movefocus, r"
-      "$mod, up, movefocus, u"
-      "$mod, down, movefocus, d"
+      "$mod, left, exec, hypr-i3-move focus l"
+      "$mod, right, exec, hypr-i3-move focus r"
+      "$mod, up, exec, hypr-i3-move focus u"
+      "$mod, down, exec, hypr-i3-move focus d"
       
       # Move window with mod + SHIFT + arrow keys
-      "$mod SHIFT, left, movewindoworgroup, l"
-      "$mod SHIFT, right, movewindoworgroup, r"
-      "$mod SHIFT, up, movewindoworgroup, u"
-      "$mod SHIFT, down, movewindoworgroup, d"
+      "$mod SHIFT, left, exec, hypr-i3-move move l"
+      "$mod SHIFT, right, exec, hypr-i3-move move r"
+      "$mod SHIFT, up, exec, hypr-i3-move move u"
+      "$mod SHIFT, down, exec, hypr-i3-move move d"
 
       # Move workspace to monitor
       "CTRL $mod SHIFT, right, movecurrentworkspacetomonitor, r"

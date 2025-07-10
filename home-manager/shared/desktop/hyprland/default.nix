@@ -9,9 +9,6 @@
     #./smartgaps.nix
   ];
 
-
-  # changegroupactiveormovefocus = pkgs.callPackage ./changegroupactiveormovefocus { };
-  
   programs.kitty.enable = true; # required for the default Hyprland config
   wayland.windowManager.hyprland.enable = true; # enable Hyprland
   wayland.windowManager.hyprland.systemd.enable = true;

@@ -3,4 +3,5 @@
 
 pkgs: {
   openlens = pkgs.callPackage ./openlens { };
+  hypr-i3-move = pkgs.callPackage ./hypr-i3-move { };
 }
