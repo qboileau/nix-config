@@ -8,13 +8,13 @@
 
 let
 
-  pname = "openlens-desktop";
+  pname = "open-lens";
   version = "6.5.2-366";
 
   sources = {
     x86_64-linux = {
       url = "https://github.com/MuhammedKalkan/OpenLens/releases/download/v${version}/OpenLens-${version}.x86_64.AppImage";
-      hash = "sha256-AbuEU5gOckVU+eDIFnomc7ryLq68ihuk3c0XosoJp74=";
+      hash = "sha256-ZAltAS/U/xh4kCT7vQ+NHAzWV7z0uE5GMQICHKSdj8k=";
     };
   };
 
