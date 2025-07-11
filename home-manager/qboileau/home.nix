@@ -20,17 +20,7 @@
 
     ../shared/desktop/hyprland
     ../shared/desktop/i3
-    ../shared/desktop/sway
-  ] ++ map configLib.relativeToRoot [
-    #"pkgs/shells"
-    #"pkgs/base-tools.nix"
-    #"pkgs/work-tools.nix"
-
-    #"pkgs/dev"
-    #"pkgs/editors"
-    #"pkgs/i3"
-    #"pkgs/sway"
-    #"pkgs/hyprland"
+    # ../shared/desktop/sway
   ];
 
   nixpkgs = {

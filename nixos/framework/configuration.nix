@@ -25,7 +25,7 @@
     ./hardware-configuration.nix
     ./disks.nix
     ../shared/desktop/i3/system.nix
-    ../shared/desktop/sway/system.nix
+    # ../shared/desktop/sway/system.nix
     ../shared/desktop/hyprland/system.nix
   ];
 
