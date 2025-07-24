@@ -9,9 +9,11 @@
     k9s
     k3d
     lens
-    openlens
     chart-testing
     openshift
+    # custom packages
+    openlens
+    helm-readme-generator
   ];
 
   # kubectl extensions
