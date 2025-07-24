@@ -37,6 +37,7 @@
     wayland-utils
     wl-mirror
     wf-recorder
+    wl-clipboard 
     wlroots
     wlr-randr
     libsForQt5.qt5.qtwayland
@@ -45,6 +46,7 @@
     brightnessctl
     playerctl
     hyprprop
+    hyprpicker
     hyprpaper
     hyprlock
     hypridle

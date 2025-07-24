@@ -9,6 +9,7 @@
     bind = let 
       grim = "${pkgs.grim}/bin/grim";
       slurp = "${pkgs.slurp}/bin/slurp";
+      wl-copy = "${pkgs.wl-clipboard}/bin/wl-copy";
     in [
       # Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
       "$mod, Return, exec, $terminal"
@@ -59,7 +60,7 @@
 
       #", Print, exec, XDG_CURRENT_DESKTOP=sway flameshot gui" # use when fixed
       ''
-       , Print, exec, ${grim} -g "$(${slurp})" - | wl-copy -t image/png
+       , Print, exec, ${grim} -g "$(${slurp})" - | ${wl-copy} -t image/png
       ''
     ] ++ (builtins.concatLists (builtins.genList (
       x: let

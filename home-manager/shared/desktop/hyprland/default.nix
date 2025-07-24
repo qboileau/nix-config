@@ -14,6 +14,18 @@
   wayland.windowManager.hyprland.systemd.enable = true;
   wayland.windowManager.hyprland.xwayland.enable = true;
 
+  services.flameshot = {
+    enable = true;
+    package = pkgs.flameshot.override { enableWlrSupport = true; };
+    settings = {
+      # https://github.com/flameshot-org/flameshot/blob/master/flameshot.example.ini
+      General = {
+        #useGrimAdapter = true; # use grim for screenshots
+        contrastOpacity = 188;
+      };
+    };
+  };
+
   wayland.windowManager.hyprland.plugins = [
     pkgs.hyprlandPlugins.hy3
   ];
@@ -118,13 +130,18 @@
     };
     windowrule = [
       #https://wiki.hyprland.org/FAQ/#how-do-i-screenshot
-      "noanim, class:^(flameshot)$"
-      "float, class:^(flameshot)$"
-      "move 0 0, class:^(flameshot)$"
-      "pin, class:^(flameshot)$"
+      #https://ryanwise.me/blog/flameshot-on-hyprland/
+      "move 0 0,class:(flameshot),title:(flameshot)"
+      "pin,class:(flameshot),title:(flameshot)"
+      "fullscreenstate,class:(flameshot),title:(flameshot)"
+      "float,class:(flameshot),title:(flameshot)"
+      # "noanim, class:^(flameshot)$"
+      # "float, class:^(flameshot)$"
+      # "move 0 0, class:^(flameshot)$"
+      # "pin, class:^(flameshot)$"
       # set this to your leftmost monitor id, otherwise you have to move your cursor to the leftmost monitor
       # before executing flameshot
-      "monitor 1, class:^(flameshot)$"
+      # "monitor 1, class:^(flameshot)$"
  
       # Screen sharing Xwayland
       "opacity 0.0 override, class:^(xwaylandvideobridge)$"
@@ -133,9 +150,19 @@
       "maxsize 1 1, class:^(xwaylandvideobridge)$"
       "noblur, class:^(xwaylandvideobridge)$"
       "nofocus, class:^(xwaylandvideobridge)$"
+
+      "float, class:galculator"
+      "float, class:brave,title:(.*)(wants to open)"
+    ];
+    windowrulev2 = [
+      #https://wiki.hyprland.org/FAQ/#how-do-i-screenshot
+      #https://ryanwise.me/blog/flameshot-on-hyprland/
+      "move 0 0,class:(flameshot),title:(flameshot)"
+      "pin,class:(flameshot),title:(flameshot)"
+      "fullscreenstate,class:(flameshot),title:(flameshot)"
+      "float,class:(flameshot),title:(flameshot)"
     ];
   };
-
   # home.file.hyperland = {
   #   enable = true;
   #   source = ./cfg/hyperland.conf;
