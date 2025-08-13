@@ -4,6 +4,7 @@
   home.packages = with pkgs; [ 
     kubectl
     kubernetes-helm
+    kubernetes-helmPlugins.helm-diff
     fluxcd
     kustomize
     k9s

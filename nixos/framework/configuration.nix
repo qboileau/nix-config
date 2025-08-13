@@ -163,22 +163,64 @@
   services.libinput.enable = true;
 
   # Enable sound with pipewire.
+  # https://wiki.nixos.org/wiki/PipeWire#
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
+  systemd.user.services.pipewire.environment.PIPEWIRE_DEBUG = "5";
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
     wireplumber.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
+    wireplumber.extraConfig."10-bluez" = {
+      "monitor.bluez.properties" = {
+        "bluez5.enable-sbc-xq" = true;
+        "bluez5.enable-msbc" = true;
+        "bluez5.enable-hw-volume" = true;
+        # https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration/bluetooth.html#monitor-properties
+        "bluez5.roles" = [
+          "a2dp_sink" 
+          "a2dp_source"
+          "bap_sink" 
+          "bap_source"
+          "hsp_hs"
+          "hsp_ag"
+          "hfp_hf"
+          "hfp_ag"
+        ];
+      };
+    };
+    extraConfig = {
+      pipewire = {
+        "switch-on-connect" = {
+          "pulse.cmd" = [
+            {
+              cmd = "load-module";
+              args = "module-always-sink";
+              flags = [ ];
+            }
+            {
+              cmd = "load-module";
+              args = "module-switch-on-connect";
+            }
+          ];
+        };
+      };
+    };
   };
-  
+
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings = {
+      General = {
+        Experimental = true; # Show battery charge of Bluetooth devices
+      };
+    };
+  };
+  services.blueman.enable = true;
+
   powerManagement.enable = true;
   services.power-profiles-daemon.enable = true;
   programs.auto-cpufreq.enable = false;
@@ -206,8 +248,29 @@
   # ...and use one of the next four drivers
   services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix; # Goodix driver module
 
-  virtualisation.docker.enable = true;
-  virtualisation.docker.storageDriver = "btrfs";
+  virtualisation.docker = { 
+    enable = true;
+    package = pkgs.unstable.docker;
+    storageDriver = "btrfs";
+
+    rootless = {
+      enable = true;
+      setSocketVariable = true;
+      # Optionally customize rootless Docker daemon settings
+      daemon.settings = {
+        "storage-driver" = "btrfs";
+        experimental = true;
+        features = {
+          buildkit = true;
+        };
+      };
+    };
+  };
+
+  # Enable binfmt support for multi-platform containers
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  # Use self-contained, static emulators that work inside containers
+  boot.binfmt.preferStaticEmulators = true;
 
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
@@ -243,6 +306,8 @@
    sops 
    openssl
    ddcutil
+   fprintd
+   qemu
   ];
   services.clamav.daemon.enable = true;
 

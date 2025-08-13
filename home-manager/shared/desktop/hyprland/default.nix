@@ -72,10 +72,25 @@
     "$lock" = "hyprlock";
     "$menu" = "wofi --show drun";
     env = [
+      #https://wiki.hypr.land/Configuring/Environment-variables/#xdg-specifications
+      "XDG_CURRENT_DESKTOP,Hyprland"
+      "XDG_SESSION_TYPE,wayland"
+      "XDG_SESSION_DESKTOP,Hyprland"
+      
+      #https://wiki.hypr.land/Configuring/Environment-variables/#qt-variables
+      "QT_QPA_PLATFORM,wayland;xcb"
+      "QT_AUTO_SCREEN_SCALE_FACTOR,1"
+      "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
+      "QT_QPA_PLATFORMTHEME,qt5ct"
+
+      #https://wiki.hypr.land/Configuring/Environment-variables/#toolkit-backend-variables
+      "GDK_BACKEND,wayland,x11,*"
+      "SDL_VIDEODRIVER,wayland"
+      "CLUTTER_BACKEND,wayland"
+
       "XCURSOR_SIZE,23"
       "HYPRCURSOR_SIZE,23"
       "MOZ_ENABLE_WAYLAND,1"
-      "QT_QPA_PLATFORM,wayland"
       "SDL_VIDEODRIVER,wayland"
       "_JAVA_AWT_WM_NONREPARENTING,1"
       "GDK_DPI_SCALE,1"
@@ -153,6 +168,7 @@
 
       "float, class:galculator"
       "float, class:brave,title:(.*)(wants to open)"
+      "float, class:brave,title:(.*)(wants to save)"
     ];
     windowrulev2 = [
       #https://wiki.hyprland.org/FAQ/#how-do-i-screenshot

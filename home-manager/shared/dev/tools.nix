@@ -13,7 +13,7 @@
     gh
     awscli2
     google-cloud-sdk
-    teleport_16
+    teleport_17
     unstable.terraform
     terragrunt
     harbor-cli

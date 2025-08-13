@@ -9,7 +9,14 @@
     extensions = with pkgs; [
       vscode-extensions.bbenoist.nix
       vscode-extensions.jnoortheen.nix-ide
+      vscode-extensions.davidanson.vscode-markdownlint
+      vscode-extensions.github.vscode-pull-request-github
       vscode-extensions.hashicorp.terraform
+      vscode-extensions.golang.go
+      vscode-extensions.rust-lang.rust-analyzer
+      vscode-extensions.fill-labs.dependi
+      vscode-extensions.vadimcn.vscode-lldb
+      vscode-extensions.ms-azuretools.vscode-containers
     ];
     keybindings = [
       # TODO

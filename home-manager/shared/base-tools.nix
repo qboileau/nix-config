@@ -26,6 +26,8 @@
     cameractrls-gtk4
 
     synology-drive-client
+
+    overskride # bluetooth GUI
   ];
 
 
