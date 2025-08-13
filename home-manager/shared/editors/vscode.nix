@@ -16,7 +16,8 @@
       vscode-extensions.rust-lang.rust-analyzer
       vscode-extensions.fill-labs.dependi
       vscode-extensions.vadimcn.vscode-lldb
-      vscode-extensions.ms-azuretools.vscode-containers
+      vscode-extensions.github.vscode-github-actions
+      unstable.vscode-extensions.ms-azuretools.vscode-containers
     ];
     keybindings = [
       # TODO
