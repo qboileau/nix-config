@@ -5,7 +5,7 @@
   imports = [
     ./picom.nix
     ./i3-status-rs.nix
-    ./dunst.nix
+    ./../dunst.nix
     ./rofi.nix
   ];
 

@@ -4,9 +4,14 @@
     # inputs.hyprland.nixosModules.default
     ./waybar.nix
     ./binds.nix
+    ./../dunst.nix
     #./rules.nix
     #./settings.nix
     #./smartgaps.nix
+  ];
+
+   home.packages = with pkgs; [ 
+    rose-pine-hyprcursor
   ];
 
   programs.kitty.enable = true; # required for the default Hyprland config
@@ -16,7 +21,7 @@
 
   services.flameshot = {
     enable = true;
-    package = pkgs.flameshot.override { enableWlrSupport = true; };
+    package = pkgs.unstable.flameshot; #.override { enableWlrSupport = true; };
     settings = {
       # https://github.com/flameshot-org/flameshot/blob/master/flameshot.example.ini
       General = {
@@ -88,8 +93,9 @@
       "SDL_VIDEODRIVER,wayland"
       "CLUTTER_BACKEND,wayland"
 
-      "XCURSOR_SIZE,23"
-      "HYPRCURSOR_SIZE,23"
+      "XCURSOR_SIZE,25"
+      "HYPRCURSOR_SIZE,25"
+      "HYPRCURSOR_THEME,rose-pine-hyprcursor"
       "MOZ_ENABLE_WAYLAND,1"
       "SDL_VIDEODRIVER,wayland"
       "_JAVA_AWT_WM_NONREPARENTING,1"
