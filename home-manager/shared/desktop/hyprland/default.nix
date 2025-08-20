@@ -2,8 +2,12 @@
 {
   imports = [
     # inputs.hyprland.nixosModules.default
-    ./waybar.nix
     ./binds.nix
+    ./hypridle.nix
+    ./hyprlock.nix
+    ./hyprpaper.nix
+    ./waybar.nix
+    ./flameshot.nix
     ./../dunst.nix
     #./rules.nix
     #./settings.nix
@@ -15,52 +19,18 @@
   ];
 
   programs.kitty.enable = true; # required for the default Hyprland config
-  wayland.windowManager.hyprland.enable = true; # enable Hyprland
-  wayland.windowManager.hyprland.systemd.enable = true;
-  wayland.windowManager.hyprland.xwayland.enable = true;
-
-  services.flameshot = {
-    enable = true;
-    package = pkgs.unstable.flameshot; #.override { enableWlrSupport = true; };
-    settings = {
-      # https://github.com/flameshot-org/flameshot/blob/master/flameshot.example.ini
-      General = {
-        #useGrimAdapter = true; # use grim for screenshots
-        contrastOpacity = 188;
-      };
-    };
-  };
-
-  wayland.windowManager.hyprland.plugins = [
-    pkgs.hyprlandPlugins.hy3
-  ];
-
-  programs.hyprlock.enable = true;
-  home.file.hyprlock = {
-    enable = true;
-    source = ./cfg/hyprlock.conf;
-    target = ".config/hypr/hyprlock.conf";
-  };
-
-  services.hypridle.enable = true;
-  home.file.hypridle = {
-    enable = true;
-    source = ./cfg/hypridle.conf;
-    target = ".config/hypr/hypridle.conf";
-  };
-
-  services.hyprpaper.enable = true;
-  services.hyprpaper.settings = {
-    preload =[ 
-      "${config.home.homeDirectory}/Dropbox/wallpapers/1x1/1550593747663.png" 
-      "${config.home.homeDirectory}/Dropbox/wallpapers/3x1/4205197.jpg"
-    ];
-    wallpaper = [
-      "eDP-1,${config.home.homeDirectory}/Dropbox/wallpapers/1x1/1550593747663.png"
-      "desc:Philips Consumer Electronics Company 49M2C8900 AU42415000050,${config.home.homeDirectory}/Dropbox/wallpapers/3x1/4205197.jpg"
-    ];
-  };
   services.hyprpolkitagent.enable = true;
+
+  wayland.windowManager.hyprland = {
+    enable = true;
+    systemd.enable = true;
+    xwayland.enable = true;
+    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+    portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+    plugins = [
+      pkgs.hyprlandPlugins.hy3
+    ];
+  };
 
   wayland.windowManager.hyprland.settings = {
     # See https://wiki.hyprland.org/Configuring/Monitors/
