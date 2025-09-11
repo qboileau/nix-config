@@ -14,8 +14,9 @@
       vscode-extensions.github.vscode-github-actions
       vscode-extensions.github.copilot-chat
       vscode-extensions.hashicorp.terraform
+      vscode-extension-4ops-terraform # custom package
       vscode-extensions.golang.go
-      vscode-extensions.rust-lang.rust-analyzer
+      # vscode-extensions.rust-lang.rust-analyzer
       vscode-extensions.fill-labs.dependi
       vscode-extensions.vadimcn.vscode-lldb
       vscode-extensions.ms-azuretools.vscode-containers
@@ -37,13 +38,14 @@
       };
       "excalidraw.language" = "en";
       "files.autoSave" = "onFocusChange";
+      "github.copilot.nextEditSuggestions.enabled" = true;
       "workbench.editor.autoLockGroups" = {
         "imagePreview.previewEditor" = true;
       };
       "workbench.editorAssociations" = {
         "*.svg" = "editor.excalidraw";
       };
-      "github.copilot.nextEditSuggestions.enabled" = true;
+      "git.confirmSync"= false;
     };
   };
 
