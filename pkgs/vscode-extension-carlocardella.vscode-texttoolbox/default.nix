@@ -6,10 +6,10 @@
 
 vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
-    name = "terraform";
-    publisher = "4ops";
-    version = "0.2.5";
-    hash = "sha256-y5LljxK8V9Fir9EoG8g9N735gISrlMg3czN21qF/KjI=";
+    name = "vscode-texttoolbox";
+    publisher = "CarloCardella";
+    version = "2.29.0";
+    hash = "sha256-+gez2m0VtPTcE1TY76tUJaGwosgc2TQyC8gnQwMgUqY=";
   };
 
   postInstall = ''
@@ -19,7 +19,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   passthru.updateScript = vscode-extension-update-script {
     extraArgs = [
       "--override-filename"
-      "pkgs/vscode-extensions.4ops.terraform/default.nix"
+      "pkgs/vscode-extensions.carlocardella.vscode-texttoolbox/default.nix"
     ];
   };
 
