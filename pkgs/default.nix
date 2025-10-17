@@ -13,4 +13,5 @@ pkgs: {
   helm-readme-generator = pkgs.callPackage ./helm-readme-generator { };
   vscode-extension-4ops-terraform = pkgs.callPackage ./vscode-extension-4ops-terraform { };
   vscode-extension-carlocardella.vscode-texttoolbox = pkgs.callPackage ./vscode-extension-carlocardella.vscode-texttoolbox { };
+  vscode-extension-buenon.scratchpads = pkgs.callPackage ./vscode-extension-buenon.scratchpads { };
 }
