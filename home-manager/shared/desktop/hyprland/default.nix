@@ -36,7 +36,7 @@
     # See https://wiki.hyprland.org/Configuring/Monitors/
     "monitor" = [
       "eDP-1,2256x1504,0x0,1,bitdepth,10" #main framework laptop monitor
-      "desc:Philips Consumer Electronics Company 49M2C8900 AU42415000050,5120x1440,auto-right,1,bitdepth,10"
+      "desc:Philips Consumer Electronics Company 49M2C8900 AU42415000050,5120x1440,auto-right,1,bitdepth,10,cm,hdr"
       #"DP-4,5120x1440,auto-right,1"
     ];
     xwayland.force_zero_scaling = true;
@@ -83,6 +83,9 @@
       "touchegg"
       #https://gist.github.com/brunoanc/2dea6ddf6974ba4e5d26c3139ffb7580#editing-the-configuration-file
       "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+      # https://wiki.hypr.land/Hypr-Ecosystem/xdg-desktop-portal-hyprland/#share-picker-doesnt-use-the-system-theme
+      "dbus-update-activation-environment --systemd --all"
+      "systemctl --user import-environment QT_QPA_PLATFORMTHEME"
     ];
 
 
@@ -92,7 +95,27 @@
       gaps_in = 1;
       gaps_out = 1;
       border_size = 1;
+      "col.inactive_border" = "0xff444444";
+      "col.active_border" = "0xffffffff";
+      "col.nogroup_border" = "0xff444444";
+      "col.nogroup_border_active" = "0xffffffff";
     };
+
+    group = {
+      "col.border_inactive" = "0xff444444";
+      "col.border_active" = "0xffffffff";
+      "col.border_locked_inactive" = "0xff444444";
+      "col.border_locked_active" = "0xffffffff";
+      groupbar = {
+        font_size = 12;
+        font_weight_active = "bold";
+        "col.active" = "0x6600BCD1";
+        "col.inactive" = "0x66006A75";  
+        "col.locked_active" = "0x6600BCD1";
+        "col.locked_inactive" = "0x66006A75";
+      };
+    };
+    
 
     animations.enabled = true;
 
@@ -153,6 +176,9 @@
       "pin,class:(flameshot),title:(flameshot)"
       "fullscreenstate,class:(flameshot),title:(flameshot)"
       "float,class:(flameshot),title:(flameshot)"
+      
+      # intellij 
+      "nofocus,class:^jetbrains-(?!toolbox),floating:1,title:^win\d+$"
     ];
   };
   # home.file.hyperland = {

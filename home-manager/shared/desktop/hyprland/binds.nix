@@ -58,7 +58,7 @@
       #"$mod SHIFT, right, movegroupwindow, f"
       
 
-      #", Print, exec, XDG_CURRENT_DESKTOP=sway flameshot gui" # use when fixed
+      # ", Print, exec, XDG_CURRENT_DESKTOP=sway flameshot gui"
       ''
        , Print, exec, ${grim} -g "$(${slurp})" - | ${wl-copy} -t image/png
       ''

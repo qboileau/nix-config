@@ -40,7 +40,6 @@
   programs.fzf.enable=true;  # TLDR
 
   services.dropbox.enable=true;
-  services.flameshot.enable=true;
 
   # system monitoring 
   programs.htop.enable=true;

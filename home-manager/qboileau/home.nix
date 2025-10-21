@@ -19,7 +19,7 @@
     ../shared/editors
 
     ../shared/desktop/hyprland
-    ../shared/desktop/i3
+    # ../shared/desktop/i3
     # ../shared/desktop/sway
   ];
 
@@ -73,10 +73,10 @@
       enable = true;
       extraPortals = [
         pkgs.xdg-desktop-portal-gtk
-        pkgs.xdg-desktop-portal-wlr
       ];
-      # configPackages = [ pkgs.hyprland ];
-      config.common.default = "*";
+      config.common.default = "hyprland;gtk";
+      config.common."org.freedesktop.impl.portal.FileChooser" = "gtk";
+      config.common."org.freedesktop.portal.FileChooser" = "gtk";
     };
 
     mimeApps = {
@@ -107,6 +107,64 @@
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
+
+  home.pointerCursor = {
+    gtk.enable = true;
+    # x11.enable = true;
+    package = pkgs.adwaita-icon-theme;
+    name = "Adwaita";
+    size = 24;
+  };
+
+  gtk = {
+    enable = true;
+
+    cursorTheme = {
+      package = pkgs.adwaita-icon-theme;
+      name = "Adwaita";
+      size = 24;
+    };
+
+    theme = {
+      package = pkgs.flat-remix-gtk;
+      name = "Flat-Remix-GTK-Blue-Dark";
+    };
+
+    iconTheme = {
+      package = pkgs.adwaita-icon-theme;
+      name = "Adwaita";
+    };
+
+    font = {
+      name = "Noto Sans";
+      size = 11;
+    };
+
+    gtk3.extraConfig = {
+      "gtk-application-prefer-dark-theme" = "true";
+      "gtk-enable-primary-paste" = "true";
+      "gtk-enable-event-sounds" = "false";
+      "gtk-enable-input-feedback-sounds" = "false";
+      "gtk-enable-animations" = "true";
+    };
+
+    gtk4.extraConfig = {
+      "gtk-application-prefer-dark-theme" = "true";
+      "gtk-enable-primary-paste" = "true";
+      "gtk-enable-event-sounds" = "false";
+      "gtk-enable-input-feedback-sounds" = "false";
+      "gtk-enable-animations" = "true";
+    };
+  };
+
+  qt = {
+    enable = true;
+    platformTheme.name = "gtk";
+    style = {
+      name = "gtk2";
+      package = pkgs.qt6Packages.qt6gtk2;
+    };
+  };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "24.11";

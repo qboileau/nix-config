@@ -9,6 +9,7 @@
       General = {
         #useGrimAdapter = true; # use grim for screenshots
         contrastOpacity = 188;
+        useGrimAdapter = true;
       };
     };
   };

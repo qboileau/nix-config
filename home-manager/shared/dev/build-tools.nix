@@ -13,6 +13,8 @@
     gcc
     libllvm
     python3
+    pre-commit
+    checkov
   ];
     
   home.shellAliases = {

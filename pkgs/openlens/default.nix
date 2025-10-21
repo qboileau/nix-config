@@ -31,10 +31,5 @@ let
 
 in
   callPackage ./linux.nix {
-    inherit
-      pname
-      version
-      src
-      meta
-      ;
+    inherit pname version src meta;
   }

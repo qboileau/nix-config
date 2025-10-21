@@ -22,6 +22,16 @@
     xwayland.enable = true;
   };
 
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ 
+      inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland 
+    ];
+
+    config.common.default = "*";
+    config."org.freedesktop.impl.portal.ScreenCast".default = "hyprland";
+  };
+
   programs.uwsm.enable = false; # use SDDM
   programs.hyprlock.enable = true;
   services.hypridle.enable = true;
@@ -54,9 +64,12 @@
     hyprpolkitagent
     grim
     slurp
+    dunst
+    pcmanfm
     #hyprsysteminfo
     kdePackages.ark
     kdePackages.okular
     kdePackages.gwenview
+    kdePackages.dolphin
   ];
 }

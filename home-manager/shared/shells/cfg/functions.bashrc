@@ -204,8 +204,11 @@ battery_level() {
 
 generate_kubeconfig() {
   local base_config="$HOME/.kube/config"
-  local base_config_bkp="$HOME/.kube/config.bkp"
   local config_dir="$HOME/.kube/config.d"
+  local backup_dir="$HOME/.kube/backup"
+  local base_config_bkp="$backup_dir/config.bkp"
+
+  mkdir -p "$backup_dir"
 
   if [ -d "$config_dir" ]; then
     local config_files=$(find "$config_dir" -type f -name "*.yaml" -exec printf ":%s" {} \;)

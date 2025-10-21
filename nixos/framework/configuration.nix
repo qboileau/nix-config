@@ -24,7 +24,7 @@
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
     ./disks.nix
-    ../shared/desktop/i3/system.nix
+    #../shared/desktop/i3/system.nix
     # ../shared/desktop/sway/system.nix
     ../shared/desktop/hyprland/system.nix
   ];
@@ -138,14 +138,15 @@
   #Framework firmware update `fwupdmgr update` 
   services.fwupd.enable = true;
 
-  services.xserver.enable = true;
+  # services.xserver.enable = false;
 
-  # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;
+    theme = "chili";
   };
-  services.desktopManager.plasma6.enable = true;
+  # Enable the KDE Plasma Desktop Environment.
+  # services.desktopManager.plasma6.enable = false;
 
   # XFCE
   #services.xserver.desktopManager.xfce.enable = true;
@@ -172,6 +173,7 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+    jack.enable = true;
     wireplumber.enable = true;
     wireplumber.extraConfig."10-bluez" = {
       "monitor.bluez.properties" = {
@@ -252,19 +254,26 @@
     enable = true;
     package = pkgs.unstable.docker;
     storageDriver = "btrfs";
-
-    rootless = {
-      enable = true;
-      setSocketVariable = true;
-      # Optionally customize rootless Docker daemon settings
-      daemon.settings = {
-        "storage-driver" = "btrfs";
-        experimental = true;
-        features = {
-          buildkit = true;
-        };
+    # Optionally customize rootless Docker daemon settings
+    daemon.settings = {
+      experimental = true;
+      features = {
+        buildkit = true;
       };
     };
+    # Disable rootless Docker because it cause issues with K3s cluster https://github.com/NixOS/nixpkgs/issues/385044
+    # rootless = {
+    #   enable = true;
+    #   setSocketVariable = true;
+    #   # Optionally customize rootless Docker daemon settings
+    #   daemon.settings = {
+    #     "storage-driver" = "btrfs";
+    #     experimental = true;
+    #     features = {
+    #       buildkit = true;
+    #     };
+    #   };
+    # };
   };
 
   # Enable binfmt support for multi-platform containers
@@ -298,7 +307,10 @@
    wget
    git
    gnumake
+   unzip
+   p7zip
    statix
+   bzip2
    pciutils
    usbutils
    hwinfo
@@ -308,6 +320,10 @@
    ddcutil
    fprintd
    qemu
+   sddm-chili-theme
+   samba
+   cifs-utils # Samba client
+   framework-tool
   ];
   services.clamav.daemon.enable = true;
 

@@ -25,7 +25,7 @@ test-system:
 update-home:
 	nix flake update
 	@echo ".#$(HOSTNAME)@${USER}"
-	home-manager switch --flake ".#${USER}@$(HOSTNAME)"  # --show-trace
+	home-manager switch --flake ".#${USER}@$(HOSTNAME)" # --show-trace -b "bkp"
 
 .PHONY: enable-git-hooks
 enable-git-hooks:

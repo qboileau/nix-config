@@ -11,11 +11,13 @@
     wget
     galculator
     gh
+    pgcli
     awscli2
     google-cloud-sdk
     teleport_17
     unstable.terraform
     terragrunt
+    terraform-docs
     harbor-cli
     dive
     golangci-lint
@@ -26,6 +28,8 @@
     xournalpp
     postgresql
     ddcui
+    nss # certutil
+    mkcert
   ];
 
   xdg.desktopEntries.calculator = {

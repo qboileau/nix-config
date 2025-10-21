@@ -3,23 +3,38 @@
 
   programs.vscode = {
     enable = true;
+    package = pkgs.unstable.vscode;
   };
   
   programs.vscode.profiles.default = {
     extensions = with pkgs.unstable; [
       vscode-extensions.bbenoist.nix
       vscode-extensions.jnoortheen.nix-ide
+      vscode-extensions.mkhl.direnv
       vscode-extensions.davidanson.vscode-markdownlint
+      vscode-extensions.bierner.markdown-mermaid
       vscode-extensions.github.vscode-pull-request-github
       vscode-extensions.github.vscode-github-actions
       vscode-extensions.github.copilot-chat
       vscode-extensions.hashicorp.terraform
-      vscode-extension-4ops-terraform # custom package
+      vscode-extensions.hashicorp.hcl
       vscode-extensions.golang.go
+      vscode-extensions.scalameta.metals
+      vscode-extensions.scala-lang.scala
+      vscode-extensions.scala-lang.scala
+      vscode-extensions.waderyan.gitblame
+      vscode-extensions.donjayamanne.githistory
+      vscode-extensions.humao.rest-client
+      vscode-extensions.ms-vscode.hexeditor
       # vscode-extensions.rust-lang.rust-analyzer
       vscode-extensions.fill-labs.dependi
       vscode-extensions.vadimcn.vscode-lldb
       vscode-extensions.ms-azuretools.vscode-containers
+      vscode-extensions.ms-python.python
+    ] ++ [
+      pkgs.vscode-extension-4ops-terraform # custom package
+      pkgs.vscode-extension-carlocardella.vscode-texttoolbox # custom package
+      pkgs.vscode-extension-buenon.scratchpads # custom package
     ];
     keybindings = [
       # TODO
