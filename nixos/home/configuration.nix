@@ -1,14 +1,70 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, ... }:
-
 {
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  hostUsers,
+  ...
+}: {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../shared/desktop/hyprland/system.nix
     ];
+
+
+  nixpkgs = {
+    # You can add overlays here
+    overlays = [
+      # Add overlays your own flake exports (from overlays and pkgs dir):
+      outputs.overlays.additions
+      outputs.overlays.modifications
+      outputs.overlays.unstable-packages
+
+      # You can also add overlays exported from other flakes:
+      # neovim-nightly-overlay.overlays.default
+
+      # Or define it inline, for example:
+      # (final: prev: {
+      #   hi = final.hello.overrideAttrs (oldAttrs: {
+      #     patches = [ ./change-hello-to-hi.patch ];
+      #   });
+      # })
+    ];
+    # Configure your nixpkgs instance
+    config = {
+      # Disable if you don't want unfree packages
+      allowUnfree = true;
+    };
+  };
+
+  nix = let
+    flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
+  in {
+    settings = {
+      # Enable flakes and new 'nix' command
+      experimental-features = "nix-command flakes";
+      # Opinionated: disable global registry
+      flake-registry = "";
+      # Workaround for https://github.com/NixOS/nix/issues/9574
+      nix-path = config.nix.nixPath;
+
+      auto-optimise-store = true;
+    };
+
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
+
+    channel.enable = true;
+
+    # Opinionated: make flake registry and nix path match flake inputs
+    registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
+    nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
+  };
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -21,19 +77,12 @@
   networking.hostName = "home"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
   # Enable networking
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
+  # Time zone and Local
   time.timeZone = "Europe/Paris";
-
-  # Select internationalisation properties.
   i18n.defaultLocale = "fr_FR.UTF-8";
-
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "fr_FR.UTF-8";
     LC_IDENTIFICATION = "fr_FR.UTF-8";
@@ -46,12 +95,14 @@
     LC_TIME = "fr_FR.UTF-8";
   };
 
-  # Enable the X11 windowing system.
-  # You can disable this if you're only using the Wayland session.
-  services.xserver.enable = true;
+
+  services.displayManager.sddm = {
+    enable = true;
+    wayland.enable = true;
+    theme = "chili";
+  };
 
   # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
@@ -74,31 +125,97 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
+    jack.enable = true;
+    wireplumber.enable = true;
+    wireplumber.extraConfig."10-bluez" = {
+      "monitor.bluez.properties" = {
+        "bluez5.enable-sbc-xq" = true;
+        "bluez5.enable-msbc" = true;
+        "bluez5.enable-hw-volume" = true;
+        # https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration/bluetooth.html#monitor-properties
+        "bluez5.roles" = [
+          "a2dp_sink"
+          "a2dp_source"
+          "bap_sink"
+          "bap_source"
+          "hsp_hs"
+          "hsp_ag"
+          "hfp_hf"
+          "hfp_ag"
+        ];
+      };
+    };
 
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
+    extraConfig = {
+      pipewire = {
+        "switch-on-connect" = {
+          "pulse.cmd" = [
+            {
+              cmd = "load-module";
+              args = "module-always-sink";
+              flags = [ ];
+            }
+            {
+              cmd = "load-module";
+              args = "module-switch-on-connect";
+            }
+          ];
+        };
+      };
+    };
   };
+
+  virtualisation.docker = {
+    enable = true;
+    package = pkgs.unstable.docker;
+    storageDriver = "btrfs";
+    # Optionally customize rootless Docker daemon settings
+    daemon.settings = {
+      experimental = true;
+      features = {
+        buildkit = true;
+      };
+    };
+    # Disable rootless Docker because it cause issues with K3s cluster https://github.com/NixOS/nixpkgs/issues/385044
+    # rootless = {
+    #   enable = true;
+    #   setSocketVariable = true;
+    #   # Optionally customize rootless Docker daemon settings
+    #   daemon.settings = {
+    #     "storage-driver" = "btrfs";
+    #     experimental = true;
+    #     features = {
+    #       buildkit = true;
+    #     };
+    #   };
+    # };
+  };
+
+  # Enable binfmt support for multi-platform containers
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  # Use self-contained, static emulators that work inside containers
+  boot.binfmt.preferStaticEmulators = true;
+
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.qboileau = {
+  users.users = builtins.listToAttrs (map (user: lib.nameValuePair user {
     isNormalUser = true;
-    description = "qboileau";
-    extraGroups = [ "networkmanager" "wheel" ];
+    shell = pkgs.bash;
+    openssh.authorizedKeys.keys = [
+      # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
+    ];
+    # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
+    extraGroups = ["wheel" "networkmanager" "docker" "libvirtd"];
     packages = with pkgs; [
       kdePackages.kate
       vlc
-      gparted
-      git
-
-    #  thunderbird
     ];
-  };
+  }) hostUsers);
 
   # Enable automatic login for the user.
   services.displayManager.autoLogin.enable = true;
@@ -107,14 +224,31 @@
   # Install firefox.
   programs.firefox.enable = true;
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+  programs.gnupg.agent.enable = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
+    gparted
+    wget
+    git
+    unzip
+    p7zip
+    statix
+    bzip2
+    pciutils
+    usbutils
+    hwinfo
+    age
+    sops
+    openssl
+    ddcutil
+    qemu
+    sddm-chili-theme
+    samba
+    cifs-utils # Samba client
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

@@ -55,13 +55,13 @@
 
     hostsSettings = {
         vm = {
-           users = [ "test" "qboileau"];
+           users = [ "test" "qboileau" ];
         };
         framework = {
-           users = [ "qboileau"];
+           users = [ "qboileau" ];
         };
-        hom = {
-           users = [ "qboileau"];
+        home = {
+           users = [ "qboileau" ];
         };
     };
     forAllHosts = builtins.attrNames hostsSettings;
@@ -117,11 +117,6 @@
         };
         modules = [
           ./nixos/home/configuration.nix
-          home-manager.nixosModules.home-manager {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.qboileau = ./home-manager/qboileau-personal/home.nix;
-          }
         ];
       };
     };
@@ -145,6 +140,13 @@
         modules = [ 
           ./home-manager/qboileau/home.nix 
           krewfile.homeManagerModules.krewfile
+        ];
+      };
+      "qboileau@home" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        extraSpecialArgs = specialArgs;
+        modules = [
+          ./home-manager/qboileau-home/home.nix
         ];
       };
     };
