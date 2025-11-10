@@ -60,6 +60,9 @@
         framework = {
            users = [ "qboileau"];
         };
+        hom = {
+           users = [ "qboileau"];
+        };
     };
     forAllHosts = builtins.attrNames hostsSettings;
     inherit (nixpkgs) lib;
@@ -106,6 +109,19 @@
           disko.nixosModules.disko
           nixos-hardware.nixosModules.framework-11th-gen-intel
           auto-cpufreq.nixosModules.default
+        ];
+      };
+      home = nixpkgs.lib.nixosSystem {
+        specialArgs = specialArgs // {
+          hostUsers = hostsSettings.home.users;
+        };
+        modules = [
+          ./nixos/home/configuration.nix
+          home-manager.nixosModules.home-manager {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.qboileau = ./home-manager/qboileau-personal/home.nix;
+          }
         ];
       };
     };
