@@ -36,7 +36,7 @@
     # See https://wiki.hyprland.org/Configuring/Monitors/
     "monitor" = [
       "eDP-1,2256x1504,0x0,1,bitdepth,10" #main framework laptop monitor
-      "desc:Philips Consumer Electronics Company 49M2C8900 AU42415000050,5120x1440,auto-right,1,bitdepth,10,cm,hdr"
+      "desc:Philips Consumer Electronics Company 49M2C8900 AU42415000050,5120x1440,auto-right,1,bitdepth,10,cm,hdr,sdrbrightness,1.3,sdrsaturation,1.0,vrr,3"
       #"DP-4,5120x1440,auto-right,1"
     ];
     xwayland.force_zero_scaling = true;

@@ -7,8 +7,8 @@
     # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.mangohud.enable
     programs.mangohud.enable = true;
 
-    home.packages = with pkgs; [
-
+    home.packages = with pkgs.unstable; [
+        discord-ptb
     ];
 
     # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.discord.enable
