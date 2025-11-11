@@ -12,5 +12,5 @@
     ];
 
     # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.discord.enable
-    programs.discord.enable = true;
+    #programs.discord.enable = true;
 }

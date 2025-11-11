@@ -16,7 +16,7 @@
 #     ../shared/work-tools.nix
     ../shared/shells
 #     ../shared/dev
-#     ../shared/editors
+    ../shared/editors
 
     ../shared/gaming
 
