@@ -58,8 +58,8 @@
   # Add stuff for your user as you see fit:
   # programs.neovim.enable = true;
   home.packages = with pkgs; [ 
-    vlc
- ];
+      vlc
+  ];
 
   # Background deamon
   #nm-applet
