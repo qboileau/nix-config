@@ -5,6 +5,7 @@
   config,
   pkgs,
   hostUsers,
+  username,
   ...
 }: {
   imports =
@@ -96,11 +97,19 @@
     LC_TIME = "fr_FR.UTF-8";
   };
 
-
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;
-    theme = "chili";
+    # TODO uncomment whtn commenting plasma6
+    # package = pkgs.kdePackages.sddm;
+    # theme = "breeze";
+    # extraPackages = with pkgs.kdePackages; [ 
+    #   breeze-icons
+    #   kirigami
+    #   libplasma
+    #   qtsvg
+    #   qtvirtualkeyboard
+    # ];
   };
 
   # Enable the KDE Plasma Desktop Environment.
@@ -203,8 +212,9 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users = builtins.listToAttrs (map (user: lib.nameValuePair user {
+  users.users.${username} = {
+    uid = 1000;
+    group = "users";
     isNormalUser = true;
     shell = pkgs.bash;
     openssh.authorizedKeys.keys = [
@@ -212,15 +222,12 @@
     ];
     # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
     extraGroups = ["wheel" "networkmanager" "docker" "libvirtd"];
-    packages = with pkgs; [
-      kdePackages.kate
-      vlc
-    ];
-  }) hostUsers);
+    packages = with pkgs; [];
+  };
 
   # Enable automatic login for the user.
   services.displayManager.autoLogin.enable = true;
-  services.displayManager.autoLogin.user = "qboileau";
+  services.displayManager.autoLogin.user = "${username}";
 
   # Install firefox.
   programs.firefox.enable = true;
@@ -248,9 +255,12 @@
     openssl
     ddcutil
     qemu
-    sddm-chili-theme
+    # sddm-chili-theme
     samba
     cifs-utils # Samba client
+    kdePackages.breeze
+    kdePackages.breeze-icons
+    kdePackages.breeze-gtk
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

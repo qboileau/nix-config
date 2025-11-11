@@ -45,30 +45,28 @@
     krewfile,
     hyprland,
     ...
-  } @ inputs: let
+  } @ inputs: 
+  let
     inherit (self) outputs;
     # Supported systems for your flake packages, shell, etc.
-    systems = [
-      "x86_64-linux"
-    ];
+    username = "qboileau";
+    systems = [ "x86_64-linux" ];
+
     forAllSystems = nixpkgs.lib.genAttrs systems;
 
     hostsSettings = {
-        vm = {
-           users = [ "test" "qboileau" ];
-        };
         framework = {
-           users = [ "qboileau" ];
+           users = [ "${username}" ];
         };
         home = {
-           users = [ "qboileau" ];
+           users = [ "${username}" ];
         };
     };
     forAllHosts = builtins.attrNames hostsSettings;
     inherit (nixpkgs) lib;
     configLib = import ./lib { inherit lib; };
     specialArgs = {
-      inherit inputs outputs configLib nixpkgs;
+      inherit inputs outputs configLib nixpkgs username;
     };
   in {
     # Your custom packages
@@ -91,15 +89,6 @@
     # Available through 'nixos-rebuild --flake .#your-hostname'
 
     nixosConfigurations = {
-      vm = nixpkgs.lib.nixosSystem {
-        specialArgs = specialArgs // {
-          hostUsers = hostsSettings.vm.users;
-        };
-        modules = [
-          ./nixos/vm/configuration.nix
-          disko.nixosModules.disko
-        ];
-      };
       framework = nixpkgs.lib.nixosSystem {
         specialArgs = specialArgs // {
           hostUsers = hostsSettings.framework.users;
@@ -112,12 +101,19 @@
         ];
       };
       home = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
         specialArgs = specialArgs // {
           hostUsers = hostsSettings.home.users;
         };
         modules = [
           ./nixos/home/configuration.nix
           home-manager.nixosModules.default
+          {
+            home-manager.extraSpecialArgs = specialArgs;
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.${username} = import ./home-manager/qboileau-home/home.nix;
+          }
         ];
       };
     };
@@ -125,17 +121,7 @@
     # Standalone home-manager configuration entrypoint
     # Available through 'home-manager --flake .#your-username@your-hostname'
     homeConfigurations = {
-      "test@vm" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; 
-        extraSpecialArgs = specialArgs;
-        modules = [ ./home-manager/test/home.nix ];
-      };
-      "qboileau@vm" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; 
-        extraSpecialArgs = specialArgs;
-        modules = [ ./home-manager/qboileau/home.nix ];
-      };
-      "qboileau@framework" = home-manager.lib.homeManagerConfiguration {
+      "${username}@framework" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; 
         extraSpecialArgs = specialArgs;
         modules = [ 
@@ -143,13 +129,13 @@
           krewfile.homeManagerModules.krewfile
         ];
       };
-      "qboileau@home" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        extraSpecialArgs = specialArgs;
-        modules = [
-          ./home-manager/qboileau-home/home.nix
-        ];
-      };
+      # "${username}@home" = home-manager.lib.homeManagerConfiguration {
+      #   pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      #   extraSpecialArgs = specialArgs;
+      #   modules = [
+      #     ./home-manager/qboileau-home/home.nix
+      #   ];
+      # };
     };
   };
 }
