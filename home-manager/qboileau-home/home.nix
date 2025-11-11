@@ -18,6 +18,8 @@
 #     ../shared/dev
 #     ../shared/editors
 
+    ../shared/gaming
+
     ../shared/desktop/hyprland
     # ../shared/desktop/i3
     # ../shared/desktop/sway

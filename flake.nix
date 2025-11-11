@@ -117,6 +117,7 @@
         };
         modules = [
           ./nixos/home/configuration.nix
+          home-manager.nixosModules.default
         ];
       };
     };

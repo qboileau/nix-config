@@ -8,9 +8,10 @@
   ];
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
-  boot.initrd.kernelModules = [ ];
+  boot.initrd.kernelModules = [ "amdgpu" ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
+  services.xserver.videoDrivers = [ "amdgpu" ];
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/7a1db630-a289-42e3-a6e8-8d8ac9c00326";
@@ -54,5 +55,8 @@
     };
   };
   services.blueman.enable = true;
+
+  # Enable SSD TRIM timer https://www.reddit.com/r/NixOS/comments/rbzhb1/if_you_have_a_ssd_dont_forget_to_enable_fstrim/
+  services.fstrim.enable = true;
 
 }
