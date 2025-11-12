@@ -43,6 +43,7 @@
 
   # Custom options
   gaming.enable = true;
+  hyprland.autolock.enable = false;
 
   # Background deamon
   #nm-applet
@@ -64,7 +65,7 @@
     mimeApps = {
       enable = true;
       defaultApplications = {
-        "inode/directory" = "pcmanfm.desktop";
+        "inode/directory" = "dolphin.desktop";
         "text/html" = "brave-browser.desktop";
         "application/pdf" = "okular.desktop";
         "application/yaml" = "code.desktop";

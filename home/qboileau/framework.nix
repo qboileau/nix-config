@@ -57,7 +57,11 @@
   # programs.neovim.enable = true;
   home.packages = with pkgs; [ 
     vlc
- ];
+  ];
+
+  # Custom options
+  gaming.enable = false;
+  hyprland.autolock.enable = true;
 
   # Background deamon
   #nm-applet
