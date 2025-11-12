@@ -41,6 +41,9 @@
     vlc
   ];
 
+  # Custom options
+  gaming.enable = true;
+
   # Background deamon
   #nm-applet
   services.network-manager-applet.enable = true;

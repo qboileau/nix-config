@@ -1,6 +1,16 @@
-{config, pkgs, ...} :
-{
-
+{config, lib, pkgs, ...} :
+with lib;
+let
+  gaming = config.gaming;   
+in {
+    
+  options = {
+    gaming = {
+      enable = lib.mkEnableOption "Gaming support";
+    };
+  };
+  
+  config = mkIf gaming.enable {
     # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.lutris.enable
     programs.lutris = {
         enable = true;
@@ -19,4 +29,5 @@
 
     # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.discord.enable
     #programs.discord.enable = true;
+  };
 }
