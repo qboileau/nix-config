@@ -32,10 +32,4 @@
       ];
     };
   };
-
-  # home.file.hypridle = {
-  #   enable = true;
-  #   source = ./cfg/hypridle.conf;
-  #   target = ".config/hypr/hypridle.conf";
-  # };
 }
