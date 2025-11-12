@@ -2,13 +2,19 @@
 {
 
     # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.lutris.enable
-    programs.lutris.enable = true;
+    programs.lutris = {
+        enable = true;
+        package = pkgs.unstable.lutris;
+    };
 
     # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.mangohud.enable
-    programs.mangohud.enable = true;
+    programs.mangohud = {
+        enable = true;
+        package = pkgs.unstable.mangohud;
+    };
 
-    home.packages = with pkgs.unstable; [
-        discord-ptb
+    home.packages = with pkgs; [
+        unstable.discord-ptb
     ];
 
     # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.discord.enable

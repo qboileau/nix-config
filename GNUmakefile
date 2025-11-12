@@ -19,7 +19,7 @@ update-system:
 .PHONY: test-system
 test-system:
 	nix flake update
-	sudo nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo 
+	sudo nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace
 
 .PHONY: update-home
 update-home:
