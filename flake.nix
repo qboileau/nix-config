@@ -58,7 +58,7 @@
         framework = {
            users = [ "${username}" ];
         };
-        home = {
+        desktop = {
            users = [ "${username}" ];
         };
     };
@@ -100,10 +100,10 @@
           auto-cpufreq.nixosModules.default
         ];
       };
-      home = nixpkgs.lib.nixosSystem {
+      desktop = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = specialArgs // {
-          hostUsers = hostsSettings.home.users;
+          hostUsers = hostsSettings.desktop.users;
         };
         modules = [
           ./nixos/desktop/configuration.nix
