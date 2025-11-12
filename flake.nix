@@ -112,7 +112,7 @@
             home-manager.extraSpecialArgs = specialArgs;
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.${username} = import ./home-manager/qboileau-home/home.nix;
+            home-manager.users.${username} = import ./home/qboileau/home.nix;
           }
         ];
       };
@@ -125,7 +125,7 @@
         pkgs = nixpkgs.legacyPackages.x86_64-linux; 
         extraSpecialArgs = specialArgs;
         modules = [ 
-          ./home-manager/qboileau/home.nix 
+          ./home/qboileau/framework.nix 
           krewfile.homeManagerModules.krewfile
         ];
       };
