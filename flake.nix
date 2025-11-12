@@ -106,13 +106,13 @@
           hostUsers = hostsSettings.home.users;
         };
         modules = [
-          ./nixos/home/configuration.nix
+          ./nixos/desktop/configuration.nix
           home-manager.nixosModules.default
           {
             home-manager.extraSpecialArgs = specialArgs;
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.${username} = import ./home/qboileau/home.nix;
+            home-manager.users.${username} = import ./home/qboileau/desktop.nix;
           }
         ];
       };
@@ -133,7 +133,7 @@
       #   pkgs = nixpkgs.legacyPackages.x86_64-linux;
       #   extraSpecialArgs = specialArgs;
       #   modules = [
-      #     ./home-manager/qboileau-home/home.nix
+      #     ./home/qboileau/desktop.nix
       #   ];
       # };
     };
