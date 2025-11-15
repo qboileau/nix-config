@@ -7,6 +7,14 @@ with lib;
       autolock = {
         enable = lib.mkEnableOption "Enable Hyprland lock support";
       };
+      bar = lib.mkOption {
+        type = lib.types.enum [
+          "waybar"
+          "ironbar"
+        ];
+        default = "waybar";
+        description = "Select the bar to use with Hyprland. Either waybar or ironbar";
+      };
     };
   };
 
@@ -185,6 +193,8 @@ with lib;
         "float, class:mpv"
         "float, class:brave,title:(.*)(wants to open)"
         "float, class:brave,title:(.*)(wants to save)"
+        # Firefox videos windows
+        "float, class:firefox,title:(Incrustation)(.*)"
       ];
       windowrulev2 = [
         #https://wiki.hyprland.org/FAQ/#how-do-i-screenshot

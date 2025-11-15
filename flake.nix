@@ -31,6 +31,9 @@
     #https://github.com/outfoxxed/hy3
     hy3.url = "github:outfoxxed/hy3"; 
     hy3.inputs.hyprland.follows = "hyprland";
+
+    ironbar.url = "github:JakeStanger/ironbar";
+    ironbar.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -43,6 +46,7 @@
     krewfile,
     hyprland,
     hy3,
+    ironbar,
     ...
   } @ inputs: 
   let
@@ -68,25 +72,20 @@
       inherit inputs outputs configLib nixpkgs username;
     };
   in {
-    # Your custom packages
+    # Custom packages
     # Accessible through 'nix build', 'nix shell', etc
     packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
     # Formatter for your nix files, available through 'nix fmt'
     # Other options beside 'alejandra' include 'nixpkgs-fmt'
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
 
-    # Your custom packages and modifications, exported as overlays
+    # Custom packages and modifications, exported as overlays
     overlays = import ./overlays {inherit inputs;};
-    # Reusable nixos modules you might want to export
-    # These are usually stuff you would upstream into nixpkgs
     nixosModules = import ./modules/nixos;
-    # Reusable home-manager modules you might want to export
-    # These are usually stuff you would upstream into home-manager
     homeManagerModules = import ./modules/home-manager;
 
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild --flake .#your-hostname'
-
     nixosConfigurations = {
       framework = nixpkgs.lib.nixosSystem {
         specialArgs = specialArgs // {
@@ -126,6 +125,7 @@
         modules = [ 
           ./home/qboileau/framework.nix 
           krewfile.homeManagerModules.krewfile
+          ironbar.homeManagerModules.default
         ];
       };
       # "${username}@home" = home-manager.lib.homeManagerConfiguration {

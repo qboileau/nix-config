@@ -13,6 +13,8 @@
   
   # You can import other home-manager modules here
   imports = [
+    inputs.ironbar.homeManagerModules.default
+
     ../shared/base-tools.nix
 #     ../shared/work-tools.nix
     ../shared/shells
@@ -22,6 +24,7 @@
     ../shared/gaming
 
     ../shared/desktop/hyprland
+    
     # ../shared/desktop/i3
     # ../shared/desktop/sway
   ];
