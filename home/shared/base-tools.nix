@@ -21,8 +21,13 @@
     curl
     wget
 
+    #proton 
+    proton-pass
+    protonvpn-gui
+    unstable.proton-authenticator
+
     # others
-    spotify
+    unstable.spotify
     cameractrls-gtk4
 
     synology-drive-client
