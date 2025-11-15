@@ -38,9 +38,9 @@ with lib;
       xwayland.enable = true;
       package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
       portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-      plugins = [
-        pkgs.hyprlandPlugins.hy3
-      ];
+      extraConfig = ''
+        plugin = ${inputs.hy3.packages.x86_64-linux.hy3}/lib/libhy3.so
+      '';
     };
 
     wayland.windowManager.hyprland.settings = {
@@ -62,6 +62,7 @@ with lib;
         "XDG_CURRENT_DESKTOP,Hyprland"
         "XDG_SESSION_TYPE,wayland"
         "XDG_SESSION_DESKTOP,Hyprland"
+        "XDG_MENU_PREFIX,plasma-" # fix xdg file associations for Dolphin
         
         #https://wiki.hypr.land/Configuring/Environment-variables/#qt-variables
         "QT_QPA_PLATFORM,wayland;xcb"
@@ -88,6 +89,7 @@ with lib;
 
       exec-once = [
         "nm-applet"
+        "blueman-applet"
         "systemctl --user start hyprpolkitagent"
         "dropbox start"
         "synology-drive"
@@ -103,6 +105,8 @@ with lib;
       # https://wiki.hyprland.org/Configuring/Variables/#general
       general = {
         #layout = "hy3";
+        layout = "dwindle";
+        #force_split = 2; # dwindle i3 like force create to right
         gaps_in = 1;
         gaps_out = 1;
         border_size = 1;
@@ -177,6 +181,8 @@ with lib;
         "nofocus, class:^(xwaylandvideobridge)$"
 
         "float, class:galculator"
+        "float, class:vlc"
+        "float, class:mpv"
         "float, class:brave,title:(.*)(wants to open)"
         "float, class:brave,title:(.*)(wants to save)"
       ];

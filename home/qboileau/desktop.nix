@@ -39,6 +39,7 @@
   home.packages = with pkgs; [ 
     kdePackages.kate
     vlc
+    mpv
   ];
 
   # Custom options
@@ -51,7 +52,6 @@
   services.dropbox.enable = true;
 
   xdg = {
-
     portal = {
       enable = true;
       extraPortals = [
@@ -62,27 +62,39 @@
       config.common."org.freedesktop.portal.FileChooser" = "gtk";
     };
 
-    mimeApps = {
+    mimeApps = let 
+      codeEditor = "code.desktop";
+      archive = "org.kde.ark.desktop";
+      imageViewer = "org.kde.gwenview.desktop";
+      videoPlayer = "mpv.desktop";
+      browser = "firefox.desktop";
+      fileManager = "dolphin.desktop";
+    in {
       enable = true;
       defaultApplications = {
-        "inode/directory" = "dolphin.desktop";
-        "text/html" = "brave-browser.desktop";
+        "inode/directory" = fileManager;
+        "text/html" = browser;
         "application/pdf" = "okular.desktop";
-        "application/yaml" = "code.desktop";
-        "application/xml" = "code.desktop";
-        "application/json" = "code.desktop";
-        "application/x-gzip" = "org.kde.ark.desktop";
-        "application/zip" = "org.kde.ark.desktop";
-        "application/rar" = "org.kde.ark.desktop";
-        "application/7z" = "org.kde.ark.desktop";
-        "application/*tar" = "org.kde.ark.desktop";
-        "image/*" = "org.kde.gwenview.desktop";
-        "image/gif" = "org.kde.gwenview.desktop";
-        "image/jpeg" = "org.kde.gwenview.desktop";
-        "image/png" = "org.kde.gwenview.desktop";
-        "image/webp" = "org.kde.gwenview.desktop";
-        "video/*" = "vlc.desktop";
-        "audio/*" = "vlc.desktop";
+        "application/yaml" = codeEditor;
+        "application/xml" = codeEditor;
+        "application/json" = codeEditor;
+        "application/x-gzip" = archive;
+        "application/zip" = archive;
+        "application/rar" = archive;
+        "application/7z" = archive;
+        "application/*tar" = archive;
+        "image/*" = imageViewer;
+        "image/gif" = imageViewer;
+        "image/jpeg" = imageViewer;
+        "image/png" = imageViewer;
+        "image/webp" = imageViewer;
+        "video/*" = videoPlayer;
+        "video/mp4" = videoPlayer;
+        "video/x-matroska" = videoPlayer;
+        "video/x-ms-wmv" = videoPlayer;
+        "video/quicktime" = videoPlayer;
+        "video/vnd.avi" = videoPlayer;
+        "audio/*" = videoPlayer;
         "x-scheme-handler/slack" = "slack.desktop";
       };
     };

@@ -27,12 +27,10 @@
     krewfile.url = "github:brumhard/krewfile"; 
     krewfile.inputs.nixpkgs.follows = "nixpkgs";
 
-    hyprland.url = "github:hyprwm/Hyprland";
-    # hy3.url = "github:outfoxxed/hy3?ref=hl{version}"; # where {version} is the hyprland release version
-    # # or "github:outfoxxed/hy3" to follow the development branch.
-    # # (you may encounter issues if you dont do the same for hyprland)
-    # hy3.inputs.hyprland.follows = "hyprland";
-
+    hyprland.url = "github:hyprwm/Hyprland?submodules=1";
+    #https://github.com/outfoxxed/hy3
+    hy3.url = "github:outfoxxed/hy3"; 
+    hy3.inputs.hyprland.follows = "hyprland";
   };
 
   outputs = {
@@ -44,6 +42,7 @@
     auto-cpufreq,
     krewfile,
     hyprland,
+    hy3,
     ...
   } @ inputs: 
   let
