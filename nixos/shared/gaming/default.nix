@@ -2,6 +2,17 @@
 with lib;
 let
   gaming = config.gaming;
+
+  gameEnv = {
+    MANGOHUD = true;
+    PROTON_ENABLE_WAYLAND = true;
+    PROTON_ENABLE_HDR = true;
+    ENABLE_HDR_WSI = true;
+    PROTON_FSR4_RDNA3_UPGRADE = true;
+    PROTON_FSR4_UPGRADE = true;
+    PROTON_USE_FSR4 = true;
+    PROTON_USE_NTSYNC = true;
+  };
 in {
   options = {
     gaming = {
@@ -10,6 +21,7 @@ in {
   };
 
   config = mkIf gaming.enable {
+
     programs.gamemode = {
       enable = true;
       settings = {
@@ -27,11 +39,14 @@ in {
 
     programs.steam = {
       enable = true; # install steam
-      package = pkgs.unstable.steam;
+      package = pkgs.unstable.steam.override {
+        extraEnv = gameEnv;
+      };
       remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
       #dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     };
     programs.steam.gamescopeSession.enable = true;
+    hardware.steam-hardware.enable = true;
 
     environment.systemPackages = with pkgs; [
         unstable.heroic

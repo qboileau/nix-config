@@ -97,23 +97,49 @@
     LC_TIME = "fr_FR.UTF-8";
   };
 
-  services.displayManager.sddm = {
-    enable = true;
-    wayland.enable = true;
-    # TODO uncomment whtn commenting plasma6
-    # package = pkgs.kdePackages.sddm;
-    # theme = "breeze";
-    # extraPackages = with pkgs.kdePackages; [ 
-    #   breeze-icons
-    #   kirigami
-    #   libplasma
-    #   qtsvg
-    #   qtvirtualkeyboard
-    # ];
+  services.displayManager = { 
+    # Enable automatic login for the user.security
+    autoLogin = {
+      enable = true;
+      user = "${username}";
+    };
+    sddm = {
+      enable = true;
+      wayland.enable = true;
+       # TODO uncomment whtn commenting plasma6
+      # package = pkgs.kdePackages.sddm;
+      # theme = "breeze";
+      # extraPackages = with pkgs.kdePackages; [ 
+      #   breeze-icons
+      #   kirigami
+      #   libplasma
+      #   qtsvg
+      #   qtvirtualkeyboard
+      # ];
+    };
   };
-
+  
   # Enable the KDE Plasma Desktop Environment.
   services.desktopManager.plasma6.enable = true;
+
+  security = {
+    pam = {
+      sshAgentAuth.enable = true;
+      services = {
+        sddm = {
+          kwallet.enable = true;
+          gnupg.enable = true;
+        };
+        login = {
+          kwallet.enable = true;
+          gnupg.enable = true;
+        };
+      };
+    };
+    polkit = {
+      enable = true;
+    };
+  };
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -225,10 +251,6 @@
     packages = with pkgs; [];
   };
 
-  # Enable automatic login for the user.
-  services.displayManager.autoLogin.enable = true;
-  services.displayManager.autoLogin.user = "${username}";
-
   # Install firefox.
   programs.firefox.enable = true;
 
@@ -255,13 +277,21 @@
     openssl
     ddcutil
     qemu
-    # sddm-chili-theme
-    samba
+    pavucontrol
+    pwvucontrol
     cifs-utils # Samba client
+
+    # KDE packages
     kdePackages.breeze
     kdePackages.breeze-icons
     kdePackages.breeze-gtk
+    kdePackages.kwallet
+    kdePackages.kwallet-pam
+    kdePackages.kwalletmanager
   ];
+  services.samba.enable = true;
+  services.gvfs.enable = true; # https://nixos.wiki/wiki/Samba#Browsing_samba_shares_with_GVFS
+  services.gvfs.package = pkgs.gvfs;
 
   # Custom options
   gaming.enable = true;
