@@ -1,9 +1,11 @@
-{pkgs, ...} :
-{
+{pkgs, config, ...} :
+let
+  enabled = config.hyprland.bar == "waybar";
+in {
   
   # https://github.com/Alexays/Waybar/wiki/Module:-Hyprland
   programs.waybar = {
-    enable = config.hyprland.bar == "waybar";
+    enable = enabled;
     systemd.enable = true;
     # systemd.target = ""; TODO target hyprland systemd target
     settings = [{

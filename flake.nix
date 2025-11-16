@@ -109,6 +109,9 @@
           {
             home-manager.extraSpecialArgs = specialArgs;
             home-manager.useGlobalPkgs = true;
+            home-manager.sharedModules = [
+              ironbar.homeManagerModules.default
+            ];
             home-manager.useUserPackages = true;
             home-manager.users.${username} = import ./home/qboileau/desktop.nix;
           }

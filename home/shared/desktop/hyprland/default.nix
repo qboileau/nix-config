@@ -7,6 +7,11 @@ with lib;
       autolock = {
         enable = lib.mkEnableOption "Enable Hyprland lock support";
       };
+      autostart = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [];
+        description = "List of applications to autostart with Hyprland";
+      };
       bar = lib.mkOption {
         type = lib.types.enum [
           "waybar"
@@ -25,6 +30,7 @@ with lib;
     ./hyprlock.nix
     ./hyprpaper.nix
     ./waybar.nix
+    # ./ironbar.nix
     ./flameshot.nix
     ./../dunst.nix
     #./rules.nix
@@ -107,7 +113,7 @@ with lib;
         # https://wiki.hypr.land/Hypr-Ecosystem/xdg-desktop-portal-hyprland/#share-picker-doesnt-use-the-system-theme
         "dbus-update-activation-environment --systemd --all"
         "systemctl --user import-environment QT_QPA_PLATFORMTHEME"
-      ];
+      ] ++ config.hyprland.autostart;
 
 
       # https://wiki.hyprland.org/Configuring/Variables/#general
@@ -191,6 +197,7 @@ with lib;
         "float, class:galculator"
         "float, class:vlc"
         "float, class:mpv"
+        "float, class:Bitwarden"
         "float, class:brave,title:(.*)(wants to open)"
         "float, class:brave,title:(.*)(wants to save)"
         # Firefox videos windows

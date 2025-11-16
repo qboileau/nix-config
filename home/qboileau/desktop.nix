@@ -13,8 +13,6 @@
   
   # You can import other home-manager modules here
   imports = [
-    inputs.ironbar.homeManagerModules.default
-
     ../shared/base-tools.nix
 #     ../shared/work-tools.nix
     ../shared/shells
@@ -48,6 +46,13 @@
   # Custom options
   gaming.enable = true;
   hyprland.autolock.enable = false;
+  hyprland.autostart = [  
+    "bitwarden"
+    "firefox"
+    "steam"
+    "discord"
+    "protonvpn-app"
+  ];
 
   # Background deamon
   #nm-applet

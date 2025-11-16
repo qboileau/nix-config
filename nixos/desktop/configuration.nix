@@ -1,6 +1,7 @@
 {
   inputs,
   outputs,
+  options,
   lib,
   config,
   pkgs,
@@ -78,9 +79,12 @@
 
   networking.hostName = "desktop"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  
+  networking.timeServers = options.networking.timeServers.default ++ [ "time.cloudflare.com" "fr.pool.ntp.org" ];
 
   # Enable networking
   networking.networkmanager.enable = true;
+  networking.firewall.checkReversePath = false;
 
   # Time zone and Local
   time.timeZone = "Europe/Paris";
@@ -280,6 +284,8 @@
     pavucontrol
     pwvucontrol
     cifs-utils # Samba client
+    wireguard-tools
+    openvpn3
 
     # KDE packages
     kdePackages.breeze
