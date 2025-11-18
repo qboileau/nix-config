@@ -1,9 +1,9 @@
-{config, pkgs, lib,inputs, ...} :
+{config, pkgs, lib, inputs, ...} :
 with lib;
 {
 
   programs.ironbar = {
-    enable = config.hyprland.bar == "ironbar";
+    enable = true;
     systemd = true;
     config = {
       # An example: 
@@ -32,6 +32,6 @@ with lib;
       }
     '';
     package = inputs.ironbar;
-    features = ["feature" "another_feature"];
+    # features = ["feature" "another_feature"];
   };
 }
