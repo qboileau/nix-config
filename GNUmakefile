@@ -11,19 +11,20 @@ upgrade-system:
 	sudo nix-channel --add https://channels.nixos.org/nixos-25.05 nixos
 	sudo nixos-rebuild switch --upgrade --flake ".#$(HOSTNAME)" --use-remote-sudo -p upgrade-25.05
 
+.PHONY: update-inputs
+update-inputs:
+	nix flake update
+
 .PHONY: update-system
 update-system:
-	nix flake update
 	sudo nixos-rebuild switch --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace
 
 .PHONY: test-system
 test-system:
-	nix flake update
 	sudo nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace
 
 .PHONY: update-home
 update-home:
-	nix flake update
 	@echo ".#$(HOSTNAME)@${USER}"
 	home-manager switch --flake ".#${USER}@$(HOSTNAME)" #--show-trace -b "bkp"
 

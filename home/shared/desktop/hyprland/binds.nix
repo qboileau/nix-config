@@ -15,7 +15,7 @@ let
     "$mod, E, exec, ${fileManager}"
     "$mod, V, togglefloating,"
     "$mod, D, exec, $menu"
-    "$mod, P, pseudo, # dwindle"
+    "$mod, P, pin, active"
     "$mod, J, togglesplit," 
     "$mod, L, exec, $lock"
     ''
@@ -23,12 +23,21 @@ let
     ''
     "$mod, mouse_down, workspace, e+1"
     "$mod, mouse_up, workspace, e-1"
+    
+    # Example special workspace (scratchpad)
+    "$mod, minus, togglespecialworkspace, magic"
+    "$mod SHIFT, minus, movetoworkspace, special:magic"
+
+    # Zoom 
+    "$mod SHIFT CTRL, mouse_down, exec, hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor -j | jq '.float * 1.2')"
+    "$mod SHIFT CTRL, mouse_up, exec, hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor -j | jq '(.float * 0.8) | if . < 1 then 1 else . end')"
+
   ];
 
   #https://git.outfoxxed.me/outfoxxed/nixnew/src/branch/master/modules/hyprland/hyprland.conf
   hy3-bind = [
     "$mod, a, hy3:changefocus, raise"
-    "$mod+SHIFT, a, hy3:changefocus, lower"
+    "$mod SHIFT, a, hy3:changefocus, lower"
     "$mod, g, hy3:makegroup, tab"
     "$mod, tab, hy3:togglefocuslayer"
 
@@ -182,11 +191,11 @@ in {
     # )
     # 10));
 
-    binds = [];
     bindm = [
       # Move/resize windows with mod + LMB/RMB and dragging
       "$mod, mouse:272, movewindow"
       "$mod, mouse:273, resizewindow"
+      # "$mod, mouse:277, movetoworkspace" # not working because no movetoworkspace on mouse binds
     ];
     bindl = [
       # Requires playerctl

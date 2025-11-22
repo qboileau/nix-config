@@ -299,6 +299,11 @@
   services.gvfs.enable = true; # https://nixos.wiki/wiki/Samba#Browsing_samba_shares_with_GVFS
   services.gvfs.package = pkgs.gvfs;
 
+  services.udev.packages = with pkgs; [
+    unstable.logitech-udev-rules
+    unstable.keychron-udev-rules
+  ];
+
   # Custom options
   gaming.enable = true;
 

@@ -34,6 +34,7 @@
     synology-drive-client
 
     overskride # bluetooth GUI
+    solaar # logitech devices GUI
   ];
 
 

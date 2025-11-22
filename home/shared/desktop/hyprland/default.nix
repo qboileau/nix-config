@@ -52,9 +52,9 @@ with lib;
       xwayland.enable = true;
       package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
       portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-      extraConfig = ''
-        plugin = ${inputs.hy3.packages.x86_64-linux.hy3}/lib/libhy3.so
-      '';
+      # extraConfig = ''
+      #   plugin = ${inputs.hy3.packages.x86_64-linux.hy3}/lib/libhy3.so
+      # '';
     };
 
     wayland.windowManager.hyprland.settings = {
@@ -131,6 +131,9 @@ with lib;
       };
 
       group = {
+        insert_after_current = false; # insert at last in group
+        drag_into_group = 2; # drag to groupbar add to group
+        merge_groups_on_groupbar = false; # groups don't merge into each other
         "col.border_inactive" = "0xff444444";
         "col.border_active" = "0xffffffff";
         "col.border_locked_inactive" = "0xff444444";
@@ -145,6 +148,10 @@ with lib;
         };
       };
       
+      binds = {
+        workspace_back_and_forth = true;
+        scroll_event_delay = 100; # default is 300
+      };
 
       animations.enabled = true;
 
@@ -174,46 +181,51 @@ with lib;
       windowrule = [
         #https://wiki.hyprland.org/FAQ/#how-do-i-screenshot
         #https://ryanwise.me/blog/flameshot-on-hyprland/
-        "move 0 0,class:(flameshot),title:(flameshot)"
-        "pin,class:(flameshot),title:(flameshot)"
-        "fullscreenstate,class:(flameshot),title:(flameshot)"
-        "float,class:(flameshot),title:(flameshot)"
-        # "noanim, class:^(flameshot)$"
-        # "float, class:^(flameshot)$"
-        # "move 0 0, class:^(flameshot)$"
-        # "pin, class:^(flameshot)$"
+        "move 0 0,match:class (flameshot),match:title (flameshot)"
+        "pin true,match:class (flameshot),match:title (flameshot)"
+        "fullscreen_state 3 3,match:class (flameshot),match:title (flameshot)"
+        "float true,match:class (flameshot),match:title (flameshot)"
+        # "noanim, match:class ^(flameshot)$"
+        # "float, match:class ^(flameshot)$"
+        # "move 0 0, match:class ^(flameshot)$"
+        # "pin, match:class ^(flameshot)$"
         # set this to your leftmost monitor id, otherwise you have to move your cursor to the leftmost monitor
         # before executing flameshot
-        # "monitor 1, class:^(flameshot)$"
+        # "monitor 1, match:class ^(flameshot)$"
   
         # Screen sharing Xwayland
-        "opacity 0.0 override, class:^(xwaylandvideobridge)$"
-        "noanim, class:^(xwaylandvideobridge)$"
-        "noinitialfocus, class:^(xwaylandvideobridge)$"
-        "maxsize 1 1, class:^(xwaylandvideobridge)$"
-        "noblur, class:^(xwaylandvideobridge)$"
-        "nofocus, class:^(xwaylandvideobridge)$"
+        "opacity 0.0 override, match:class ^(xwaylandvideobridge)$"
+        "no_anim true, match:class ^(xwaylandvideobridge)$"
+        "no_initial_focus true, match:class ^(xwaylandvideobridge)$"
+        "max_size 1 1, match:class ^(xwaylandvideobridge)$"
+        "no_blur true, match:class ^(xwaylandvideobridge)$"
+        "no_focus true, match:class ^(xwaylandvideobridge)$"
 
-        "float, class:galculator"
-        "float, class:vlc"
-        "float, class:mpv"
-        "float, class:Bitwarden"
-        "float, class:brave,title:(.*)(wants to open)"
-        "float, class:brave,title:(.*)(wants to save)"
+        "float true, match:class galculator"
+        "float true, match:class vlc"
+        "float true, match:class mpv"
+        "float true, match:class Bitwarden"
+        "float true, match:class brave,match:title (.*)(wants to open)"
+        "float true, match:class brave,match:title (.*)(wants to save)"
         # Firefox videos windows
-        "float, class:firefox,title:(Incrustation)(.*)"
+        "float true, match:class firefox,match:title (Incrustation)(.*)"
+
+        "no_focus true,match:class ^jetbrains-(?!toolbox),match:float true,match:title ^win\d+$"
+
+        "workspace 2, match:class ^(steam)$"
+        "workspace 4, match:class ^(discord)$"
       ];
-      windowrulev2 = [
-        #https://wiki.hyprland.org/FAQ/#how-do-i-screenshot
-        #https://ryanwise.me/blog/flameshot-on-hyprland/
-        "move 0 0,class:(flameshot),title:(flameshot)"
-        "pin,class:(flameshot),title:(flameshot)"
-        "fullscreenstate,class:(flameshot),title:(flameshot)"
-        "float,class:(flameshot),title:(flameshot)"
+      # windowrulev2 = [
+      #   #https://wiki.hyprland.org/FAQ/#how-do-i-screenshot
+      #   #https://ryanwise.me/blog/flameshot-on-hyprland/
+      #   "move 0 0,match:class (flameshot),match:title (flameshot)"
+      #   "pin,match:class (flameshot),match:title (flameshot)"
+      #   "fullscreenstate,match:class (flameshot),match:title (flameshot)"
+      #   "float,match:class (flameshot),match:title (flameshot)"
         
-        # intellij 
-        "nofocus,class:^jetbrains-(?!toolbox),floating:1,title:^win\d+$"
-      ];
+      #   # intellij 
+      #   "nofocus,match:class ^jetbrains-(?!toolbox),floating:1,match:title ^win\d+$"
+      # ];
     };
     # home.file.hyperland = {
     #   enable = true;

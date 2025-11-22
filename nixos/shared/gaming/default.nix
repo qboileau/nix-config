@@ -21,6 +21,11 @@ in {
   };
 
   config = mkIf gaming.enable {
+    # Add support of game devices
+    hardware.uinput.enable = true;
+    services.udev.packages = with pkgs; [
+      unstable.game-devices-udev-rules
+    ];
 
     programs.gamemode = {
       enable = true;
@@ -58,6 +63,7 @@ in {
   #             ];
   #         })
         unstable.bottles # wine prefix manager
+        unstable.vulkan-tools
     ];
   };
 }

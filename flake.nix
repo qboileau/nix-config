@@ -27,10 +27,10 @@
     krewfile.url = "github:brumhard/krewfile"; 
     krewfile.inputs.nixpkgs.follows = "nixpkgs";
 
-    hyprland.url = "github:hyprwm/Hyprland?submodules=1";
+    hyprland.url = "github:hyprwm/Hyprland?submodules=1&tag=v0.52.1";
     #https://github.com/outfoxxed/hy3
-    hy3.url = "github:outfoxxed/hy3"; 
-    hy3.inputs.hyprland.follows = "hyprland";
+    # hy3.url = "github:outfoxxed/hy3"; 
+    # hy3.inputs.hyprland.follows = "hyprland";
 
     ironbar.url = "github:JakeStanger/ironbar";
     ironbar.inputs.nixpkgs.follows = "nixpkgs";
@@ -45,7 +45,7 @@
     auto-cpufreq,
     krewfile,
     hyprland,
-    hy3,
+    # hy3,
     ironbar,
     ...
   } @ inputs: 
@@ -109,6 +109,7 @@
           {
             home-manager.extraSpecialArgs = specialArgs;
             home-manager.useGlobalPkgs = true;
+            home-manager.backupFileExtension = ".bak";
             home-manager.sharedModules = [
               ironbar.homeManagerModules.default
             ];

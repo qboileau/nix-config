@@ -41,6 +41,7 @@
     kdePackages.kate
     vlc
     mpv
+    unstable.brave
   ];
 
   # Custom options
@@ -50,7 +51,7 @@
     "bitwarden"
     "firefox"
     "steam"
-    "discord"
+    "discordptb"
     "protonvpn-app"
   ];
 
