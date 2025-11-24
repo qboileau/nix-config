@@ -84,7 +84,12 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-  networking.firewall.checkReversePath = false;
+  networking.firewall = {
+    checkReversePath = false;
+    #KDE connect ports https://wiki.nixos.org/wiki/KDE_Connect
+    allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
+    allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
+  };
 
   # Time zone and Local
   time.timeZone = "Europe/Paris";

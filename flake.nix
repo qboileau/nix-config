@@ -109,7 +109,7 @@
           {
             home-manager.extraSpecialArgs = specialArgs;
             home-manager.useGlobalPkgs = true;
-            home-manager.backupFileExtension = ".bak";
+            home-manager.backupFileExtension = "bak";
             home-manager.sharedModules = [
               ironbar.homeManagerModules.default
             ];

@@ -59,8 +59,11 @@
   #nm-applet
   services.network-manager-applet.enable = true;
   services.dropbox.enable = true;
+  services.kdeconnect.enable = true;
+  services.kdeconnect.indicator = true;
 
   xdg = {
+    enable = true;
     portal = {
       enable = true;
       extraPortals = [
@@ -71,6 +74,7 @@
       config.common."org.freedesktop.portal.FileChooser" = "gtk";
     };
 
+    mime.enable = true;
     mimeApps = let 
       codeEditor = "code.desktop";
       archive = "org.kde.ark.desktop";

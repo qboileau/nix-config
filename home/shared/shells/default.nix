@@ -5,23 +5,41 @@
       ./zsh.nix
     ];
 
-    home.packages = with pkgs; [ 
-      alacritty
-      starship
-    ];
-
-    programs.alacritty.enable = true;
-    home.file.alacritty = {
+    programs.alacritty = {
       enable = true;
-      source = ./cfg/alacritty.toml;
-      target = ".config/alacritty/alacritty.toml";
+      # See https://alacritty.org/config-alacritty.html
+      settings = {
+        general = {
+          live_config_reload = true;
+        };
+        colors = {
+          draw_bold_text_with_bright_colors = true;
+        };
+        font = {
+          size = 12;
+        };
+      };
     };
 
-    programs.starship.enable = true;
-    home.file.starship = {
+    programs.starship = {
       enable = true;
-      source = ./cfg/starship.toml;
-      target = ".config/starship.toml";
+      enableBashIntegration = true;
+      enableZshIntegration = true;
+      # See https://starship.rs/config/
+      settings = {
+        add_newline = true;
+        scan_timeout = 10;
+        username = {
+          show_always = true;
+        };
+        directory = {
+          truncate_to_repo = true;
+          truncation_length = 8;
+        };
+        git_commit = {
+          commit_hash_length = 5;
+        };
+      };
     };
 
     home.file.bashFunctions = {
