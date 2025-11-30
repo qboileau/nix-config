@@ -67,6 +67,8 @@ in {
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
+    # package = pkgs.unstable.mesa;
+    # package32 = pkgs.unstable.pkgsi686Linux.mesa;
   };
 
   hardware.bluetooth = {
@@ -87,6 +89,8 @@ in {
   environment.systemPackages = with pkgs; [ 
     bluez-tools 
     lact # AMDGPU controller GUI TODO use services.lact.enable = true; when it hit stable
+    mesa-demos
+    lshw
   ];
 
   # Enable SSD TRIM timer https://www.reddit.com/r/NixOS/comments/rbzhb1/if_you_have_a_ssd_dont_forget_to_enable_fstrim/

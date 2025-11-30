@@ -42,6 +42,7 @@
     vlc
     mpv
     unstable.brave
+    signal-desktop-bin
   ];
 
   # Custom options
@@ -53,6 +54,7 @@
     "steam"
     "discordptb"
     "protonvpn-app"
+    "signal-desktop"
   ];
 
   # Background deamon
@@ -64,6 +66,10 @@
 
   xdg = {
     enable = true;
+
+    # avoid conflict on mimeapps.list
+    configFile."mimeapps.list".force = true;
+
     portal = {
       enable = true;
       extraPortals = [
@@ -87,6 +93,10 @@
       defaultApplications = {
         "inode/directory" = fileManager;
         "text/html" = browser;
+        "x-scheme-handler/http" = browser;
+        "x-scheme-handler/https" = browser;
+        "x-scheme-handler/about" = browser;
+        "x-scheme-handler/unknown" = browser;
         "application/pdf" = "okular.desktop";
         "application/yaml" = codeEditor;
         "application/xml" = codeEditor;
@@ -112,6 +122,8 @@
       };
     };
   };
+
+  home.sessionVariables.DEFAULT_BROWSER = "${pkgs.firefox}/bin/firefox";
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";

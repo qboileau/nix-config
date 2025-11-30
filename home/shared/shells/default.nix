@@ -7,6 +7,7 @@
 
     programs.alacritty = {
       enable = true;
+      package = pkgs.unstable.alacritty;
       # See https://alacritty.org/config-alacritty.html
       settings = {
         general = {

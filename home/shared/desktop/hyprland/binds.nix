@@ -1,6 +1,6 @@
 {pkgs, ...} :
 let
-  terminal = "${pkgs.alacritty}/bin/alacritty";
+  terminal = "${pkgs.unstable.alacritty}/bin/alacritty";
   fileManager = "${pkgs.kdePackages.dolphin}/bin/dolphin";
   grim = "${pkgs.grim}/bin/grim";
   slurp = "${pkgs.slurp}/bin/slurp";

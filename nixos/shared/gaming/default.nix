@@ -51,6 +51,7 @@ in {
       #dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     };
     programs.steam.gamescopeSession.enable = true;
+    programs.steam.protontricks.enable = true;
     hardware.steam-hardware.enable = true;
 
     environment.systemPackages = with pkgs; [
