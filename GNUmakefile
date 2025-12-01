@@ -8,8 +8,8 @@ help: ## Prints help for targets with comments
 
 .PHONY: upgrade-system
 upgrade-system:
-	sudo nix-channel --add https://channels.nixos.org/nixos-25.05 nixos
-	sudo nixos-rebuild switch --upgrade --flake ".#$(HOSTNAME)" --use-remote-sudo -p upgrade-25.05
+	sudo nix-channel --add https://channels.nixos.org/nixos-25.11 nixos
+	sudo nixos-rebuild test --upgrade --flake ".#$(HOSTNAME)" --use-remote-sudo -p upgrade-25.11
 
 .PHONY: update-inputs
 update-inputs:

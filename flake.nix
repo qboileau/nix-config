@@ -1,16 +1,15 @@
 {
-  description = "Your new nix config";
+  description = "My everything nixos configuration";
 
   inputs = {
     # Nixpkgs
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
-    # You can access packages and modules from different nixpkgs revs
-    # at the same time. Here's an working example:
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    # Unstable channel used in overlay
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
+    systems.url = "github:nix-systems/default-linux";
 
     # Home manager
-    home-manager.url = "github:nix-community/home-manager/release-25.05";
+    home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     #Disko
@@ -39,6 +38,7 @@
   outputs = {
     self,
     nixpkgs,
+    systems,
     home-manager,
     disko,
     nixos-hardware,
@@ -51,11 +51,21 @@
   } @ inputs: 
   let
     inherit (self) outputs;
+    
+    lib = nixpkgs.lib // home-manager.lib;
+    configLib = import ./lib { inherit lib; };
+
     # Supported systems for your flake packages, shell, etc.
     username = "qboileau";
-    systems = [ "x86_64-linux" ];
 
-    forAllSystems = nixpkgs.lib.genAttrs systems;
+    forEachSystem = f: lib.genAttrs (import systems) (system: f pkgsFor.${system});
+    pkgsFor = lib.genAttrs (import systems) (
+      system:
+        import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        }
+    );
 
     hostsSettings = {
         framework = {
@@ -66,21 +76,18 @@
         };
     };
     forAllHosts = builtins.attrNames hostsSettings;
-    inherit (nixpkgs) lib;
-    configLib = import ./lib { inherit lib; };
+
     specialArgs = {
       inherit inputs outputs configLib nixpkgs username;
     };
   in {
-    # Custom packages
-    # Accessible through 'nix build', 'nix shell', etc
-    packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
-    # Formatter for your nix files, available through 'nix fmt'
-    # Other options beside 'alejandra' include 'nixpkgs-fmt'
-    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+    inherit lib;
+
+    packages = forEachSystem (pkgs: import ./pkgs {inherit pkgs;});
+    formatter = forEachSystem (pkgs: pkgs.alejandra);
 
     # Custom packages and modifications, exported as overlays
-    overlays = import ./overlays {inherit inputs;};
+    overlays = import ./overlays {inherit inputs outputs;};
     nixosModules = import ./modules/nixos;
     homeManagerModules = import ./modules/home-manager;
 
@@ -99,7 +106,6 @@
         ];
       };
       desktop = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
         specialArgs = specialArgs // {
           hostUsers = hostsSettings.desktop.users;
         };
@@ -132,13 +138,6 @@
           ironbar.homeManagerModules.default
         ];
       };
-      # "${username}@home" = home-manager.lib.homeManagerConfiguration {
-      #   pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      #   extraSpecialArgs = specialArgs;
-      #   modules = [
-      #     ./home/qboileau/desktop.nix
-      #   ];
-      # };
     };
   };
 }
