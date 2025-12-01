@@ -8,6 +8,8 @@
     home.packages = with pkgs; [ 
       alacritty
       starship
+      asciinema_3
+      asciinema-agg
     ];
 
     programs.alacritty.enable = true;

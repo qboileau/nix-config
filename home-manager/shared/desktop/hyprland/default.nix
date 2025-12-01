@@ -28,7 +28,7 @@
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
     plugins = [
-      pkgs.hyprlandPlugins.hy3
+      #pkgs.hyprlandPlugins.hy3
     ];
   };
 
@@ -57,6 +57,8 @@
       "QT_AUTO_SCREEN_SCALE_FACTOR,1"
       "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
       "QT_QPA_PLATFORMTHEME,qt5ct"
+      "QT_QUICK_CONTROLS_STYLE,org.hyprland.style"
+      "QT_SCALE_FACTOR,1"
 
       #https://wiki.hypr.land/Configuring/Environment-variables/#toolkit-backend-variables
       "GDK_BACKEND,wayland,x11,*"
@@ -72,6 +74,7 @@
       "GDK_DPI_SCALE,1"
       "GDK_SCALE,1"
       "NIXOS_OZONE_WL,1" # tell Electron/Chromium to run on Wayland
+      "ELECTRON_OZONE_PLATFORM_HINT,auto" # https://www.electronjs.org/docs/latest/api/environment-variables
     ];
     
 
@@ -145,10 +148,10 @@
     windowrule = [
       #https://wiki.hyprland.org/FAQ/#how-do-i-screenshot
       #https://ryanwise.me/blog/flameshot-on-hyprland/
-      "move 0 0,class:(flameshot),title:(flameshot)"
-      "pin,class:(flameshot),title:(flameshot)"
-      "fullscreenstate,class:(flameshot),title:(flameshot)"
-      "float,class:(flameshot),title:(flameshot)"
+      "move 0 0,match:class (flameshot),match:title (flameshot)"
+      "pin true,match:class (flameshot),match:title (flameshot)"
+      "fullscreen_state 3 3,match:class (flameshot),match:title (flameshot)"
+      "float true,match:class (flameshot),match:title (flameshot)"
       # "noanim, class:^(flameshot)$"
       # "float, class:^(flameshot)$"
       # "move 0 0, class:^(flameshot)$"
@@ -158,28 +161,30 @@
       # "monitor 1, class:^(flameshot)$"
  
       # Screen sharing Xwayland
-      "opacity 0.0 override, class:^(xwaylandvideobridge)$"
-      "noanim, class:^(xwaylandvideobridge)$"
-      "noinitialfocus, class:^(xwaylandvideobridge)$"
-      "maxsize 1 1, class:^(xwaylandvideobridge)$"
-      "noblur, class:^(xwaylandvideobridge)$"
-      "nofocus, class:^(xwaylandvideobridge)$"
+      "opacity 0.0 override, match:class ^(xwaylandvideobridge)$"
+      # "noanim, match:class ^(xwaylandvideobridge)$"
+      "no_initial_focus true, match:class ^(xwaylandvideobridge)$"
+      # "maxsize 1 1, match:class ^(xwaylandvideobridge)$"
+      "no_blur true, match:class ^(xwaylandvideobridge)$"
+      "no_focus true, match:class ^(xwaylandvideobridge)$"
 
-      "float, class:galculator"
-      "float, class:brave,title:(.*)(wants to open)"
-      "float, class:brave,title:(.*)(wants to save)"
+      "float true, match:class galculator"
+      "float true, match:class brave,match:title (.*)(wants to open)"
+      "float true, match:class brave,match:title (.*)(wants to save)"
+
+      "no_focus true,match:class ^jetbrains-(?!toolbox),match:float true,match:title ^win\d+$"
     ];
-    windowrulev2 = [
-      #https://wiki.hyprland.org/FAQ/#how-do-i-screenshot
-      #https://ryanwise.me/blog/flameshot-on-hyprland/
-      "move 0 0,class:(flameshot),title:(flameshot)"
-      "pin,class:(flameshot),title:(flameshot)"
-      "fullscreenstate,class:(flameshot),title:(flameshot)"
-      "float,class:(flameshot),title:(flameshot)"
+    # windowrulev2 = [
+    #   #https://wiki.hyprland.org/FAQ/#how-do-i-screenshot
+    #   #https://ryanwise.me/blog/flameshot-on-hyprland/
+    #   "move 0 0,match:class (flameshot),match:title (flameshot)"
+    #   "pin true,match:class (flameshot),match:title (flameshot)"
+    #   "fullscreen_state 3 3,match:class (flameshot),match:title (flameshot)"
+    #   "float true,match:class (flameshot),match:title (flameshot)"
       
-      # intellij 
-      "nofocus,class:^jetbrains-(?!toolbox),floating:1,title:^win\d+$"
-    ];
+    #   # intellij 
+    #   "no_focus true,match:class ^jetbrains-(?!toolbox),floating:1,match:title ^win\d+$"
+    # ];
   };
   # home.file.hyperland = {
   #   enable = true;

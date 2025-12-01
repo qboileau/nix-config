@@ -40,6 +40,8 @@
   programs.fzf.enable=true;  # TLDR
 
   services.dropbox.enable=true;
+  services.kdeconnect.enable = true;
+  services.kdeconnect.indicator = true;
 
   # system monitoring 
   programs.htop.enable=true;

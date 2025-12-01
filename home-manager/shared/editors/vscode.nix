@@ -3,9 +3,15 @@
 
   programs.vscode = {
     enable = true;
-    package = pkgs.unstable.vscode;
-  };
-  
+    package = pkgs.vscode;
+    };
+    
+
+  home.packages = with pkgs; [ 
+    nixfmt-rfc-style
+    nil # Nix Language Server
+  ];
+
   programs.vscode.profiles.default = {
     extensions = with pkgs.unstable; [
       vscode-extensions.bbenoist.nix
@@ -60,7 +66,19 @@
       "workbench.editorAssociations" = {
         "*.svg" = "editor.excalidraw";
       };
+      "files.watcherExclude"= {
+        "**/.bloop" = true;
+        "**/.metals" = true;
+      };
       "git.confirmSync"= false;
+      "nix.enableLanguageServer" = true;
+      "nix.serverSettings" = {
+        "nil" = {
+          "formatting" = {
+            "command" = ["nixfmt"];
+          };
+        };
+      };
     };
   };
 

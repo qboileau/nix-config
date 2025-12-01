@@ -6,6 +6,10 @@ help: ## Prints help for targets with comments
 	@cat $(MAKEFILE_LIST) | grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 
+.PHONY: update-flake
+update-flake:
+	nix flake update
+
 .PHONY: upgrade-system
 upgrade-system:
 	sudo nix-channel --add https://channels.nixos.org/nixos-25.05 nixos
@@ -13,19 +17,20 @@ upgrade-system:
 
 .PHONY: update-system
 update-system:
-	nix flake update
-	sudo nixos-rebuild switch --flake ".#$(HOSTNAME)" --use-remote-sudo 
+	sudo nixos-rebuild switch --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace
 
 .PHONY: test-system
 test-system:
-	nix flake update
 	sudo nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo 
 
 .PHONY: update-home
 update-home:
-	nix flake update
 	@echo ".#$(HOSTNAME)@${USER}"
 	home-manager switch --flake ".#${USER}@$(HOSTNAME)" # --show-trace -b "bkp"
+
+revert-home:
+	home-manager generations
+	home-manager switch --rollback
 
 .PHONY: enable-git-hooks
 enable-git-hooks:

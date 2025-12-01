@@ -20,7 +20,8 @@
     terraform-docs
     harbor-cli
     dive
-    golangci-lint
+    nixfmt-rfc-style
+    unstable.golangci-lint
     killall
     graphviz
     postman
@@ -30,6 +31,7 @@
     ddcui
     nss # certutil
     mkcert
+    unstable.claude-code
   ];
 
   xdg.desktopEntries.calculator = {
