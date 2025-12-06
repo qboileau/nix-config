@@ -14,11 +14,10 @@ let
     PROTON_USE_NTSYNC = true;
   };
 in {
-  options = {
-    gaming = {
-      enable = lib.mkEnableOption "Gaming support";
-    };
-  };
+  imports = [
+    ./options.nix
+    ./vr.nix
+  ];
 
   config = mkIf gaming.enable {
     # Add support of game devices
@@ -43,15 +42,19 @@ in {
     };
 
     programs.steam = {
-      enable = true; # install steam
+      enable = true;
       package = pkgs.unstable.steam.override {
         extraEnv = gameEnv;
       };
+
       remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-      #dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+      dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+      localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+      gamescopeSession.enable = true;
+      protontricks.enable = true;
     };
-    programs.steam.gamescopeSession.enable = true;
-    programs.steam.protontricks.enable = true;
+    # VR fix sudo setcap CAP_SYS_NICE+ep ~/.local/share/Steam/steamapps/common/SteamVR/bin/linux64/vrcompositor-launcher
+
     hardware.steam-hardware.enable = true;
 
     environment.systemPackages = with pkgs; [

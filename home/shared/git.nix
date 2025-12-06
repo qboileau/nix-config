@@ -9,9 +9,10 @@
 
   programs.git = {
     enable = true;
+    lfs.enable = true;
     settings = {
        user.name = "Quentin Boileau";
-       aliases = {
+       alias = {
         fall = "fetch -a";
         pr = "pull --rebase";
         co = "checkout";
