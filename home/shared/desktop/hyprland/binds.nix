@@ -1,10 +1,12 @@
-{pkgs, ...} :
+{config, pkgs, ...} :
 let
-  terminal = "${pkgs.unstable.alacritty}/bin/alacritty";
+  terminal = config.terminal.default;
   fileManager = "${pkgs.kdePackages.dolphin}/bin/dolphin";
   grim = "${pkgs.grim}/bin/grim";
   slurp = "${pkgs.slurp}/bin/slurp";
   wl-copy = "${pkgs.wl-clipboard}/bin/wl-copy";
+  lock = "hyprlock";
+  menu = "wofi --show drun";
 
   base-bind = [
     "$mod, Return, exec, ${terminal}"
@@ -14,10 +16,10 @@ let
     "$mod, M, exit,"
     "$mod, E, exec, ${fileManager}"
     "$mod, V, togglefloating,"
-    "$mod, D, exec, $menu"
+    "$mod, D, exec, ${menu}"
     "$mod, P, pin, active"
     "$mod, J, togglesplit," 
-    "$mod, L, exec, $lock"
+    "$mod, L, exec, ${lock}"
     ''
       , Print, exec, ${grim} -g "$(${slurp})" - | ${wl-copy} -t image/png
     ''
@@ -122,10 +124,10 @@ in {
     #   "$mod, M, exit,"
     #   "$mod, E, exec, $fileManager"
     #   "$mod, V, togglefloating,"
-    #   "$mod, D, exec, $menu"
+    #   "$mod, D, exec, ${menu}"
     #   "$mod, P, pseudo, # dwindle"
     #   "$mod, J, togglesplit," # dwindle
-    #   "$mod, L, exec, $lock"
+    #   "$mod, L, exec, ${lock}"
 
     #   # Move focus with mod + arrow keys
     #   "$mod, left, exec, hypr-i3-move focus l"

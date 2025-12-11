@@ -1,11 +1,25 @@
-{config, pkgs, ...} :
+{config, lib, pkgs, ...} :
 {
-    imports = [
-      ./bash.nix
-      ./zsh.nix
-    ];
+  imports = [
+    ./bash.nix
+    ./zsh.nix
+  ];
 
-    programs.alacritty = {
+  options = {
+    terminal = {
+      default = lib.mkOption {
+        type = lib.types.enum [
+          "alacritty"
+          "ghostty"
+        ];
+        default = "ghostty";
+        description = "Select the terminal emulator to use. Either alacritty or ghostty.";
+      };
+    };
+  };
+
+  config = {
+    programs.alacritty = lib.mkIf (config.terminal.default == "alacritty") {
       enable = true;
       package = pkgs.unstable.alacritty;
       # See https://alacritty.org/config-alacritty.html
@@ -19,6 +33,18 @@
         font = {
           size = 12;
         };
+      };
+    };  
+
+    programs.ghostty = lib.mkIf (config.terminal.default == "ghostty") {
+      enable = true;
+      enableBashIntegration = true;
+      enableZshIntegration = true;
+      settings = {
+        font-family = "FiraCode Nerd Font Mono";
+        font-size = 12;
+        theme = "light:Adwaita,dark:Adwaita Dark";
+        background = "black";
       };
     };
 
@@ -65,5 +91,5 @@
         };
       };
     };
-
+  };
 }

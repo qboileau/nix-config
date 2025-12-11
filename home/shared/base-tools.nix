@@ -35,6 +35,8 @@
 
     overskride # bluetooth GUI
     solaar # logitech devices GUI
+
+    galculator
   ];
 
 
@@ -75,4 +77,11 @@
     TERM = "alacritty";
   };
 
+  xdg.desktopEntries.calculator = {
+    name = "Calculator";
+    exec = "galculator";
+    terminal = false;
+    type = "Application";
+    categories = ["System"];
+  };
 }

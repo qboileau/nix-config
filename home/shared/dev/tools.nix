@@ -9,7 +9,6 @@
     httpie
     curl
     wget
-    galculator
     gh
     pgcli
     awscli2
@@ -31,12 +30,4 @@
     nss # certutil
     mkcert
   ];
-
-  xdg.desktopEntries.calculator = {
-    name = "Calculator";
-    exec = "galculator";
-    terminal = false;
-    type = "Application";
-    categories = ["System"];
-  };
 }

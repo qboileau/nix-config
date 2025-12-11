@@ -67,10 +67,6 @@ with lib;
       xwayland.force_zero_scaling = true;
 
       "$mod" = "SUPER";
-      "$terminal" = "alacritty";
-      "$fileManager" = "dolphin";
-      "$lock" = "hyprlock";
-      "$menu" = "wofi --show drun";
       env = [
         #https://wiki.hypr.land/Configuring/Environment-variables/#xdg-specifications
         "XDG_CURRENT_DESKTOP,Hyprland"
@@ -202,6 +198,7 @@ with lib;
         "no_focus true, match:class ^(xwaylandvideobridge)$"
 
         "float true, match:class galculator"
+        "size 341 378, match:class galculator"
         "float true, match:class vlc"
         "float true, match:class mpv"
         "float true, match:class Bitwarden"
