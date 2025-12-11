@@ -33,6 +33,9 @@
 
     ironbar.url = "github:JakeStanger/ironbar";
     ironbar.inputs.nixpkgs.follows = "nixpkgs";
+
+    noctalia.url = "github:noctalia-dev/noctalia-shell";
+    noctalia.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -47,6 +50,7 @@
     hyprland,
     # hy3,
     ironbar,
+    noctalia,
     ...
   } @ inputs: 
   let
@@ -118,6 +122,7 @@
             home-manager.backupFileExtension = "bak";
             home-manager.sharedModules = [
               ironbar.homeManagerModules.default
+              noctalia.homeModules.default
             ];
             home-manager.useUserPackages = true;
             home-manager.users.${username} = import ./home/qboileau/desktop.nix;

@@ -14,6 +14,8 @@
       ./hardware-configuration.nix
       ../shared/desktop/hyprland/system.nix
       ../shared/gaming
+
+      outputs.nixosModules.noctalia
     ];
 
 
@@ -90,6 +92,7 @@
     allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
     allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
   };
+  services.tailscale.enable = true;
 
   # Time zone and Local
   time.timeZone = "Europe/Paris";
@@ -309,9 +312,20 @@
     unstable.keychron-udev-rules
   ];
 
+  services.udev.extraRules = ''
+    # allow keychron k2 HE keyboard
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0e20", MODE="0666", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+    # keychron k2 HE stm bootloader
+    SUBSYSTEM=="usb", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0e20", MODE="0666", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+    # keychron link
+    SUBSYSTEM=="usb", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="d030", MODE="0666", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+  '';
+
   # Custom options
   gaming.enable = true;
   gaming.vr.enable = true;
+
+  noctalia.enable = false;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
