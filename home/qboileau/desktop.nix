@@ -42,6 +42,7 @@
     vlc
     mpv
     unstable.brave
+    chromium
     signal-desktop-bin
   ];
 
