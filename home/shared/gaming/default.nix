@@ -26,6 +26,7 @@ in {
     home.packages = with pkgs; [
         unstable.discord-ptb
         unstable.goverlay
+        owmods-gui # https://outerwildsmods.com/mod-manager/
     ];
 
     # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.discord.enable

@@ -53,7 +53,6 @@ in {
       gamescopeSession.enable = true;
       protontricks.enable = true;
     };
-    # VR fix sudo setcap CAP_SYS_NICE+ep ~/.local/share/Steam/steamapps/common/SteamVR/bin/linux64/vrcompositor-launcher
 
     hardware.steam-hardware.enable = true;
 
