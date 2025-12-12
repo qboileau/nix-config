@@ -24,7 +24,7 @@
     # others
     spotify
     cameractrls-gtk4
-
+    tail-tray
     synology-drive-client
 
     overskride # bluetooth GUI

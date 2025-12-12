@@ -42,7 +42,7 @@
     xwayland.force_zero_scaling = true;
 
     "$mod" = "SUPER";
-    "$terminal" = "alacritty";
+    "$terminal" = "ghostty";
     "$fileManager" = "dolphin";
     "$lock" = "hyprlock";
     "$menu" = "wofi --show drun";
@@ -84,6 +84,7 @@
       "dropbox start"
       "synology-drive"
       "touchegg"
+      "tail-tray"
       #https://gist.github.com/brunoanc/2dea6ddf6974ba4e5d26c3139ffb7580#editing-the-configuration-file
       "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
       # https://wiki.hypr.land/Hypr-Ecosystem/xdg-desktop-portal-hyprland/#share-picker-doesnt-use-the-system-theme

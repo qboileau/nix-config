@@ -49,6 +49,11 @@
       #   command = "editor.action.clipboardCopyAction";
       #   when = "textInputFocus";
       # }
+      {
+        key = "ctrl+w"; # Disable close editor tab on ctrl+w
+        command = "-workbench.action.closeWindow";
+        when = "!editorIsOpen && !multipleEditorGroups";
+      }
     ];
     userSettings = {
       # TODO
@@ -79,6 +84,9 @@
           };
         };
       };
+      "terminal.explorerKind"= "both";
+      "terminal.external.linuxExec"= "alacritty";
+      "terminal.integrated.enableImages"= true;
     };
   };
 

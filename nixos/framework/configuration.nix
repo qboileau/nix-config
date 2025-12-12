@@ -89,6 +89,9 @@
   services.dnsmasq = {
     enable = true;
     settings = {
+      bind-interfaces = true;
+      interface = "wlp170s0";
+      listen-address= ["127.0.0.1"];
       domain-needed = true;
       domain = "localhost";
       expand-hosts = true;
@@ -120,6 +123,7 @@
     dhcpcd.enable = false;
     nameservers = [ "127.0.0.1" ]; # use DNSmasq
   };
+  services.tailscale.enable = true;
 
   time.timeZone = "Europe/Paris";
   i18n.defaultLocale = "en_US.UTF-8";
