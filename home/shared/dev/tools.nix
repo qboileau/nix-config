@@ -1,5 +1,9 @@
-    {pkgs, ...} :
-{
+{pkgs, ...} :
+let 
+  gdk = pkgs.google-cloud-sdk.withExtraComponents( with pkgs.google-cloud-sdk.components; [
+    gke-gcloud-auth-plugin
+  ]);
+in {
 
   home.packages = with pkgs; [ 
     jq
@@ -9,17 +13,19 @@
     httpie
     curl
     wget
+    galculator
     gh
     pgcli
     awscli2
-    google-cloud-sdk
+    gdk
     teleport_17
     unstable.terraform
     terragrunt
     terraform-docs
     harbor-cli
     dive
-    golangci-lint
+    nixfmt-rfc-style
+    unstable.golangci-lint
     killall
     graphviz
     postman

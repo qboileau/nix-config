@@ -57,6 +57,8 @@
   # programs.neovim.enable = true;
   home.packages = with pkgs; [ 
     vlc
+    mpv
+    imv
   ];
 
   # Custom options

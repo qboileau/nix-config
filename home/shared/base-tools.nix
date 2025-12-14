@@ -32,6 +32,7 @@
     cameractrls-gtk4
 
     synology-drive-client
+    unstable.tail-tray
 
     overskride # bluetooth GUI
     solaar # logitech devices GUI

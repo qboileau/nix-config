@@ -4,8 +4,14 @@
   programs.vscode = {
     enable = true;
     package = pkgs.unstable.vscode;
-  };
-  
+    };
+    
+
+  home.packages = with pkgs; [ 
+    nixfmt-rfc-style
+    nil # Nix Language Server
+  ];
+
   programs.vscode.profiles.default = {
     extensions = with pkgs.unstable; [
       vscode-extensions.bbenoist.nix
@@ -48,6 +54,11 @@
       #   command = "editor.action.clipboardCopyAction";
       #   when = "textInputFocus";
       # }
+      {
+        key = "ctrl+w"; # Disable close editor tab on ctrl+w
+        command = "-workbench.action.closeWindow";
+        when = "!editorIsOpen && !multipleEditorGroups";
+      }
     ];
     userSettings = {
       # TODO
@@ -65,7 +76,22 @@
       "workbench.editorAssociations" = {
         "*.svg" = "editor.excalidraw";
       };
+      "files.watcherExclude"= {
+        "**/.bloop" = true;
+        "**/.metals" = true;
+      };
       "git.confirmSync"= false;
+      "nix.enableLanguageServer" = true;
+      "nix.serverSettings" = {
+        "nil" = {
+          "formatting" = {
+            "command" = ["nixfmt"];
+          };
+        };
+      };
+      "terminal.explorerKind"= "both";
+      "terminal.external.linuxExec"= "alacritty";
+      "terminal.integrated.enableImages"= true;
     };
   };
 

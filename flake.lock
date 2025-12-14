@@ -324,6 +324,27 @@
     },
     "hyprland-protocols": {
       "inputs": {
+        "aquamarine": [
+          "hyprland",
+          "aquamarine"
+        ],
+        "hyprgraphics": [
+          "hyprland",
+          "hyprgraphics"
+        ],
+        "hyprlang": [
+          "hyprland",
+          "hyprlang"
+        ],
+        "hyprtoolkit": "hyprtoolkit",
+        "hyprutils": [
+          "hyprland",
+          "hyprutils"
+        ],
+        "hyprwayland-scanner": [
+          "hyprland",
+          "hyprwayland-scanner"
+        ],
         "nixpkgs": [
           "hyprland",
           "nixpkgs"
@@ -334,16 +355,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1759610243,
-        "narHash": "sha256-+KEVnKBe8wz+a6dTLq8YDcF3UrhQElwsYJaVaHXJtoI=",
+        "lastModified": 1763727565,
+        "narHash": "sha256-vRff/2R1U1jzPBy4OODqh2kfUzmizW/nfV2ROzTDIKo=",
         "owner": "hyprwm",
-        "repo": "hyprland-protocols",
-        "rev": "bd153e76f751f150a09328dbdeb5e4fab9d23622",
+        "repo": "hyprland-guiutils",
+        "rev": "7724d3a12a0453e7aae05f2ef39474219f05a4b4",
         "type": "github"
       },
       "original": {
         "owner": "hyprwm",
-        "repo": "hyprland-protocols",
+        "repo": "hyprland-guiutils",
         "type": "github"
       }
     },
@@ -432,10 +453,12 @@
       "inputs": {
         "nixpkgs": [
           "hyprland",
+          "hyprland-guiutils",
           "nixpkgs"
         ],
         "systems": [
           "hyprland",
+          "hyprland-guiutils",
           "systems"
         ]
       },
