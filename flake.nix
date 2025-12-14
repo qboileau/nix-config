@@ -113,21 +113,11 @@
     # Standalone home-manager configuration entrypoint
     # Available through 'home-manager --flake .#your-username@your-hostname'
     homeConfigurations = {
-      "test@vm" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; 
-        extraSpecialArgs = specialArgs;
-        modules = [ ./home-manager/test/home.nix ];
-      };
-      "qboileau@vm" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; 
-        extraSpecialArgs = specialArgs;
-        modules = [ ./home-manager/qboileau/home.nix ];
-      };
       "qboileau@framework" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; 
         extraSpecialArgs = specialArgs;
         modules = [ 
-          ./home-manager/qboileau/home.nix 
+          ./home/qboileau/framework.nix 
           krewfile.homeManagerModules.krewfile
         ];
       };
