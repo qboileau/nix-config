@@ -24,12 +24,11 @@
     # others
     spotify
     cameractrls-gtk4
-    tail-tray
+    unstable.tail-tray
     synology-drive-client
 
     overskride # bluetooth GUI
   ];
-
 
   # replacement tools
   programs.bat.enable=true; # better cat

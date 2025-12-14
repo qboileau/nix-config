@@ -37,7 +37,7 @@
     "monitor" = [
       "eDP-1,2256x1504,0x0,1,bitdepth,10" #main framework laptop monitor
       "desc:Philips Consumer Electronics Company 49M2C8900 AU42415000050,5120x1440,auto-right,1,bitdepth,10,cm,hdr"
-      #"DP-4,5120x1440,auto-right,1"
+      "desc:Iiyama North America PL2440HS 1179410502548,1920x1080,auto-up,1"
     ];
     xwayland.force_zero_scaling = true;
 

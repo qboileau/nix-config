@@ -89,9 +89,9 @@
   services.dnsmasq = {
     enable = true;
     settings = {
-      bind-interfaces = true;
-      interface = "wlp170s0";
-      listen-address= ["127.0.0.1"];
+      # bind-interfaces = true;
+      # interface = "wlp170s0";
+      # listen-address= ["127.0.0.1"];
       domain-needed = true;
       domain = "localhost";
       expand-hosts = true;
