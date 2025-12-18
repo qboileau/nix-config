@@ -31,8 +31,8 @@
     # hy3.url = "github:outfoxxed/hy3"; 
     # hy3.inputs.hyprland.follows = "hyprland";
 
-    ironbar.url = "github:JakeStanger/ironbar";
-    ironbar.inputs.nixpkgs.follows = "nixpkgs";
+    # ironbar.url = "github:JakeStanger/ironbar";
+    # ironbar.inputs.nixpkgs.follows = "nixpkgs";
 
     noctalia.url = "github:noctalia-dev/noctalia-shell";
     noctalia.inputs.nixpkgs.follows = "nixpkgs";
@@ -49,7 +49,7 @@
     krewfile,
     hyprland,
     # hy3,
-    ironbar,
+    # ironbar,
     noctalia,
     ...
   } @ inputs: 
@@ -121,7 +121,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.backupFileExtension = "bak";
             home-manager.sharedModules = [
-              ironbar.homeManagerModules.default
+              # ironbar.homeManagerModules.default
               noctalia.homeModules.default
             ];
             home-manager.useUserPackages = true;
@@ -140,7 +140,7 @@
         modules = [ 
           ./home/qboileau/framework.nix 
           krewfile.homeManagerModules.krewfile
-          ironbar.homeManagerModules.default
+          # ironbar.homeManagerModules.default
         ];
       };
     };

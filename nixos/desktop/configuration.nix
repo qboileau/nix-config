@@ -324,6 +324,7 @@
   # Custom options
   gaming.enable = true;
   gaming.vr.enable = true;
+  gaming.amd.enable = true;
 
   noctalia.enable = false;
 

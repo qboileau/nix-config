@@ -27,6 +27,7 @@
     #../shared/desktop/i3/system.nix
     # ../shared/desktop/sway/system.nix
     ../shared/desktop/hyprland/system.nix
+    ../shared/gaming
   ];
 
   nixpkgs = {
@@ -363,6 +364,12 @@
       PasswordAuthentication = false;
     };
   };
+
+  # Custom options
+  gaming.enable = true;
+  gaming.vr.enable = false;
+  gaming.amd.enable = false;
+
 
   services.udev.extraRules = ''
     # allow keychron k2 HE keyboard

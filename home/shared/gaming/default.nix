@@ -24,7 +24,6 @@ in {
     };
 
     home.packages = with pkgs; [
-        unstable.discord-ptb
         unstable.goverlay
         owmods-gui # https://outerwildsmods.com/mod-manager/
     ];

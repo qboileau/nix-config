@@ -27,6 +27,7 @@
     unstable.proton-authenticator
 
     # others
+    unstable.discord-ptb
     bitwarden-desktop
     unstable.spotify
     cameractrls-gtk4

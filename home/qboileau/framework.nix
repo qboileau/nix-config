@@ -17,6 +17,7 @@
     ../shared/shells
     ../shared/dev
     ../shared/editors
+    ../shared/gaming
 
     ../shared/desktop/hyprland
     # ../shared/desktop/i3
@@ -64,6 +65,7 @@
   # Custom options
   gaming.enable = false;
   hyprland.autolock.enable = true;
+  hyprland.autostart = [];
 
   # Background deamon
   #nm-applet
@@ -100,7 +102,7 @@
         "application/7z" = "org.kde.ark.desktop";
         "application/*tar" = "org.kde.ark.desktop";
         "image/*" = "org.kde.gwenview.desktop";
-        "image/gif" = "org.kde.gwenview.desktop";
+        "image/gif" = "imv.desktop";
         "image/jpeg" = "org.kde.gwenview.desktop";
         "image/png" = "org.kde.gwenview.desktop";
         "image/webp" = "org.kde.gwenview.desktop";
