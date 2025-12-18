@@ -1,13 +1,12 @@
 {
-  description = "Your new nix config";
+  description = "My everything nixos configuration";
 
   inputs = {
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
-    # You can access packages and modules from different nixpkgs revs
-    # at the same time. Here's an working example:
+    # Unstable channel used in overlay
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
+    systems.url = "github:nix-systems/default-linux";
 
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-25.11";
@@ -27,76 +26,78 @@
     krewfile.url = "github:brumhard/krewfile"; 
     krewfile.inputs.nixpkgs.follows = "nixpkgs";
 
-    hyprland.url = "github:hyprwm/Hyprland";
-    # hy3.url = "github:outfoxxed/hy3?ref=hl{version}"; # where {version} is the hyprland release version
-    # # or "github:outfoxxed/hy3" to follow the development branch.
-    # # (you may encounter issues if you dont do the same for hyprland)
+    hyprland.url = "github:hyprwm/Hyprland?submodules=1&tag=v0.52.1";
+    #https://github.com/outfoxxed/hy3
+    # hy3.url = "github:outfoxxed/hy3"; 
     # hy3.inputs.hyprland.follows = "hyprland";
 
+    ironbar.url = "github:JakeStanger/ironbar";
+    ironbar.inputs.nixpkgs.follows = "nixpkgs";
+
+    noctalia.url = "github:noctalia-dev/noctalia-shell";
+    noctalia.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
     self,
     nixpkgs,
+    systems,
     home-manager,
     disko,
     nixos-hardware,
     auto-cpufreq,
     krewfile,
     hyprland,
+    # hy3,
+    ironbar,
+    noctalia,
     ...
-  } @ inputs: let
+  } @ inputs: 
+  let
     inherit (self) outputs;
+    
+    lib = nixpkgs.lib // home-manager.lib;
+    configLib = import ./lib { inherit lib; };
+
     # Supported systems for your flake packages, shell, etc.
-    systems = [
-      "x86_64-linux"
-    ];
-    forAllSystems = nixpkgs.lib.genAttrs systems;
+    username = "qboileau";
+
+    forEachSystem = f: lib.genAttrs (import systems) (system: f pkgsFor.${system});
+    pkgsFor = lib.genAttrs (import systems) (
+      system:
+        import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        }
+    );
 
     hostsSettings = {
-        vm = {
-           users = [ "test" "qboileau"];
-        };
         framework = {
-           users = [ "qboileau"];
+           users = [ "${username}" ];
+        };
+        desktop = {
+           users = [ "${username}" ];
         };
     };
     forAllHosts = builtins.attrNames hostsSettings;
-    inherit (nixpkgs) lib;
-    configLib = import ./lib { inherit lib; };
+
     specialArgs = {
-      inherit inputs outputs configLib nixpkgs;
+      inherit inputs outputs configLib nixpkgs username;
     };
   in {
-    # Your custom packages
-    # Accessible through 'nix build', 'nix shell', etc
-    packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
-    # Formatter for your nix files, available through 'nix fmt'
-    # Other options beside 'alejandra' include 'nixpkgs-fmt'
-    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+    inherit lib;
 
-    # Your custom packages and modifications, exported as overlays
-    overlays = import ./overlays {inherit inputs;};
-    # Reusable nixos modules you might want to export
-    # These are usually stuff you would upstream into nixpkgs
+    packages = forEachSystem (pkgs: import ./pkgs {inherit pkgs;});
+    formatter = forEachSystem (pkgs: pkgs.alejandra);
+
+    # Custom packages and modifications, exported as overlays
+    overlays = import ./overlays {inherit inputs outputs;};
     nixosModules = import ./modules/nixos;
-    # Reusable home-manager modules you might want to export
-    # These are usually stuff you would upstream into home-manager
     homeManagerModules = import ./modules/home-manager;
 
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild --flake .#your-hostname'
-
     nixosConfigurations = {
-      vm = nixpkgs.lib.nixosSystem {
-        specialArgs = specialArgs // {
-          hostUsers = hostsSettings.vm.users;
-        };
-        modules = [
-          ./nixos/vm/configuration.nix
-          disko.nixosModules.disko
-        ];
-      };
       framework = nixpkgs.lib.nixosSystem {
         specialArgs = specialArgs // {
           hostUsers = hostsSettings.framework.users;
@@ -108,17 +109,38 @@
           auto-cpufreq.nixosModules.default
         ];
       };
+      desktop = nixpkgs.lib.nixosSystem {
+        specialArgs = specialArgs // {
+          hostUsers = hostsSettings.desktop.users;
+        };
+        modules = [
+          ./nixos/desktop/configuration.nix
+          home-manager.nixosModules.default
+          {
+            home-manager.extraSpecialArgs = specialArgs;
+            home-manager.useGlobalPkgs = true;
+            home-manager.backupFileExtension = "bak";
+            home-manager.sharedModules = [
+              ironbar.homeManagerModules.default
+              noctalia.homeModules.default
+            ];
+            home-manager.useUserPackages = true;
+            home-manager.users.${username} = import ./home/qboileau/desktop.nix;
+          }
+        ];
+      };
     };
 
     # Standalone home-manager configuration entrypoint
     # Available through 'home-manager --flake .#your-username@your-hostname'
     homeConfigurations = {
-      "qboileau@framework" = home-manager.lib.homeManagerConfiguration {
+      "${username}@framework" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; 
         extraSpecialArgs = specialArgs;
         modules = [ 
           ./home/qboileau/framework.nix 
           krewfile.homeManagerModules.krewfile
+          ironbar.homeManagerModules.default
         ];
       };
     };

@@ -12,8 +12,12 @@ update-flake:
 
 .PHONY: upgrade-system
 upgrade-system:
-	sudo nix-channel --add https://channels.nixos.org/nixos-25.05 nixos
-	sudo nixos-rebuild switch --upgrade --flake ".#$(HOSTNAME)" --use-remote-sudo -p upgrade-25.05
+	sudo nix-channel --add https://channels.nixos.org/nixos-25.11 nixos
+	sudo nixos-rebuild test --upgrade --flake ".#$(HOSTNAME)" --use-remote-sudo -p upgrade-25.11
+
+.PHONY: update-inputs
+update-inputs:
+	nix flake update
 
 .PHONY: update-system
 update-system:
@@ -21,12 +25,12 @@ update-system:
 
 .PHONY: test-system
 test-system:
-	sudo nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo 
+	sudo nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace
 
 .PHONY: update-home
 update-home:
 	@echo ".#$(HOSTNAME)@${USER}"
-	home-manager switch --flake ".#${USER}@$(HOSTNAME)" # --show-trace -b "bkp"
+	home-manager switch --flake ".#${USER}@$(HOSTNAME)" #--show-trace -b "bkp"
 
 revert-home:
 	home-manager generations

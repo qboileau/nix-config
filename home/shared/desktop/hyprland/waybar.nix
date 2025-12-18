@@ -1,12 +1,15 @@
-{pkgs, ...} :
-{
+{pkgs, config, ...} :
+let
+  enabled = config.hyprland.bar == "waybar";
+in {
+  
   # https://github.com/Alexays/Waybar/wiki/Module:-Hyprland
   programs.waybar = {
-    enable = true;
+    enable = enabled;
     systemd.enable = true;
     # systemd.target = ""; TODO target hyprland systemd target
     settings = [{
-      height = 25;
+      height = 30;
       layer = "top";
       position = "bottom";
       modules-center = [ "hyprland/window" ];
@@ -93,6 +96,24 @@
         #on-click-right = ""
       };
 
+      wireplumber = {
+        format = "{volume}% {icon} {format_source}";
+        format-muted = " {format_source}";
+        format-source = "{source_volume}% ";
+        format-source-muted = " ";
+        format-icons = {
+          default = ["" "" ""];
+          handsfree = "";
+          headphones = "";
+          headset = "";
+          phone = "";
+          portable = "";
+        };
+        on-click = "pwvucontrol";
+        on-scroll-up = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
+        on-scroll-down = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
+      };
+
       pulseaudio = {
         format = "{volume}% {icon} {format_source}";
         format-bluetooth = "{volume}% {icon} {format_source}";
@@ -108,7 +129,7 @@
         format-muted = " {format_source}";
         format-source = "{volume}% ";
         format-source-muted = "";
-        on-click = "pavucontrol";
+        on-click = "pwvucontrol";
         on-scroll-up = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
         on-scroll-down = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
       };
@@ -181,6 +202,7 @@
 
       tray = { 
         spacing = 10;
+        show-passive-items = true;
       };
     }];
 

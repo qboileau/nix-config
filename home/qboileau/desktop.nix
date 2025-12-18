@@ -7,73 +7,69 @@
   config,
   configLib,
   pkgs,
+  username,
   ...
 }: {
   
   # You can import other home-manager modules here
   imports = [
     ../shared/base-tools.nix
-    ../shared/work-tools.nix
+#     ../shared/work-tools.nix
     ../shared/shells
-    ../shared/dev
+#     ../shared/dev
     ../shared/editors
 
+    ../shared/gaming
+
     ../shared/desktop/hyprland
+    
     # ../shared/desktop/i3
     # ../shared/desktop/sway
   ];
 
-  nixpkgs = {
-    # You can add overlays here
-    overlays = [
-      # Add overlays your own flake exports (from overlays and pkgs dir):
-      outputs.overlays.additions
-      outputs.overlays.modifications
-      outputs.overlays.unstable-packages
-
-      # You can also add overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
-
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
-    ];
-    # Configure your nixpkgs instance
-    config = {
-      # Disable if you don't want unfree packages
-      allowUnfree = true;
-    };
-  };
+  # Enable home-manager
+  programs.home-manager.enable = true;
 
   home = {
-    username = "qboileau";
-    homeDirectory = "/home/qboileau";
+    username = "${username}";
+    homeDirectory = "/home/${username}";
   };
 
   # Add stuff for your user as you see fit:
   # programs.neovim.enable = true;
   home.packages = with pkgs; [ 
+    kdePackages.kate
     vlc
     mpv
-    imv
+    unstable.brave
+    chromium
+    signal-desktop-bin
   ];
 
   # Custom options
-  gaming.enable = false;
-  hyprland.autolock.enable = true;
+  gaming.enable = true;
+  hyprland.autolock.enable = false;
+  hyprland.autostart = [  
+    "bitwarden"
+    "firefox"
+    "steam"
+    "discordptb"
+    "protonvpn-app"
+    "signal-desktop"
+  ];
 
   # Background deamon
   #nm-applet
   services.network-manager-applet.enable = true;
   services.dropbox.enable = true;
-
-  # Enable home-manager
-  programs.home-manager.enable = true;
+  services.kdeconnect.enable = true;
+  services.kdeconnect.indicator = true;
 
   xdg = {
+    enable = true;
+
+    # avoid conflict on mimeapps.list
+    configFile."mimeapps.list".force = true;
 
     portal = {
       enable = true;
@@ -85,31 +81,50 @@
       config.common."org.freedesktop.portal.FileChooser" = "gtk";
     };
 
-    mimeApps = {
+    mime.enable = true;
+    mimeApps = let 
+      codeEditor = "code.desktop";
+      archive = "org.kde.ark.desktop";
+      imageViewer = "org.kde.gwenview.desktop";
+      videoPlayer = "mpv.desktop";
+      browser = "firefox.desktop";
+      fileManager = "dolphin.desktop";
+    in {
       enable = true;
       defaultApplications = {
-        "inode/directory" = "pcmanfm.desktop";
-        "text/html" = "brave-browser.desktop";
+        "inode/directory" = fileManager;
+        "text/html" = browser;
+        "x-scheme-handler/http" = browser;
+        "x-scheme-handler/https" = browser;
+        "x-scheme-handler/about" = browser;
+        "x-scheme-handler/unknown" = browser;
         "application/pdf" = "okular.desktop";
-        "application/yaml" = "code.desktop";
-        "application/xml" = "code.desktop";
-        "application/json" = "code.desktop";
-        "application/x-gzip" = "org.kde.ark.desktop";
-        "application/zip" = "org.kde.ark.desktop";
-        "application/rar" = "org.kde.ark.desktop";
-        "application/7z" = "org.kde.ark.desktop";
-        "application/*tar" = "org.kde.ark.desktop";
-        "image/*" = "org.kde.gwenview.desktop";
-        "image/gif" = "org.kde.gwenview.desktop";
-        "image/jpeg" = "org.kde.gwenview.desktop";
-        "image/png" = "org.kde.gwenview.desktop";
-        "image/webp" = "org.kde.gwenview.desktop";
-        "video/*" = "vlc.desktop";
-        "audio/*" = "vlc.desktop";
+        "application/yaml" = codeEditor;
+        "application/xml" = codeEditor;
+        "application/json" = codeEditor;
+        "application/x-gzip" = archive;
+        "application/zip" = archive;
+        "application/rar" = archive;
+        "application/7z" = archive;
+        "application/*tar" = archive;
+        "image/*" = imageViewer;
+        "image/gif" = imageViewer;
+        "image/jpeg" = imageViewer;
+        "image/png" = imageViewer;
+        "image/webp" = imageViewer;
+        "video/*" = videoPlayer;
+        "video/mp4" = videoPlayer;
+        "video/x-matroska" = videoPlayer;
+        "video/x-ms-wmv" = videoPlayer;
+        "video/quicktime" = videoPlayer;
+        "video/vnd.avi" = videoPlayer;
+        "audio/*" = videoPlayer;
         "x-scheme-handler/slack" = "slack.desktop";
       };
     };
   };
+
+  home.sessionVariables.DEFAULT_BROWSER = "${pkgs.firefox}/bin/firefox";
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";

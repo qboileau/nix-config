@@ -3,4 +3,5 @@
 {
   # List your module files here
   # my-module = import ./my-module.nix;
+  noctalia = import ./noctalia/default.nix;
 }

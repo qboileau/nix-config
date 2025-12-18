@@ -3,7 +3,7 @@
 
   programs.vscode = {
     enable = true;
-    package = pkgs.vscode;
+    package = pkgs.unstable.vscode;
     };
     
 
@@ -32,6 +32,11 @@
       vscode-extensions.donjayamanne.githistory
       vscode-extensions.humao.rest-client
       vscode-extensions.ms-vscode.hexeditor
+      vscode-extensions.ms-vscode-remote.remote-ssh
+      vscode-extensions.ms-vscode.remote-explorer
+      vscode-extensions.ms-vscode-remote.remote-ssh-edit
+      vscode-extensions.ms-vscode.makefile-tools
+      vscode-extensions.ms-vscode-remote.remote-containers
       # vscode-extensions.rust-lang.rust-analyzer
       vscode-extensions.fill-labs.dependi
       vscode-extensions.vadimcn.vscode-lldb

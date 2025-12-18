@@ -13,6 +13,7 @@
     gcc
     libllvm
     python3
+    python313Packages.uv
     pre-commit
     checkov
   ];

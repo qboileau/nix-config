@@ -21,14 +21,25 @@
     curl
     wget
 
+    #proton 
+    proton-pass
+    protonvpn-gui
+    unstable.proton-authenticator
+
     # others
-    spotify
+    bitwarden-desktop
+    unstable.spotify
     cameractrls-gtk4
-    unstable.tail-tray
+
     synology-drive-client
+    unstable.tail-tray
 
     overskride # bluetooth GUI
+    solaar # logitech devices GUI
+
+    galculator
   ];
+
 
   # replacement tools
   programs.bat.enable=true; # better cat
@@ -39,8 +50,6 @@
   programs.fzf.enable=true;  # TLDR
 
   services.dropbox.enable=true;
-  services.kdeconnect.enable = true;
-  services.kdeconnect.indicator = true;
 
   # system monitoring 
   programs.htop.enable=true;
@@ -69,4 +78,11 @@
     TERM = "alacritty";
   };
 
+  xdg.desktopEntries.calculator = {
+    name = "Calculator";
+    exec = "galculator";
+    terminal = false;
+    type = "Application";
+    categories = ["System"];
+  };
 }

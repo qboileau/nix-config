@@ -35,14 +35,5 @@ in {
     ddcui
     nss # certutil
     mkcert
-    unstable.claude-code
   ];
-
-  xdg.desktopEntries.calculator = {
-    name = "Calculator";
-    exec = "galculator";
-    terminal = false;
-    type = "Application";
-    categories = ["System"];
-  };
 }

@@ -50,6 +50,7 @@
     wl-clipboard 
     wlroots
     wlr-randr
+    #xwaylandvideobridge # exposes Wayland windows to X11 screen capture
     libsForQt5.qt5.qtwayland
     nwg-displays
     nwg-look
