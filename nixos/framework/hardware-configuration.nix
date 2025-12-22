@@ -10,7 +10,7 @@
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" "sr_mod" ];
 
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" "iwlwifi" ];
+  boot.kernelModules = [ "kvm-intel" "iwlwifi" "ntsync" ];
   boot.extraModulePackages = [ ];
   
   # TODO get offset with : btrfs inspect-internal map-swapfile -r /swap/swapfile

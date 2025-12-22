@@ -62,6 +62,7 @@ with lib;
       "monitor" = [
         "eDP-1,2256x1504,0x0,1,bitdepth,10" #main framework laptop monitor
         "desc:Philips Consumer Electronics Company 49M2C8900 AU42415000050,5120x1440,auto-right,1,bitdepth,10,cm,hdr,sdrbrightness,1.3,sdrsaturation,1.0,vrr,3"
+        "desc:Iiyama North America PL2440HS 1179410502548,1920x1080,auto-up,1"
         #"DP-4,5120x1440,auto-right,1"
       ];
       xwayland.force_zero_scaling = true;
@@ -79,6 +80,8 @@ with lib;
         "QT_AUTO_SCREEN_SCALE_FACTOR,1"
         "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
         "QT_QPA_PLATFORMTHEME,qt5ct"
+        "QT_QUICK_CONTROLS_STYLE,org.hyprland.style"
+        "QT_SCALE_FACTOR,1"
 
         #https://wiki.hypr.land/Configuring/Environment-variables/#toolkit-backend-variables
         "GDK_BACKEND,wayland,x11,*"
@@ -94,6 +97,7 @@ with lib;
         "GDK_DPI_SCALE,1"
         "GDK_SCALE,1"
         "NIXOS_OZONE_WL,1" # tell Electron/Chromium to run on Wayland
+        "ELECTRON_OZONE_PLATFORM_HINT,auto" # https://www.electronjs.org/docs/latest/api/environment-variables
       ];
       
 
@@ -224,10 +228,5 @@ with lib;
       #   "nofocus,match:class ^jetbrains-(?!toolbox),floating:1,match:title ^win\d+$"
       # ];
     };
-    # home.file.hyperland = {
-    #   enable = true;
-    #   source = ./cfg/hyperland.conf;
-    #   target = ".config/hypr/hyprland.conf";
-    # };
   };
 }

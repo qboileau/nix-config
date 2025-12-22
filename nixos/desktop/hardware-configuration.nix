@@ -88,10 +88,10 @@ in {
   services.blueman.enable = true;
   environment.systemPackages = with pkgs; [ 
     bluez-tools 
-    lact # AMDGPU controller GUI TODO use services.lact.enable = true; when it hit stable
     mesa-demos
     lshw
   ];
+  services.lact.enable = true; # AMDGPU controller GUI 
 
   # Enable SSD TRIM timer https://www.reddit.com/r/NixOS/comments/rbzhb1/if_you_have_a_ssd_dont_forget_to_enable_fstrim/
   services.fstrim.enable = true;

@@ -82,10 +82,21 @@
     nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
   };
 
-
-  boot.loader.systemd-boot.enable = true;
-  # boot.loader.systemd-boot.configurationLimit = 15;
-  boot.loader.efi.canTouchEfiVariables = true;
+  # Bootloader.
+  boot = {
+    kernelPackages = pkgs.linuxPackages_6_18; # force latest LTS kernel 
+    loader = { 
+      efi.canTouchEfiVariables = true;
+      systemd-boot.enable = true;
+      # migrate sudo nixos-rebuild --install-bootloader boot
+      # Delete old /boot/EFI/BOOT/BOOTX64.EFI from systemd-boot 
+      # grub = {
+      #     enable = true;
+      #     efiSupport = true;
+      #     device = "nodev";
+      # };
+    };
+  };
 
   services.dnsmasq = {
     enable = true;
@@ -230,8 +241,8 @@
   services.blueman.enable = true;
 
   powerManagement.enable = true;
-  services.power-profiles-daemon.enable = true;
-  programs.auto-cpufreq.enable = false;
+  services.power-profiles-daemon.enable = false;
+  programs.auto-cpufreq.enable = true;
   programs.auto-cpufreq.settings = {
     battery = {
       governor = "powersave";
@@ -243,17 +254,14 @@
     };
   };
 
-  # Start the driver at boot
+  # Fprint
   systemd.services.fprintd = {
     wantedBy = [ "multi-user.target" ];
     serviceConfig.Type = "simple";
   };
 
-  # Install the driver
   services.fprintd.enable = true;
-  # If simply enabling fprintd is not enough, try enabling fprintd.tod...
   services.fprintd.tod.enable = true;
-  # ...and use one of the next four drivers
   services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix; # Goodix driver module
 
   virtualisation.docker = { 

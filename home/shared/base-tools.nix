@@ -6,6 +6,7 @@
   ];
 
   home.packages = with pkgs; [ 
+    fastfetch
     # replacement tools
     duf # better du / df
     font-manager
