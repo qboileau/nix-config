@@ -55,7 +55,7 @@
       # See https://starship.rs/config/
       settings = {
         add_newline = true;
-        scan_timeout = 10;
+        scan_timeout = 30;
         username = {
           show_always = true;
         };

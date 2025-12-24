@@ -72,5 +72,11 @@ in {
         unstable.bottles # wine prefix manager
         unstable.vulkan-tools
     ];
+
+    # Enable SCX service https://wiki.cachyos.org/configuration/sched-ext/
+    services.scx = mkIf gaming.scx_lavd.enable {
+      enable = true;
+      scheduler = "scx_lavd"; # https://wiki.cachyos.org/configuration/sched-ext/#scx_lavd
+    };
   };
 }
