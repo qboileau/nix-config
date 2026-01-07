@@ -10,10 +10,11 @@ let
 in {
   imports = [
   ];
-
+`
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
   boot.initrd.kernelModules = [ "amdgpu" ];
   boot.kernelModules = [ "kvm-amd" "ntsync" ];
+  # boot.kernelParams = [ "preempt=full"];
   boot.extraModulePackages = [ ];
   services.xserver.videoDrivers = [ "amdgpu" ];
 
