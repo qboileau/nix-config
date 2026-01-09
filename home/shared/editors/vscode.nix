@@ -37,6 +37,7 @@
       vscode-extensions.ms-vscode-remote.remote-ssh-edit
       vscode-extensions.ms-vscode.makefile-tools
       vscode-extensions.ms-vscode-remote.remote-containers
+      vscode-extensions.ms-kubernetes-tools.vscode-kubernetes-tools
       # vscode-extensions.rust-lang.rust-analyzer
       vscode-extensions.fill-labs.dependi
       vscode-extensions.vadimcn.vscode-lldb
@@ -55,9 +56,14 @@
       #   when = "textInputFocus";
       # }
       {
-        key = "ctrl+w"; # Disable close editor tab on ctrl+w
+        key = "ctrl+w"; # Disable close window on ctrl+w
         command = "-workbench.action.closeWindow";
         when = "!editorIsOpen && !multipleEditorGroups";
+      }
+      {
+        key = "ctrl+w"; # Disable close editor tab on ctrl+w
+        command = "-workbench.action.closeActiveEditor";
+        when = "";
       }
     ];
     userSettings = {
@@ -81,6 +87,7 @@
         "**/.metals" = true;
       };
       "git.confirmSync"= false;
+      "git.replaceTagsWhenPull" = true;
       "nix.enableLanguageServer" = true;
       "nix.serverSettings" = {
         "nil" = {
