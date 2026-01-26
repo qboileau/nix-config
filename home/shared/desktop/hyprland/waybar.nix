@@ -12,6 +12,7 @@ in {
       height = 30;
       layer = "top";
       position = "bottom";
+      reload_style_on_change = true;
       modules-center = [ "hyprland/window" ];
       modules-left = [ "hyprland/workspaces" ];
       modules-right = [
@@ -27,6 +28,16 @@ in {
         "group/group-power"
       ];
 
+      "hyprland/workspaces" = {
+        format = "{id}";
+      };
+
+      "hyprland/window" = {
+        format = "{title}";
+        max-length = 50;
+        separate-outputs = true;
+      };
+
       battery = {
         format = "{capacity}% {icon}";
         format-alt = "{time} {icon}";
@@ -40,15 +51,21 @@ in {
       };
 
       mpris = {
-        "format" = "{player_icon}: {artist} - {title}  ";
-        "format-paused" = "{player_icon}: {status_icon} <i>{artist} - {title}</i>  ";
-        "player-icons" = {
-          "default" = "▶";
-          "mpv" = "🎵";
-          "spotify" = "  ";
+        format = "{player_icon}: {artist} - {title}  ";
+        format-paused = "{player_icon}: {status_icon} <i>{artist} - {title}</i>  ";
+        format-len = 40;
+        ignored-players = [
+          "brave"
+          "brave.instance4584"
+          "firefox"
+        ];
+        player-icons = {
+          default = "▶";
+          mpv = "🎵";
+          spotify = "  ";
         };
-        "status-icons" = {
-          "paused" =  "⏸" ;
+        status-icons = {
+          paused =  "⏸" ;
         };
       };
 
@@ -207,29 +224,77 @@ in {
     }];
 
     # TODO check https://github.com/coffebar/dotfiles/blob/main/.config/waybar/style.css
-    # style = 
-    # ''
-    #   * {
-    #     border: none;
-    #     border-radius: 0;
-    #     font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
-    #   }
-    #   window#waybar {
-    #     background-color: rgba(43, 48, 59, 0.5);
-    #     border-bottom: 3px solid rgba(100, 114, 125, 0.5);
-    #     color: #ffffff;
-    #     transition-property: background-color;
-    #     transition-duration: .5s;
-    #   }
-    #   window#waybar.hidden {
-    #     opacity: 0.2;
-    #   }
+    style = 
+    ''
+    * {
+        border: none;
+        border-radius: 0;
+        font-family: "Ubuntu Nerd Font";
+        font-size: 13px;
+        min-height: 0;
+    }
 
-    #   #workspaces button {
-    #     padding: 0 5px;
-    #   }
-    # ''};
+    window#waybar {
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+    }
+
+    tooltip {
+      background: rgba(43, 48, 59, 0.5);
+      border: 1px solid rgba(100, 114, 125, 0.5);
+    }
+    tooltip label {
+      color: white;
+    }
+
+    #workspaces, #window, #mpris, #pulseaudio, #wireplumber, #network, #cpu, #memory, #battery, #clock, #tray, #custom-group-power {
+        background: transparent;
+        color: white;
+
+        padding: 0 3px;
+        margin: 0 2px;
+
+        font-family: "Fira Code Nerd Font";
+    }
+
+    #window {
+        font-weight: bold;
+        font-family: "Fira Code Nerd Font";
+    }
+
+    #workspaces button {
+        padding: 0 5px;
+        color: white;
+        border-top: 2px solid transparent;
+    }
+
+    #workspaces button.active {
+        border-bottom: 2px solid rgba(255, 255, 255, 0.8);
+    }
+
+    #workspaces button:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    #clock {
+        font-weight: bold;
+        font-family: "Fira Code Nerd Font";
+        color: white;
+        font-size: 16px;
+        padding: 1px 15px 1px; 
+    }
+
+    #mpris {
+        font-style: italic;
+    }
+
+    #mpris, #pulseaudio, #wireplumber {
+        border-bottom: 1px solid rgba(63, 63, 176, 0.568);
+    }
+
+    #network, #cpu, #memory, #battery {
+        border-bottom: 1px solid rgba(75, 168, 75, 0.568);
+    }
+    '';
   };
-
-
 }
