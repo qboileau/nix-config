@@ -42,4 +42,6 @@
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   hardware.enableAllFirmware = true;
   services.fwupd.enable = true;
+
+  hardware.i2c.enable = true; # for i2c-dev kernel module to enable ddcutils and edid  hdr support
 }

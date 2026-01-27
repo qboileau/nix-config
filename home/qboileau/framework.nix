@@ -92,7 +92,7 @@
       defaultApplications = {
         "inode/directory" = "pcmanfm.desktop";
         "text/html" = "brave-browser.desktop";
-        "application/pdf" = "okular.desktop";
+        "application/pdf" = "org.kde.okular.desktop";
         "application/yaml" = "code.desktop";
         "application/xml" = "code.desktop";
         "application/json" = "code.desktop";

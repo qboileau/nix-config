@@ -59,13 +59,55 @@ with lib;
 
     wayland.windowManager.hyprland.settings = {
       # See https://wiki.hyprland.org/Configuring/Monitors/
-      "monitor" = [
-        "eDP-1,2256x1504,0x0,1,bitdepth,10" #main framework laptop monitor
-        "desc:Philips Consumer Electronics Company 49M2C8900 AU42415000050,5120x1440,auto-right,1,bitdepth,10,cm,hdr,sdrbrightness,1.3,sdrsaturation,1.0,vrr,3"
-        "desc:Iiyama North America PL2440HS 1179410502548,1920x1080,auto-up,1"
-        #"DP-4,5120x1440,auto-right,1"
+      # "monitor" = [
+      #   "eDP-1,2256x1504,0x0,1,bitdepth,10" #main framework laptop monitor
+      #   "desc:Philips Consumer Electronics Company 49M2C8900 AU42415000050,5120x1440,auto-right,1,bitdepth,10,cm,hdr,sdrbrightness,1.3,sdrsaturation,1.0,vrr,3"
+      #   "desc:Iiyama North America PL2440HS 1179410502548,1920x1080,auto-up,1"
+      #   #"DP-4,5120x1440,auto-right,1"
+      # ];
+
+      monitorv2 = [
+        {
+          output = "eDP-1";
+          mode = "2256x1504";
+          position = "0x0";
+          scale = 1;
+          bitdepth = 10;
+        }
+        {
+          output = "desc:Philips Consumer Electronics Company 49M2C8900 AU42415000050";
+          mode = "5120x1440@240.49Hz";
+          position = "auto-right";
+          scale = 1;
+          bitdepth = 10;
+          cm = "hdr";
+          supports_wide_color = 1;
+          supports_hdr = 1;
+          sdr_min_luminance = 0.05;
+          min_luminance = 0.05;
+          sdr_max_luminance = 200;
+          max_luminance = 400;
+          sdrbrightness = 1.0;
+          sdrsaturation = 1.0;
+          vrr = 3;
+        }
+        {
+          output = "desc:Iiyama North America PL2440HS 1179410502548";
+          mode = "1920x1080";
+          position = "auto-up";
+          scale = 1;
+          bitdepth = 10;
+        }
       ];
+
       xwayland.force_zero_scaling = true;
+
+      render = {
+        direct_scanout = 2; # auto scanout to reduce lag, set to 0 if game/app have glitches 
+        cm_enabled = true;
+        cm_auto_hdr = 1; # switch to hdr
+        cm_sdr_eotf = 3; # Treat unspecified as sRGB
+      };
 
       "$mod" = "SUPER";
       env = [
