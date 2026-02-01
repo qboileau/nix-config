@@ -75,19 +75,13 @@
       };
       "excalidraw.language" = "en";
       "files.autoSave" = "onFocusChange";
-      "github.copilot.nextEditSuggestions.enabled" = true;
-      "workbench.editor.autoLockGroups" = {
-        "imagePreview.previewEditor" = true;
-      };
-      "workbench.editorAssociations" = {
-        "*.svg" = "editor.excalidraw";
-      };
       "files.watcherExclude"= {
         "**/.bloop" = true;
         "**/.metals" = true;
       };
       "git.confirmSync"= false;
       "git.replaceTagsWhenPull" = true;
+      "github.copilot.nextEditSuggestions.enabled" = true; 
       "nix.enableLanguageServer" = true;
       "nix.serverSettings" = {
         "nil" = {
@@ -97,8 +91,14 @@
         };
       };
       "terminal.explorerKind"= "both";
-      "terminal.external.linuxExec"= "alacritty";
+      "terminal.external.linuxExec"= "ghostty";
       "terminal.integrated.enableImages"= true;
+      "workbench.editor.autoLockGroups" = {
+        "imagePreview.previewEditor" = true;
+      };
+      "workbench.editorAssociations" = {
+        "*.svg" = "editor.excalidraw";
+      };
     };
   };
 

@@ -60,17 +60,18 @@ in {
 
     hardware.steam-hardware.enable = true;
 
-    environment.systemPackages = with pkgs; [
-        unstable.heroic
-        unstable.protonup-qt
-  #         (retroarch.override {
-  #             cores = with libretro; [ # decide what emulators you want to include
-  #             snes9x
-  #             scummvm
-  #             ];
-  #         })
-        unstable.bottles # wine prefix manager
-        unstable.vulkan-tools
+    environment.systemPackages = with pkgs.unstable; [
+        heroic
+        protonup-qt
+        bottles # wine prefix manager
+        vulkan-tools
+    ] ++ optionals gaming.emulators.enable  [
+      (retroarch.withCores (cores: with cores; [
+        snes9x
+        beetle-psx-hw
+      ]))
+      ryubing # switch emulator
+      rpcs3 # ps3 emulator
     ];
 
     # Enable SCX service https://wiki.cachyos.org/configuration/sched-ext/

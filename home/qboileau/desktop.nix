@@ -44,6 +44,7 @@
     unstable.brave
     chromium
     signal-desktop-bin
+    prusa-slicer
   ];
 
   # Custom options
@@ -98,7 +99,7 @@
         "x-scheme-handler/https" = browser;
         "x-scheme-handler/about" = browser;
         "x-scheme-handler/unknown" = browser;
-        "application/pdf" = "okular.desktop";
+        "application/pdf" = "org.kde.okular.desktop";
         "application/yaml" = codeEditor;
         "application/xml" = codeEditor;
         "application/json" = codeEditor;

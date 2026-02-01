@@ -14,7 +14,7 @@ in {
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
   boot.initrd.kernelModules = [ "amdgpu" ];
   boot.kernelModules = [ "kvm-amd" "ntsync" ];
-  # boot.kernelParams = [ "preempt=full"];
+  boot.kernelParams = [ "preempt=full"];
   boot.extraModulePackages = [ ];
   services.xserver.videoDrivers = [ "amdgpu" ];
 
@@ -64,6 +64,8 @@ in {
 
   hardware.enableAllFirmware = true;
   services.fwupd.enable = true;
+
+  hardware.i2c.enable = true; # for i2c-dev kernel module to enable ddcutils and edid  hdr support
 
   hardware.graphics = {
     enable = true;

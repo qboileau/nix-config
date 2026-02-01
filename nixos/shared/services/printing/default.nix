@@ -16,6 +16,7 @@
   };
   
   environment.systemPackages = with pkgs; [
+    cups-bjnp
     kdePackages.print-manager
   ];
 }

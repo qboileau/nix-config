@@ -14,6 +14,7 @@
       ./hardware-configuration.nix
       ../shared/desktop/hyprland/system.nix
       ../shared/gaming
+      ../shared/services/printing
 
       outputs.nixosModules.noctalia
     ];
@@ -162,9 +163,6 @@
   # Configure console keymap
   console.keyMap = "us";
 
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -259,7 +257,7 @@
       # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
     ];
     # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
-    extraGroups = ["wheel" "networkmanager" "docker" "libvirtd" "gamemode"];
+    extraGroups = ["wheel" "networkmanager" "docker" "libvirtd" "gamemode" "i2c"];
     packages = with pkgs; [];
   };
 
@@ -320,11 +318,17 @@
     # keychron link
     SUBSYSTEM=="usb", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="d030", MODE="0666", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
   '';
+  
+  services.hardware.openrgb = { 
+    enable = true;
+    motherboard = "amd";
+  };
 
   # Custom options
   gaming.enable = true;
   gaming.vr.enable = true;
   gaming.amd.enable = true;
+  gaming.emulators.enable = true;
 
   noctalia.enable = false;
 

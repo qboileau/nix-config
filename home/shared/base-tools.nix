@@ -28,6 +28,7 @@
     unstable.proton-authenticator
 
     # others
+    filezilla
     unstable.discord-ptb
     bitwarden-desktop
     unstable.spotify

@@ -12,6 +12,9 @@
       scx_lavd = {
         enable = lib.mkEnableOption "Enable SCX lavd scheduler for gaming";
       };
+      emulators = {
+        enable = lib.mkEnableOption "Enable emulators for gaming";
+      };
     };
   };
 }
