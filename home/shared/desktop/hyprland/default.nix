@@ -31,12 +31,15 @@ with lib;
     ./hyprpaper.nix
     ./waybar.nix
     # ./ironbar.nix
-    ./flameshot.nix
+    # ./flameshot.nix
+    ./satty.nix
     ./../dunst.nix
     #./rules.nix
     #./settings.nix
     #./smartgaps.nix
   ];
+
+  
 
   config = {
     home.packages = with pkgs; [ 

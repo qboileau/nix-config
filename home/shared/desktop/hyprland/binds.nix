@@ -4,9 +4,11 @@ let
   fileManager = "${pkgs.kdePackages.dolphin}/bin/dolphin";
   grim = "${pkgs.grim}/bin/grim";
   slurp = "${pkgs.slurp}/bin/slurp";
-  wl-copy = "${pkgs.wl-clipboard}/bin/wl-copy";
+  satty = "${pkgs.satty}/bin/satty";
+  wl-copy = "${pkgs.wl-clipboard}/bin/wl-copy"; # ${wl-copy} -t image/png
   lock = "hyprlock";
   menu = "wofi --show drun";
+  screenshot = "${grim} -g \"$(${slurp})\" -t ppm - | ${satty} --filename -  --output-filename -";
 
   base-bind = [
     "$mod, Return, exec, ${terminal}"
@@ -20,9 +22,11 @@ let
     "$mod, P, pin, active"
     "$mod, J, togglesplit," 
     "$mod, L, exec, ${lock}"
-    ''
-      , Print, exec, ${grim} -g "$(${slurp})" - | ${wl-copy} -t image/png
-    ''
+    ", Print, exec, ${screenshot}"
+    # ''
+    #   , Print, exec, ${grim} -g "$(${slurp})" -t ppm - | ${satty} --filename -  --output-filename -
+    # ''
+    
     "$mod, mouse_down, workspace, e+1"
     "$mod, mouse_up, workspace, e-1"
     
