@@ -292,8 +292,9 @@
     cifs-utils # Samba client
     wireguard-tools
     openvpn3
+    ffmpeg-full
 
-    # KDE packages
+    # KDE package
     kdePackages.breeze
     kdePackages.breeze-icons
     kdePackages.breeze-gtk

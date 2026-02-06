@@ -58,9 +58,22 @@
   # programs.neovim.enable = true;
   home.packages = with pkgs; [ 
     vlc
-    mpv
     imv
   ];
+
+  programs.mpv = {
+    enable = true;
+    package = (
+      pkgs.mpv-unwrapped.wrapper {
+        scripts = with pkgs.mpvScripts; [
+          uosc
+        ];
+        mpv = pkgs.mpv-unwrapped.override {
+          ffmpeg = pkgs.ffmpeg-full;
+        };
+      }
+    );
+  };
 
   # Custom options
   gaming.enable = false;
