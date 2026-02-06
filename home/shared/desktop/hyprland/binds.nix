@@ -8,7 +8,7 @@ let
   wl-copy = "${pkgs.wl-clipboard}/bin/wl-copy"; # ${wl-copy} -t image/png
   lock = "hyprlock";
   menu = "wofi --show drun";
-  screenshot = "${grim} -g \"$(${slurp})\" -t ppm - | ${satty} --filename -  --output-filename -";
+  screenshot = "${grim} -g \"$(${slurp})\" -t ppm - | ${satty} --filename -";
 
   base-bind = [
     "$mod, Return, exec, ${terminal}"
@@ -22,11 +22,7 @@ let
     "$mod, P, pin, active"
     "$mod, J, togglesplit," 
     "$mod, L, exec, ${lock}"
-    ", Print, exec, ${screenshot}"
-    # ''
-    #   , Print, exec, ${grim} -g "$(${slurp})" -t ppm - | ${satty} --filename -  --output-filename -
-    # ''
-    
+    ", Print, exec, ${screenshot}"    
     "$mod, mouse_down, workspace, e+1"
     "$mod, mouse_up, workspace, e-1"
     

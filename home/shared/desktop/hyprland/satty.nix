@@ -1,21 +1,16 @@
-{config, pkgs, inputs, ...} :
+{config, pkgs, ...} :
 {
 
-  
-  programs.satty.enable = {
+  programs.satty = {
     enable = true;
+    # https://github.com/Satty-org/Satty?tab=readme-ov-file#configuration-file
     settings = {
       general = {
         #fullscreen = true;
         corner-roundness = 1;
         initial-tool = "brush";
-        output-filename = "/tmp/screenshot-%Y-%m-%d_%H:%M:%S.png";
-      };
-      color-palette = {
-        palette = [ "#00ffff" "#a52a2a" "#dc143c" "#ff1493" "#ffd700" "#008000" ];
+        output-filename = "${config.home.homeDirectory}/Images/Screenshots/screenshot-%Y-%m-%d_%H:%M:%S.png";
       };
     };
   };
-
-
 }
