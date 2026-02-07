@@ -81,7 +81,7 @@
 
   xdg = {
     enable = true;
-
+    
     # avoid conflict on mimeapps.list
     configFile."mimeapps.list".force = true;
 

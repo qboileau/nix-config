@@ -43,6 +43,7 @@
     galculator
   ];
 
+  programs.firefox.enable = true;
 
   # replacement tools
   programs.bat.enable=true; # better cat

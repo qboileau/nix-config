@@ -100,4 +100,9 @@ in {
   services.fstrim.enable = true;
   
   services.tuned.enable = true;
+
+  services.hardware.openrgb = { 
+    enable = true;
+    motherboard = "amd";
+  };
 }

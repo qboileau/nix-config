@@ -41,7 +41,53 @@
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   hardware.enableAllFirmware = true;
-  services.fwupd.enable = true;
 
   hardware.i2c.enable = true; # for i2c-dev kernel module to enable ddcutils and edid  hdr support
+
+  # Bluetooth
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings = {
+      General = {
+        Experimental = true; # Show battery charge of Bluetooth devices
+      };
+    };
+  };
+  services.blueman.enable = true;
+
+  powerManagement.enable = true;
+  services.power-profiles-daemon.enable = false;
+  programs.auto-cpufreq.enable = true;
+  programs.auto-cpufreq.settings = {
+    battery = {
+      governor = "powersave";
+      turbo = "never";
+    };
+    charger = {
+      governor = "performance";
+      turbo = "auto";
+    };
+  };
+
+  # Framework-specific sound configuration  
+  # Framework firmware update `fwupdmgr update` 
+  services.fwupd.enable = true;
+  services.libinput.enable = true;
+  services.touchegg.enable = true;
+
+  # Fprint
+  services.fprintd.enable = true;
+  services.fprintd.tod.enable = true;
+  services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix;
+  systemd.services.fprintd = {
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig.Type = "simple";
+  };
+
+
+  environment.systemPackages = with pkgs; [
+   framework-tool
+  ];
+
 }
