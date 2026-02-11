@@ -1,5 +1,14 @@
 {pkgs, ...} :
-{
+let
+  claude-code-custom = pkgs.vscode-utils.buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "claude-code";
+      publisher = "anthropic";
+      version = "2.1.38";
+      hash = "sha256-4Cv0mlYbIPkRJdZlx4/xUl5ZK5jYfcpUN/wnxssFCJI=";
+    };
+  };
+in {
 
   programs.vscode = {
     enable = true;
@@ -28,6 +37,7 @@
       vscode-extensions.scalameta.metals
       vscode-extensions.scala-lang.scala
       vscode-extensions.scala-lang.scala
+      vscode-extensions.vscjava.vscode-gradle
       vscode-extensions.waderyan.gitblame
       vscode-extensions.donjayamanne.githistory
       vscode-extensions.humao.rest-client
@@ -47,14 +57,9 @@
       pkgs.vscode-extension-4ops-terraform # custom package
       pkgs.vscode-extension-carlocardella.vscode-texttoolbox # custom package
       pkgs.vscode-extension-buenon.scratchpads # custom package
+      claude-code-custom
     ];
     keybindings = [
-      # TODO
-      # {
-      #   key = "ctrl+c";
-      #   command = "editor.action.clipboardCopyAction";
-      #   when = "textInputFocus";
-      # }
       {
         key = "ctrl+w"; # Disable close window on ctrl+w
         command = "-workbench.action.closeWindow";
@@ -65,9 +70,14 @@
         command = "-workbench.action.closeActiveEditor";
         when = "";
       }
+      {
+        key = "ctrl+q"; # Disable quit on ctrl+q
+        command = "-workbench.action.quit";
+        when = "";
+      }
     ];
     userSettings = {
-      # TODO
+      "claudeCode.preferredLocation" = "panel";
       "excalidraw.image" = {
         "exportScale" = 1;
         "exportWithBackground" = true;

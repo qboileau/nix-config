@@ -5,6 +5,7 @@
     ./kube.nix
     ./build-tools.nix
     ./sdk.nix
+    ./ai.nix
     #./virt.nix # FIXME
   ];
 

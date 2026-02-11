@@ -10,6 +10,7 @@
     nodejs
     yarn
     go
+    gopls # Go language server
     gcc
     libllvm
     python3
