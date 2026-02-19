@@ -27,6 +27,14 @@
 
   # Configure shared modules for gaming desktop
   boot.useLatestKernel = true; # Use latest kernel for gaming performance
+  boot.bootloader = "systemd-boot";
+  # boot.bootloader = "grub"; # Switch to GRUB
+  # boot.grub = {
+  #   theme = "breeze"; # Match your desktop theme
+  #   resolution = "1920x1080"; # Adjust to your display
+  #   timeout = 5;
+  # };
+
 
   networking = {
     hostName = "desktop";
