@@ -16,7 +16,7 @@
       flake-registry = "";
       # Workaround for https://github.com/NixOS/nix/issues/9574
       nix-path = config.nix.nixPath;
-
+      download-buffer-size = 524288000; # Set to 500 MiB
       auto-optimise-store = true;
     };
 
