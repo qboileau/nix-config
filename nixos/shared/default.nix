@@ -18,6 +18,8 @@
   environment.systemPackages = with pkgs; [
     # nix utils
     nix
+    comma
+    nix-inspect
     statix
     age
     sops
