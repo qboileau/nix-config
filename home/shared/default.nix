@@ -3,6 +3,8 @@
 
 pkgs: {
   imports = [
+      ./xdg.nix
+      ./theme.nix
       ./base-tools.nix
       ./work-tools.nix
 

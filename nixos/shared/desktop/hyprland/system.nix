@@ -68,9 +68,25 @@
     dunst
     pcmanfm
     #hyprsysteminfo
+
+    # KDE apps
     kdePackages.ark
     kdePackages.okular
     kdePackages.gwenview
     kdePackages.dolphin
+    kdePackages.dolphin-plugins
+    kdePackages.qtsvg
+    kdePackages.kio
+    kdePackages.kio-fuse
+    kdePackages.kio-extras
+    kdePackages.breeze
+    kdePackages.breeze-icons
+    kdePackages.breeze-gtk
+    kdePackages.kwallet
+    kdePackages.kwallet-pam
+    kdePackages.kwalletmanager
+
+    kdePackages.knewstuff
+    kdePackages.ksvg
   ];
 }

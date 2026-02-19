@@ -13,18 +13,15 @@
   
   # You can import other home-manager modules here
   imports = [
+    ../shared/xdg.nix
+    ../shared/theme.nix
     ../shared/base-tools.nix
 #     ../shared/work-tools.nix
     ../shared/shells
 #     ../shared/dev
     ../shared/editors
-
     ../shared/gaming
-
     ../shared/desktop/hyprland
-    
-    # ../shared/desktop/i3
-    # ../shared/desktop/sway
   ];
 
   # Enable home-manager
@@ -44,6 +41,7 @@
     chromium
     signal-desktop-bin
     prusa-slicer
+    samba
   ];
 
   programs.mpv = {
@@ -59,6 +57,8 @@
       }
     );
   };
+  
+  programs.java.enable = true;
 
   # Custom options
   gaming.enable = true;
@@ -79,127 +79,10 @@
   services.kdeconnect.enable = true;
   services.kdeconnect.indicator = true;
 
-  xdg = {
-    enable = true;
-    
-    # avoid conflict on mimeapps.list
-    configFile."mimeapps.list".force = true;
-
-    portal = {
-      enable = true;
-      extraPortals = [
-        pkgs.xdg-desktop-portal-gtk
-      ];
-      config.common.default = "hyprland;gtk";
-      config.common."org.freedesktop.impl.portal.FileChooser" = "gtk";
-      config.common."org.freedesktop.portal.FileChooser" = "gtk";
-    };
-
-    mime.enable = true;
-    mimeApps = let 
-      codeEditor = "code.desktop";
-      archive = "org.kde.ark.desktop";
-      imageViewer = "org.kde.gwenview.desktop";
-      videoPlayer = "mpv.desktop";
-      browser = "firefox.desktop";
-      fileManager = "dolphin.desktop";
-    in {
-      enable = true;
-      defaultApplications = {
-        "inode/directory" = fileManager;
-        "text/html" = browser;
-        "x-scheme-handler/http" = browser;
-        "x-scheme-handler/https" = browser;
-        "x-scheme-handler/about" = browser;
-        "x-scheme-handler/unknown" = browser;
-        "application/pdf" = "org.kde.okular.desktop";
-        "application/yaml" = codeEditor;
-        "application/xml" = codeEditor;
-        "application/json" = codeEditor;
-        "application/x-gzip" = archive;
-        "application/zip" = archive;
-        "application/rar" = archive;
-        "application/7z" = archive;
-        "application/*tar" = archive;
-        "image/*" = imageViewer;
-        "image/gif" = imageViewer;
-        "image/jpeg" = imageViewer;
-        "image/png" = imageViewer;
-        "image/webp" = imageViewer;
-        "video/*" = videoPlayer;
-        "video/mp4" = videoPlayer;
-        "video/x-matroska" = videoPlayer;
-        "video/x-ms-wmv" = videoPlayer;
-        "video/quicktime" = videoPlayer;
-        "video/vnd.avi" = videoPlayer;
-        "audio/*" = videoPlayer;
-        "x-scheme-handler/slack" = "slack.desktop";
-      };
-    };
-  };
-
   home.sessionVariables.DEFAULT_BROWSER = "${pkgs.firefox}/bin/firefox";
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
-
-  home.pointerCursor = {
-    gtk.enable = true;
-    # x11.enable = true;
-    package = pkgs.adwaita-icon-theme;
-    name = "Adwaita";
-    size = 24;
-  };
-
-  gtk = {
-    enable = true;
-
-    cursorTheme = {
-      package = pkgs.adwaita-icon-theme;
-      name = "Adwaita";
-      size = 24;
-    };
-
-    theme = {
-      package = pkgs.flat-remix-gtk;
-      name = "Flat-Remix-GTK-Blue-Dark";
-    };
-
-    iconTheme = {
-      package = pkgs.adwaita-icon-theme;
-      name = "Adwaita";
-    };
-
-    font = {
-      name = "Noto Sans";
-      size = 11;
-    };
-
-    gtk3.extraConfig = {
-      "gtk-application-prefer-dark-theme" = "true";
-      "gtk-enable-primary-paste" = "true";
-      "gtk-enable-event-sounds" = "false";
-      "gtk-enable-input-feedback-sounds" = "false";
-      "gtk-enable-animations" = "true";
-    };
-
-    gtk4.extraConfig = {
-      "gtk-application-prefer-dark-theme" = "true";
-      "gtk-enable-primary-paste" = "true";
-      "gtk-enable-event-sounds" = "false";
-      "gtk-enable-input-feedback-sounds" = "false";
-      "gtk-enable-animations" = "true";
-    };
-  };
-
-  qt = {
-    enable = true;
-    platformTheme.name = "gtk";
-    style = {
-      name = "gtk2";
-      package = pkgs.qt6Packages.qt6gtk2;
-    };
-  };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "24.11";

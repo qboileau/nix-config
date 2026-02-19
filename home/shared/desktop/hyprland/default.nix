@@ -43,6 +43,9 @@ with lib;
 
   config = {
     home.packages = with pkgs; [ 
+      hyprland-qt-support
+      # inputs.hyprqt6engine.packages.${pkgs.stdenv.hostPlatform.system}.hyprqt6engine
+      kdePackages.qt6ct
       rose-pine-hyprcursor
     ];
 
@@ -124,7 +127,8 @@ with lib;
         "QT_QPA_PLATFORM,wayland;xcb"
         "QT_AUTO_SCREEN_SCALE_FACTOR,1"
         "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
-        "QT_QPA_PLATFORMTHEME,qt5ct"
+        "QT_QPA_PLATFORMTHEME,qt6ct"
+        # "QT_QPA_PLATFORMTHEME,hyprqt6engine"
         "QT_QUICK_CONTROLS_STYLE,org.hyprland.style"
         "QT_SCALE_FACTOR,1"
 
