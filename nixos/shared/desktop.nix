@@ -62,9 +62,6 @@ in {
         kdePackages.breeze
         kdePackages.breeze-icons
         kdePackages.breeze-gtk
-        kdePackages.kwallet
-        kdePackages.kwallet-pam
-        kdePackages.kwalletmanager
       ];
     })
   ];

@@ -36,6 +36,13 @@ in {
       services.tailscale.enable = true;
       programs.openvpn3.enable = true;
 
+      networking.networkmanager.plugins = with pkgs; [
+        networkmanager-openvpn
+      ];
+
+      # Allow WireGuard traffic
+      networking.firewall.allowedUDPPorts = [ 443 88 1224 51820 500 4500 ];
+
       # Samba
       services.samba.enable = true;
       services.samba-wsdd.enable = true; # samba discovery
@@ -44,6 +51,7 @@ in {
       services.gvfs.package = pkgs.gvfs;
       environment.systemPackages = with pkgs; [
         cifs-utils # Samba client
+        wireguard-tools # Required for NetworkManager WireGuard support
       ];
     }
 

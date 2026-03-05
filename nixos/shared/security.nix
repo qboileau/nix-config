@@ -33,15 +33,30 @@ in {
           };
         };
       };
+      # Enable Gnome keyring for some GTK apps like protonvpn
+      services.gnome.gnome-keyring.enable = true;
+      # Disable gnome-keyring's SSH agent (we use ssh-agent + ksshaskpass)
+      services.gnome.gcr-ssh-agent.enable = false;
+
 
       # Common GnuPG configuration
       programs.gnupg.agent.enable = true;
 
+      # SSH 
+      programs.ssh = {
+        startAgent = true;
+        enableAskPassword = true;
+        askPassword = "${pkgs.kdePackages.ksshaskpass}/bin/ksshaskpass";
+      };
+
       environment.systemPackages = with pkgs; [
         openssl
+        kdePackages.kwallet
+        kdePackages.kwallet-pam
+        kdePackages.kwalletmanager
+        kdePackages.ksshaskpass # For SSH agent password prompts
       ];
 
-      programs.ssh.startAgent = true;
       services.openssh = {
         enable = true;
         settings = {
