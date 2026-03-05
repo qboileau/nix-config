@@ -199,7 +199,7 @@ with lib;
       dwindle = {
         force_split = 2; # always split to the right/bottom (i3-like)
         preserve_split = true; # keep split direction when windows are removed
-        smart_resizing = false; # prevent automatic resize adjustments
+        smart_resizing = true; # prevent automatic resize adjustments
       };
 
       binds = {
