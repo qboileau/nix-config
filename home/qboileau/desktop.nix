@@ -70,6 +70,7 @@
     "discordptb"
     "protonvpn-app"
     "signal-desktop"
+    "tail-tray"
   ];
 
   # Background deamon
