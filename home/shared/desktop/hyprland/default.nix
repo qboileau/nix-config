@@ -169,7 +169,6 @@ with lib;
       general = {
         #layout = "hy3";
         layout = "dwindle";
-        #force_split = 2; # dwindle i3 like force create to right
         gaps_in = 1;
         gaps_out = 1;
         border_size = 1;
@@ -197,6 +196,12 @@ with lib;
         };
       };
       
+      dwindle = {
+        force_split = 2; # always split to the right/bottom (i3-like)
+        preserve_split = true; # keep split direction when windows are removed
+        smart_resizing = false; # prevent automatic resize adjustments
+      };
+
       binds = {
         workspace_back_and_forth = true;
         scroll_event_delay = 100; # default is 300
