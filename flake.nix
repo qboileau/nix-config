@@ -26,7 +26,7 @@
     krewfile.url = "github:brumhard/krewfile"; 
     krewfile.inputs.nixpkgs.follows = "nixpkgs";
 
-    hyprland.url = "github:hyprwm/Hyprland?submodules=1&tag=v0.52.1";
+    hyprland.url = "github:hyprwm/Hyprland?submodules=1&ref=refs/tags/v0.54.1";
     #https://github.com/outfoxxed/hy3
     # hy3.url = "github:outfoxxed/hy3"; 
     # hy3.inputs.hyprland.follows = "hyprland";
