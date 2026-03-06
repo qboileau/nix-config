@@ -2,7 +2,9 @@
 # You can build them using 'nix build .#example'
 
 pkgs: {
-  import = [
+  imports = [
+      ./xdg.nix
+      ./theme.nix
       ./base-tools.nix
       ./work-tools.nix
 
