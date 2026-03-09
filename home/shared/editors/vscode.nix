@@ -77,6 +77,7 @@ in {
       }
     ];
     userSettings = {
+      "chat.viewSessions.orientation" = "stacked";
       "claudeCode.preferredLocation" = "panel";
       "claudeCode.terminalCommand" = "${pkgs.unstable.claude-code}/bin/claude";
       "excalidraw.image" = {
