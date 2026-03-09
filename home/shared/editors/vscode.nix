@@ -78,6 +78,7 @@ in {
     ];
     userSettings = {
       "claudeCode.preferredLocation" = "panel";
+      "claudeCode.terminalCommand" = "${pkgs.unstable.claude-code}/bin/claude";
       "excalidraw.image" = {
         "exportScale" = 1;
         "exportWithBackground" = true;
@@ -91,6 +92,7 @@ in {
       };
       "git.confirmSync"= false;
       "git.replaceTagsWhenPull" = true;
+      "github.copilot.chat.claudeCode.enabled" = true;
       "github.copilot.nextEditSuggestions.enabled" = true; 
       "nix.enableLanguageServer" = true;
       "nix.serverSettings" = {

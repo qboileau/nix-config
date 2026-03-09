@@ -13,6 +13,9 @@
     ./udev.nix
   ];
 
+  # Allow dynamically linked executables (e.g. VS Code extensions with native binaries)
+  programs.nix-ld.enable = true;
+
   # Common basic system tools and programs
   programs.firefox.enable = true;
   environment.systemPackages = with pkgs; [
