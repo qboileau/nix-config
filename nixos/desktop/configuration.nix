@@ -25,6 +25,13 @@
     outputs.nixosModules.noctalia
   ];
 
+  # Ensure overlays are available for home-manager (useGlobalPkgs)
+  nixpkgs.overlays = [
+    outputs.overlays.additions
+    outputs.overlays.modifications
+    outputs.overlays.unstable-packages
+  ];
+
   # Configure shared modules for gaming desktop
   boot.useLatestKernel = true; # Use latest kernel for gaming performance
   boot.bootloader = "systemd-boot";

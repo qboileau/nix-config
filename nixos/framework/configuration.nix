@@ -25,6 +25,13 @@
     ../shared/gaming
   ];
 
+  # Ensure overlays are available for home-manager (useGlobalPkgs)
+  nixpkgs.overlays = [
+    outputs.overlays.additions
+    outputs.overlays.modifications
+    outputs.overlays.unstable-packages
+  ];
+
 
   # Configure shared modules for framework (work laptop)
   boot.useLatestKernel = false; # Use LTS for stability
@@ -66,7 +73,6 @@
   environment.pathsToLink = [ "/share/bash-completion" ]; # needed for bash completion
 
   environment.systemPackages = with pkgs; [
-   home-manager
    sddm-chili-theme
   ];
 
