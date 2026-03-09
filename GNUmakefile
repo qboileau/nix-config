@@ -5,22 +5,25 @@ HOSTNAME := $(shell hostname)
 help: ## Prints help for targets with comments
 	@cat $(MAKEFILE_LIST) | grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-.PHONY: upgrade-system
-upgrade-system: ## Upgrade NixOS to 25.11
-	sudo nix-channel --add https://channels.nixos.org/nixos-25.11 nixos
-	sudo nixos-rebuild test --upgrade --flake ".#$(HOSTNAME)" --use-remote-sudo -p upgrade-25.11
-
 .PHONY: update-inputs
 update-inputs: ## Update flake inputs
 	nix flake update
 
 .PHONY: update-system
-update-system: ## Update NixOS configuration
+update-system: ## Update NixOS configuration (use TAG=mytag to label the generation in boot menu)
+ifdef TAG
+	sudo NIXOS_LABEL="$(TAG)" nixos-rebuild switch --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace
+else
 	sudo nixos-rebuild switch --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace
+endif
 
 .PHONY: test-system
-test-system: ## Test NixOS configuration
+test-system: ## Test NixOS configuration (use TAG=mytag to label the generation in boot menu)
+ifdef TAG
+	sudo NIXOS_LABEL="$(TAG)" nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace
+else
 	sudo nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace
+endif
 
 .PHONY: update-home
 update-home: ## Update Home Manager configuration
