@@ -76,6 +76,10 @@
   };
 
   # Custom options
+  defaultBrowser = {
+    package = pkgs.unstable.brave;
+    desktopFile = "brave-browser.desktop";
+  };
   gaming.enable = false;
   hyprland.autolock.enable = true;
   hyprland.autostart = [];

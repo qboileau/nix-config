@@ -80,8 +80,6 @@
   services.kdeconnect.enable = true;
   services.kdeconnect.indicator = true;
 
-  home.sessionVariables.DEFAULT_BROWSER = "${pkgs.firefox}/bin/firefox";
-
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
 
