@@ -38,6 +38,8 @@
 
     noctalia.url = "github:noctalia-dev/noctalia-shell";
     noctalia.inputs.nixpkgs.follows = "nixpkgs";
+    
+    nixos-loading-plymouth.url = "github:qboileau/nixos-load-plymouth";
   };
 
   outputs = {
@@ -54,6 +56,7 @@
     # hy3,
     # ironbar,
     noctalia,
+    nixos-loading-plymouth,
     ...
   } @ inputs: 
   let
@@ -131,6 +134,7 @@
         modules = [
           ./nixos/desktop/configuration.nix
           home-manager.nixosModules.default
+          nixos-loading-plymouth.nixosModules.default
           {
             home-manager.extraSpecialArgs = specialArgs;
             home-manager.useGlobalPkgs = true;

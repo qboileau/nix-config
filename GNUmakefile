@@ -9,6 +9,10 @@ help: ## Prints help for targets with comments
 update-inputs: ## Update flake inputs
 	nix flake update
 
+.PHONY: update-input
+update-input: ## Update a single flake input (e.g., make update-input INPUT=nixpkgs)
+	nix flake update $(INPUT)
+
 .PHONY: update-system
 update-system: ## Update NixOS configuration (use TAG=mytag to label the generation in boot menu)
 ifdef TAG

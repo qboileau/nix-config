@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }: let
   cfg = config.boot;
@@ -164,6 +165,17 @@ in {
       environment.systemPackages = with pkgs; lib.optionals (cfg.grub.theme == "breeze") [
         # Add theme-related packages if needed
       ];
+    })
+    
+    # Plymouth configuration (uses official boot.plymouth.enable option)
+    (lib.mkIf cfg.plymouth.enable {
+      boot.plymouth = {
+        nixos-loading.variant = "default";
+        theme = "nixos-loading-default";
+        themePackages = [
+          inputs.nixos-loading-plymouth.packages.${pkgs.system}.nixos-loading-default
+        ];
+      };
     })
   ];
 }

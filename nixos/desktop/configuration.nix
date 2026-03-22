@@ -35,6 +35,7 @@
   # Configure shared modules for gaming desktop
   boot.useLatestKernel = true; # Use latest kernel for gaming performance
   boot.bootloader = "systemd-boot";
+  boot.plymouth.enable = true; # Enable Plymouth boot splash screen
   # boot.bootloader = "grub"; # Switch to GRUB
   # boot.grub = {
   #   theme = "breeze"; # Match your desktop theme
