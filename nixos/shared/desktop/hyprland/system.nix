@@ -36,6 +36,10 @@
   programs.hyprlock.enable = true;
   services.hypridle.enable = true;
   
+  # Register kio-fuse D-Bus session service so it auto-activates
+  # when Dolphin needs to open remote files with external apps (mpv, vlc, etc.)
+  services.dbus.packages = [ pkgs.kdePackages.kio-fuse ];
+
   environment.systemPackages = with pkgs; [
     kitty
     waybar # TODO flake https://github.com/Alexays/Waybar/wiki/Installation#nixos

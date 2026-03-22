@@ -37,6 +37,8 @@
     curl
     git
     vim
+    killall
+    htop
 
     gparted
     pciutils
