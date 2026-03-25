@@ -59,7 +59,7 @@
   # Configure virtualization for development work
   virtualisation = {
     docker.enableUnstable = true; # Use unstable Docker
-    docker.enableRootless = true; # Disabled due to K3s issues
+    docker.enableRootless = false; # Disabled due to K3s issues
     enableLibvirtd = true; # Not needed on work laptop
     enableVirtManager = true;
     enableBinfmt = true;
