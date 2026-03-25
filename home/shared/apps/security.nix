@@ -34,8 +34,9 @@ in {
     })
     
     (lib.mkIf cfg.onepassword.enable {
-      home.packages = with pkgs; [ 
-        _1password-gui
+      home.packages = with pkgs; [
+        unstable._1password-gui
+        unstable._1password-cli
       ];
     })
     
