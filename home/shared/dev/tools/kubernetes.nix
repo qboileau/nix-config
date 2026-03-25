@@ -15,6 +15,7 @@ in {
       kubernetes-helmPlugins.helm-diff
       fluxcd
       kustomize
+      kubeconform
       k9s
       k3d
       lens
