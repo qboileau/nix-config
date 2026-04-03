@@ -27,7 +27,7 @@ in {
 
     home.sessionVariables = {
       MAVEN_OPTS = "-Xmx1g -XX:MaxPermSize=512m";
-      SBT_OPTS = "-Xms256m -Xmx2G";
+      SBT_OPTS = "-Xms256m -Xmx4G -XX:+UseG1GC -XX:+UseStringDeduplication";
     };
   };
 }
