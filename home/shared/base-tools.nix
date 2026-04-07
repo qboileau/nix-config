@@ -1,11 +1,11 @@
-{pkgs, ...} :
+{pkgs, inputs, ...} :
 {
 
   imports = [
     ./git.nix
   ];
 
-  home.packages = with pkgs; [ 
+  home.packages = with pkgs; [
     fastfetch
     # replacement tools
     duf # better du / df
@@ -32,6 +32,7 @@
     unstable.discord-ptb
     bitwarden-desktop
     unstable.spotify
+    inputs.qbz.packages.${pkgs.system}.default
     cameractrls-gtk4
 
     synology-drive-client

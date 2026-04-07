@@ -40,6 +40,10 @@
     noctalia.inputs.nixpkgs.follows = "nixpkgs";
     
     nixos-loading-plymouth.url = "github:qboileau/nixos-load-plymouth";
+
+    # qbz.url = "github:vicrodh/qbz?ref=refs/tags/v1.2.4";
+    qbz.url = "github:qboileau/qbz/feature/external/nix-flake-direct-input-install";
+    qbz.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -57,6 +61,7 @@
     # ironbar,
     noctalia,
     nixos-loading-plymouth,
+    qbz,
     ...
   } @ inputs: 
   let
