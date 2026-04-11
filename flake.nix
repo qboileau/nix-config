@@ -44,6 +44,10 @@
     # qbz.url = "github:vicrodh/qbz?ref=refs/tags/v1.2.4";
     qbz.url = "github:qboileau/qbz/feature/external/nix-flake-direct-input-install";
     qbz.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Secrets management
+    agenix.url = "github:ryantm/agenix";
+    agenix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -62,6 +66,7 @@
     noctalia,
     nixos-loading-plymouth,
     qbz,
+    agenix,
     ...
   } @ inputs: 
   let
@@ -118,6 +123,7 @@
           disko.nixosModules.disko
           nixos-hardware.nixosModules.framework-11th-gen-intel
           auto-cpufreq.nixosModules.default
+          agenix.nixosModules.default
           home-manager.nixosModules.default
           {
             home-manager.extraSpecialArgs = specialArgs;
@@ -138,6 +144,7 @@
         };
         modules = [
           ./nixos/desktop/configuration.nix
+          agenix.nixosModules.default
           home-manager.nixosModules.default
           nixos-loading-plymouth.nixosModules.default
           {

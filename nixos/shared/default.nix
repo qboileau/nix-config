@@ -6,6 +6,7 @@
     ./locale.nix
     ./sound.nix
     ./security.nix
+    ./secrets.nix
     ./boot.nix
     ./network.nix
     ./virtualization.nix

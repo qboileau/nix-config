@@ -77,31 +77,15 @@
   programs.diff-so-fancy.enableGitIntegration = true;
   programs.diff-so-fancy.pagerOpts = [ "--tabs=4" "-RFX"];
 
-  xdg.configFile."git/personal".text = ''
-  [user]
-    name = Quentin Boileau
-    username = qboileau
-    email = quentin.boileau@gmail.com
-    signingkey = 1EE3013384394A30
-  
-  [commit]
-    gpgsign = true
-  [tag]
-    gpgsign = true
+  # Git identity configs are managed by agenix (encrypted secrets)
+  # They are decrypted at activation to ~/.config/git/personal, work, conduktor
 
-  [credential "https://github.com"]
-    username = qboileau
-
-  [credential "http://gitlab.com"]
-    username = qboileau
-  '';
-
-  xdg.configFile."git/work".text = ''
-  [user]
-    name = Quentin Boileau
-    username = qboileau
-    # TODO
-  '';
+  # xdg.configFile."git/work".text = ''
+  # [user]
+  #   name = Quentin Boileau
+  #   username = qboileau
+  #   # TODO
+  # '';
 
   home.file."projects/perso/.placeholder".text = "#placeholder";
   home.file."projects/work/.placeholder".text = "#placeholder";

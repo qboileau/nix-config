@@ -1,6 +1,10 @@
-.sops.yaml
-secrets.yaml
+# Legacy sops files (replaced by agenix)
+# .sops.yaml
+# secrets.yaml
 *.cache
 
 result
 pkgs/**/result
+
+# Age master private key (NEVER commit)
+/var/lib/age/key.txt

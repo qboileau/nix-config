@@ -38,6 +38,22 @@ revert-home: ## Revert to previous
 	home-manager generations
 	home-manager switch --rollback
 
+.PHONY: secrets-bootstrap
+secrets-bootstrap: ## Bootstrap age master key from Bitwarden vault (first-time setup)
+	./scripts/bootstrap-secrets.sh
+
+.PHONY: secrets-update
+secrets-update: ## Encrypt secrets from live system into secrets/*.age (CATEGORIES="ssh gpg git shell network bluetooth")
+ifdef CATEGORIES
+	./scripts/update-secrets.sh $(CATEGORIES)
+else
+	./scripts/update-secrets.sh
+endif
+
+.PHONY: secrets-rekey
+secrets-rekey: ## Re-encrypt all .age files after changing keys in secrets/secrets.nix
+	cd secrets && nix run github:ryantm/agenix -- --rekey -i /var/lib/age/key.txt
+
 .PHONY: enable-git-hooks
 enable-git-hooks: ## Enable Git hooks from .githooks directory
 	git config --local core.hooksPath .githooks
