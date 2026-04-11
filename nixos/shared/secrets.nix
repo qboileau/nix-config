@@ -103,7 +103,7 @@
       file = ../../secrets/shell/${config.networking.hostName}/${f};
       owner = username;
       group = "users";
-      mode = "0644";
+      mode = "0600";
       path = "/home/${username}/.bashrc.d/${name}";
     };
   }) ageFiles))

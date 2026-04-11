@@ -41,7 +41,7 @@
         editor = "interactive-rebase-tool";
       };
       credential = {
-        helper = "store";
+        helper = "libsecret";
       };
       program = { 
         pgp = "gpg";

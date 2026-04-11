@@ -142,7 +142,7 @@
   # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
   users.users = builtins.listToAttrs (map (user: lib.nameValuePair user {
     isNormalUser = true;
-    initialPassword = "changeme";
+    initialHashedPassword = "$6$X7isrpSsrsuclmyc$ngy1/kNbIDkoaCPrXEJjsA5kAJA5dixT1xXs1ulVIjpdf/aWD3hEDinxBUf8/6QpmTPg2U7JzXvZXU1bgUknw1"; # generate with: mkpasswd -m sha-512
     shell = pkgs.bash;
     openssh.authorizedKeys.keys = [
       # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
