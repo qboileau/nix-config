@@ -143,10 +143,34 @@ do_ssh() {
 
 do_gpg() {
     section "GPG Keys"
-    agenix_encrypt     "$HOME_DIR/.gnupg/personal-private-key.asc" "gpg/personal-private-key.asc.age"
-    agenix_encrypt     "$HOME_DIR/.gnupg/personal-public-key.asc"  "gpg/personal-public-key.asc.age"
-    agenix_encrypt     "$HOME_DIR/.gnupg/trustdb.gpg"              "gpg/trustdb.gpg.age"
-    agenix_encrypt_dir "$HOME_DIR/.gnupg/private-keys-v1.d"        "gpg/private-keys-v1.d.tar.age"
+
+    local gpg_tmp
+    gpg_tmp=$(mktemp -d)
+    trap "rm -rf '$gpg_tmp'" RETURN
+
+    # Export secret keys (armored)
+    gpg --batch --yes --armor --export-secret-keys > "$gpg_tmp/secret-keys.asc"
+    if [ -s "$gpg_tmp/secret-keys.asc" ]; then
+        agenix_encrypt "$gpg_tmp/secret-keys.asc" "gpg/secret-keys.asc.age"
+    else
+        warn "No GPG secret keys found, skipping"
+    fi
+
+    # Export public keys (armored)
+    gpg --batch --yes --armor --export > "$gpg_tmp/public-keys.asc"
+    if [ -s "$gpg_tmp/public-keys.asc" ]; then
+        agenix_encrypt "$gpg_tmp/public-keys.asc" "gpg/public-keys.asc.age"
+    else
+        warn "No GPG public keys found, skipping"
+    fi
+
+    # Export ownertrust
+    gpg --batch --yes --export-ownertrust > "$gpg_tmp/ownertrust.txt"
+    if [ -s "$gpg_tmp/ownertrust.txt" ]; then
+        agenix_encrypt "$gpg_tmp/ownertrust.txt" "gpg/ownertrust.txt.age"
+    else
+        warn "No GPG ownertrust found, skipping"
+    fi
 }
 
 do_git() {

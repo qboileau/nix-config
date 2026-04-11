@@ -17,18 +17,18 @@ let
   framework = "ssh-ed25519 AAAA..."; # TODO: replace with actual framework host key
 
   # All keys that should be able to decrypt
-  allKeys = [ master desktop framework ];
+  # NOTE: add framework here once its real host key is set above
+  allKeys = [ master desktop ];
 in {
   # --- SSH ---
   "ssh/pro_id_rsa.age".publicKeys = allKeys;
   "ssh/pro_id_rsa.pub.age".publicKeys = allKeys;
   "ssh/config.age".publicKeys = allKeys;
 
-  # --- GPG ---
-  "gpg/personal-private-key.asc.age".publicKeys = allKeys;
-  "gpg/personal-public-key.asc.age".publicKeys = allKeys;
-  "gpg/trustdb.gpg.age".publicKeys = allKeys;
-  "gpg/private-keys-v1.d.tar.age".publicKeys = allKeys; # tarball of keyring dir
+  # --- GPG (armored exports from gpg --export) ---
+  "gpg/secret-keys.asc.age".publicKeys = allKeys;
+  "gpg/public-keys.asc.age".publicKeys = allKeys;
+  "gpg/ownertrust.txt.age".publicKeys = allKeys;
 
   # --- Git (shared across hosts) ---
   "git/personal.age".publicKeys = allKeys;
@@ -36,19 +36,19 @@ in {
   # --- Git (per host) ---
   "git/desktop/work.age".publicKeys = [ master desktop ];
   # "git/desktop/conduktor.age".publicKeys = [ master desktop ];
-  "git/framework/work.age".publicKeys = [ master framework ];
+  # "git/framework/work.age".publicKeys = [ master framework ];       # TODO: uncomment once framework key is set
   # "git/framework/conduktor.age".publicKeys = [ master framework ];
 
   # --- Shell secrets (per host) ---
   "shell/desktop/work.bashrc.age".publicKeys = [ master desktop ];
-  "shell/framework/work.bashrc.age".publicKeys = [ master framework ];
+  # "shell/framework/work.bashrc.age".publicKeys = [ master framework ];   # TODO: uncomment once framework key is set
   # "shell/framework/conduktor.bashrc.age".publicKeys = [ master framework ];
 
   # --- NetworkManager (per host) ---
   "network/desktop/connections.tar.age".publicKeys = [ master desktop ];
-  "network/framework/connections.tar.age".publicKeys = [ master framework ];
+  # "network/framework/connections.tar.age".publicKeys = [ master framework ];  # TODO: uncomment once framework key is set
 
   # --- Bluetooth (per host) ---
   "bluetooth/desktop/devices.tar.age".publicKeys = [ master desktop ];
-  "bluetooth/framework/devices.tar.age".publicKeys = [ master framework ];
+  # "bluetooth/framework/devices.tar.age".publicKeys = [ master framework ];  # TODO: uncomment once framework key is set
 }

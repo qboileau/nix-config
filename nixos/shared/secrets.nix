@@ -37,27 +37,21 @@
       path = "/home/${username}/.ssh/config";
     };
 
-    # --- GPG ---
-    gpg_personal_private = {
-      file = ../../secrets/gpg/personal-private-key.asc.age;
+    # --- GPG (armored exports) ---
+    gpg_secret_keys = {
+      file = ../../secrets/gpg/secret-keys.asc.age;
       owner = username;
       group = "users";
       mode = "0600";
     };
-    gpg_personal_public = {
-      file = ../../secrets/gpg/personal-public-key.asc.age;
+    gpg_public_keys = {
+      file = ../../secrets/gpg/public-keys.asc.age;
       owner = username;
       group = "users";
       mode = "0644";
     };
-    gpg_trustdb = {
-      file = ../../secrets/gpg/trustdb.gpg.age;
-      owner = username;
-      group = "users";
-      mode = "0600";
-    };
-    gpg_private_keys = {
-      file = ../../secrets/gpg/private-keys-v1.d.tar.age;
+    gpg_ownertrust = {
+      file = ../../secrets/gpg/ownertrust.txt.age;
       owner = username;
       group = "users";
       mode = "0600";
@@ -130,34 +124,26 @@
     };
   });
 
-  # Restore GPG keyring from decrypted secrets
+  # Restore GPG keyring from decrypted armored exports
   system.activationScripts.restoreGpgKeys = lib.stringAfter [ "agenix" ] ''
     GPG_HOME="/home/${username}/.gnupg"
-    mkdir -p "$GPG_HOME/private-keys-v1.d"
-    chown ${username}:users "$GPG_HOME" "$GPG_HOME/private-keys-v1.d"
+    mkdir -p "$GPG_HOME"
+    chown ${username}:users "$GPG_HOME"
     chmod 700 "$GPG_HOME"
 
-    # Import GPG keys
-    if [ -f "${config.age.secrets.gpg_personal_private.path}" ]; then
-      su - ${username} -c "${pkgs.gnupg}/bin/gpg --batch --import ${config.age.secrets.gpg_personal_private.path}" 2>/dev/null || true
-    fi
-    if [ -f "${config.age.secrets.gpg_personal_public.path}" ]; then
-      su - ${username} -c "${pkgs.gnupg}/bin/gpg --batch --import ${config.age.secrets.gpg_personal_public.path}" 2>/dev/null || true
+    # Import secret keys
+    if [ -f "${config.age.secrets.gpg_secret_keys.path}" ]; then
+      su - ${username} -c "${pkgs.gnupg}/bin/gpg --batch --import ${config.age.secrets.gpg_secret_keys.path}" 2>/dev/null || true
     fi
 
-    # Restore trustdb
-    if [ -f "${config.age.secrets.gpg_trustdb.path}" ]; then
-      cp "${config.age.secrets.gpg_trustdb.path}" "$GPG_HOME/trustdb.gpg"
-      chown ${username}:users "$GPG_HOME/trustdb.gpg"
-      chmod 600 "$GPG_HOME/trustdb.gpg"
+    # Import public keys
+    if [ -f "${config.age.secrets.gpg_public_keys.path}" ]; then
+      su - ${username} -c "${pkgs.gnupg}/bin/gpg --batch --import ${config.age.secrets.gpg_public_keys.path}" 2>/dev/null || true
     fi
 
-    # Restore private-keys-v1.d
-    if [ -f "${config.age.secrets.gpg_private_keys.path}" ]; then
-      ${pkgs.gnutar}/bin/tar xf "${config.age.secrets.gpg_private_keys.path}" -C "$GPG_HOME/private-keys-v1.d/" --strip-components=1 2>/dev/null || true
-      chown -R ${username}:users "$GPG_HOME/private-keys-v1.d"
-      chmod 700 "$GPG_HOME/private-keys-v1.d"
-      chmod 600 "$GPG_HOME/private-keys-v1.d"/*.key 2>/dev/null || true
+    # Restore ownertrust
+    if [ -f "${config.age.secrets.gpg_ownertrust.path}" ]; then
+      su - ${username} -c "${pkgs.gnupg}/bin/gpg --batch --import-ownertrust ${config.age.secrets.gpg_ownertrust.path}" 2>/dev/null || true
     fi
   '';
 
