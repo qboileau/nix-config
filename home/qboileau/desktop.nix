@@ -19,6 +19,7 @@
 #     ../shared/work-tools.nix
     ../shared/shells
 #     ../shared/dev
+    ../shared/dev/ai.nix
     ../shared/editors
     ../shared/gaming
     ../shared/desktop/hyprland
@@ -62,6 +63,7 @@
 
   # Custom options
   gaming.enable = true;
+  ai-tools.enable = true;
   hyprland.autolock.enable = false;
   hyprland.autostart = [  
     "bitwarden"

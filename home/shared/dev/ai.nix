@@ -1,5 +1,6 @@
-{pkgs, ...} :
+{pkgs, config, lib, ...} :
 let
+  ai-tools = config.ai-tools;
   systemToolsInstructions = ''
     # System CLI Tool Replacements
 
@@ -23,29 +24,92 @@ let
     - Shell aliases are set: `cat=bat`, `grep=rg`, `ls=eza`, `df=duf`. Avoid piping alias-incompatible flags.
     - When you need the plain POSIX behavior (e.g., for scripting or parsing), use the full path: `$(which cat)`, `$(which grep)`, `$(which ls)`, `$(which find)`.
     - The system runs NixOS. Binaries are in `/run/current-system/sw/bin/` or `~/.nix-profile/bin/`, not `/usr/bin/`.
+
+    ## Nix development environments
+
+    Always check for `flake.nix` or `shell.nix` in the project root before running terminal commands.
+    - If `flake.nix` exists, wrap every command with: `nix develop --command bash -c '<command>'`
+    - If `shell.nix` exists, wrap every command with: `nix-shell --run '<command>'`
+    - Commands that are already prefixed with `nix develop` or `nix-shell` do not need wrapping.
+    - A PreToolUse hook enforces this: bare commands will be blocked. Retry with the wrapped version from the hook output.
   '';
 in {
-  
-  home.packages = with pkgs; [ 
-    unstable.claude-code
-    unstable.claude-monitor
-    unstable.github-copilot-cli
-    unstable.mistral-vibe
-  ];
-
-  # GitHub Copilot (VS Code) — user-level instructions, loaded in all workspaces
-  xdg.configFile."Code/User/prompts/system-tools.instructions.md" = {
-    text = ''
-      ---
-      applyTo: "**"
-      description: "System CLI tool replacements: bat for cat, rg for grep, eza for ls, fd for find. Use when running terminal commands."
-      ---
-    '' + systemToolsInstructions;
+  options = {
+    ai-tools = {
+      enable = lib.mkEnableOption "AI tools support";
+    };
   };
 
-  # Claude Code — global instructions via ~/.claude/CLAUDE.md
-  home.file.".claude/CLAUDE.md" = {
-    text = systemToolsInstructions;
-  };
+  config = lib.mkIf ai-tools.enable {
+    home.packages = with pkgs; [ 
+      unstable.claude-monitor
+      unstable.github-copilot-cli
+      unstable.mistral-vibe
+      unstable.llama-cpp 
+      unstable.oterm
+      unstable.tgpt
+      unstable.aichat
+      unstable.python314Packages.transformers
+      # unstable.gpt4all
+      # unstable.restate
+    ];
 
+    # aichat configuration — use local Ollama as default backend
+    xdg.configFile."aichat/config.yaml" = {
+      text = ''
+        model: ollama:qwen2.5-coder:32b
+        clients:
+          - type: ollama
+            api_base: http://127.0.0.1:11434
+            models:
+              - name: qwen2.5-coder:32b
+                max_input_tokens: 32768
+              - name: llama3.3:70b
+                max_input_tokens: 131072
+              - name: llama3.2-vision:11b
+                max_input_tokens: 131072
+              - name: deepseek-coder-v2:16b
+                max_input_tokens: 131072
+      '';
+    };
+
+    # GitHub Copilot (VS Code) — user-level instructions, loaded in all workspaces
+    xdg.configFile."Code/User/prompts/system-tools.instructions.md" = {
+      text = ''
+        ---
+        applyTo: "**"
+        description: "System CLI tool replacements: bat for cat, rg for grep, eza for ls, fd for find. Use when running terminal commands."
+        ---
+      '' + systemToolsInstructions;
+    };
+
+
+    programs.claude-code = {
+      enable = true;
+      package = pkgs.unstable.claude-code;
+    };
+
+    # Claude Code - global instructions via ~/.claude/CLAUDE.md
+    home.file.".claude/CLAUDE.md" = {
+      text = systemToolsInstructions;
+    };
+
+    programs.opencode = {
+      enable = true;
+      package = pkgs.unstable.opencode;
+      rules = systemToolsInstructions;
+      agents = {
+        # https://github.com/nix-community/home-manager/blob/release-25.11/modules/programs/opencode.nix#L157
+      };
+      commands = {
+        # https://github.com/nix-community/home-manager/blob/release-25.11/modules/programs/opencode.nix#L128
+      };
+      settings = {
+        theme = "opencode";
+        model = "anthropic/claude-sonnet-4-20250514";
+        autoshare = false;
+        autoupdate = true;
+      };
+    };
+  };
 }

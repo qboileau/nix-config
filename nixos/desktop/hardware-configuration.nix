@@ -62,6 +62,9 @@ in {
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
+  # ROCm support
+  hardware.amdgpu.opencl.enable = true;
+
   hardware.enableAllFirmware = true;
   services.fwupd.enable = true;
 

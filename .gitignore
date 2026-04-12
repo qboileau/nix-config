@@ -3,6 +3,8 @@
 # secrets.yaml
 *.cache
 
+_tmp/
+
 result
 pkgs/**/result
 

@@ -21,6 +21,7 @@
     # Host-specific modules
     ../shared/gaming
     ../shared/services/printing
+    ../shared/services/ai
 
     outputs.nixosModules.noctalia
   ];
@@ -95,6 +96,11 @@
     vr.enable = true;
     amd.enable = true;
     emulators.enable = true;
+  };
+
+  ai-tools = {
+    enable = true;
+    acceleration = "rocm";
   };
 
   noctalia.enable = false;

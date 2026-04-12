@@ -23,6 +23,9 @@
     
     # Host-specific modules
     ../shared/gaming
+
+    ../shared/services/printing
+    ../shared/services/ai
   ];
 
   # Ensure overlays are available for home-manager (useGlobalPkgs)
@@ -97,6 +100,10 @@
     vr.enable = false;
     amd.enable = false;
     emulators.enable = false;
+  };
+
+  ai-tools = {
+    enable = true;
   };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
