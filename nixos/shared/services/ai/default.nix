@@ -16,7 +16,9 @@ in {
   config = lib.mkIf ai-tools.enable {
     services.ollama = {
       enable = true;
-      package = pkgs.unstable.ollama;
+      package = if ai-tools.acceleration == "false"
+        then pkgs.unstable.ollama
+        else pkgs.unstable."ollama-${ai-tools.acceleration}";
       acceleration = ai-tools.acceleration;
     };
 
