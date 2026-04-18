@@ -102,7 +102,7 @@
     emulators.enable = false;
   };
 
-  ai-tools = {
+  services.ai = {
     enable = true;
   };
 

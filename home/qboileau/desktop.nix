@@ -18,8 +18,7 @@
     ../shared/base-tools.nix
 #     ../shared/work-tools.nix
     ../shared/shells
-#     ../shared/dev
-    ../shared/dev/ai.nix
+    ../shared/dev
     ../shared/editors
     ../shared/gaming
     ../shared/desktop/hyprland
@@ -59,11 +58,13 @@
     );
   };
   
-  programs.java.enable = true;
-
   # Custom options
   gaming.enable = true;
-  ai-tools.enable = true;
+  
+  # Dev tools - minimal profile for desktop
+  dev.languages.python.enable = true;
+  dev.languages.nodejs.enable = true;
+  dev.tools.ai.enable = true;
   hyprland.autolock.enable = false;
   hyprland.autostart = [  
     "bitwarden"

@@ -1,10 +1,10 @@
 { config, lib, pkgs, username, ... }:
 let
-  ai-tools = config.ai-tools;
+  cfg = config.services.ai;
 in {
   options = {
-    ai-tools = {
-      enable = lib.mkEnableOption "AI tools support";
+    services.ai = {
+      enable = lib.mkEnableOption "AI services (Ollama, Open WebUI)";
       acceleration = lib.mkOption {
         type = lib.types.enum [ "rocm" "cuda" "false" ];
         default = "false";
@@ -13,13 +13,13 @@ in {
     };
   };
 
-  config = lib.mkIf ai-tools.enable {
+  config = lib.mkIf cfg.enable {
     services.ollama = {
       enable = true;
-      package = if ai-tools.acceleration == "false"
+      package = if cfg.acceleration == "false"
         then pkgs.unstable.ollama
-        else pkgs.unstable."ollama-${ai-tools.acceleration}";
-      acceleration = ai-tools.acceleration;
+        else pkgs.unstable."ollama-${cfg.acceleration}";
+      acceleration = cfg.acceleration;
     };
 
     services.open-webui = {
@@ -35,6 +35,6 @@ in {
 
     # Ensure the user has GPU access groups for ROCm/CUDA acceleration
     users.users.${username}.extraGroups =
-      lib.optionals (ai-tools.acceleration == "rocm") [ "render" "video" ];
+      lib.optionals (cfg.acceleration == "rocm") [ "render" "video" ];
   };
 }

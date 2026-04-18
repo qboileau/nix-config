@@ -1,6 +1,6 @@
 {pkgs, config, lib, ...} :
 let
-  ai-tools = config.ai-tools;
+  cfg = config.dev.tools;
   systemToolsInstructions = ''
     # System CLI Tool Replacements
 
@@ -35,12 +35,12 @@ let
   '';
 in {
   options = {
-    ai-tools = {
-      enable = lib.mkEnableOption "AI tools support";
+    dev.tools.ai = {
+      enable = lib.mkEnableOption "AI development and productivity tools";
     };
   };
 
-  config = lib.mkIf ai-tools.enable {
+  config = lib.mkIf cfg.ai.enable {
     home.packages = with pkgs; [ 
       unstable.claude-monitor
       unstable.github-copilot-cli

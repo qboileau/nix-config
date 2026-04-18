@@ -98,7 +98,7 @@
     emulators.enable = true;
   };
 
-  ai-tools = {
+  services.ai = {
     enable = true;
     acceleration = "rocm";
   };

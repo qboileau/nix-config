@@ -57,6 +57,25 @@
     desktopFile = "brave-browser.desktop";
   };
   gaming.enable = false;
+  
+  # Dev tools - full profile for work laptop
+  # Languages
+  dev.languages.java.enable = true;
+  dev.languages.rust.enable = true;
+  dev.languages.nodejs.enable = true;
+  dev.languages.go.enable = true;
+  dev.languages.python.enable = true;
+  
+  # DevOps/Backend tools
+  dev.tools.build.enable = true;
+  dev.tools.kubernetes.enable = true;
+  dev.tools.cloud.enable = true;
+  dev.tools.database.enable = true;
+  dev.tools.network.enable = true;
+  dev.tools.containers.enable = true;
+  dev.tools.api.enable = true;
+  dev.tools.ai.enable = true;
+  # dev.tools.virtualization.enable = true;  # Uncomment if needed
   hyprland.autolock.enable = true;
   hyprland.autostart = [];
 

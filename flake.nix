@@ -124,6 +124,7 @@
           nixos-hardware.nixosModules.framework-11th-gen-intel
           auto-cpufreq.nixosModules.default
           agenix.nixosModules.default
+          nixos-loading-plymouth.nixosModules.default
           home-manager.nixosModules.default
           {
             home-manager.extraSpecialArgs = specialArgs;
@@ -152,6 +153,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.backupFileExtension = "bak";
             home-manager.sharedModules = [
+              krewfile.homeManagerModules.krewfile
               # ironbar.homeManagerModules.default
               noctalia.homeModules.default
             ];
