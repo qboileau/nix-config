@@ -4,8 +4,8 @@ let
   gaming = config.gaming;
 
   amdEnv = optionalAttrs gaming.amd.enable {
-      PROTON_FSR4_RDNA3_UPGRADE = true;
-      PROTON_FSR4_UPGRADE = true;
+      # PROTON_FSR4_RDNA3_UPGRADE = true;
+      # PROTON_FSR4_UPGRADE = true;
       PROTON_USE_FSR4 = true;
   };
   baseEnv = {
@@ -34,7 +34,7 @@ in {
       enable = true;
       settings = {
         general = {
-          softrealtime = "on";
+          softrealtime = "auto";
           inhibit_screensaver = 1;
         };
         gpu = mkIf gaming.amd.enable {
@@ -65,6 +65,9 @@ in {
         protonup-qt
         bottles # wine prefix manager
         vulkan-tools
+        vulkan-loader
+        libGL
+        python313Packages.ds4drv # DualShock 4 driver  : ds4drv --hidraw --emulate-xbox-360
     ] ++ optionals gaming.emulators.enable  [
       (retroarch.withCores (cores: with cores; [
         snes9x
