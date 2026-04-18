@@ -12,7 +12,6 @@ in {
     home.packages = with pkgs; [ 
       postman
       nixfmt-rfc-style
-      ascii-draw
     ];
   };
 }

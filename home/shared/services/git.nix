@@ -1,6 +1,7 @@
 {config, pkgs, ...} :
 {
-
+  # Git configuration and related tools
+  
   home.packages = with pkgs; [ 
     meld
     git-interactive-rebase-tool
@@ -79,13 +80,6 @@
 
   # Git identity configs are managed by agenix (encrypted secrets)
   # They are decrypted at activation to ~/.config/git/personal, work, conduktor
-
-  # xdg.configFile."git/work".text = ''
-  # [user]
-  #   name = Quentin Boileau
-  #   username = qboileau
-  #   # TODO
-  # '';
 
   home.file."projects/perso/.placeholder".text = "#placeholder";
   home.file."projects/work/.placeholder".text = "#placeholder";

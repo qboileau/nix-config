@@ -11,5 +11,6 @@
     ./virt.nix
     ./api.nix
     ./ai.nix
+    ./docs.nix
   ];
 }

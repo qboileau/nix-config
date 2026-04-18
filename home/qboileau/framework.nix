@@ -13,15 +13,7 @@
   
   # You can import other home-manager modules here
   imports = [
-    ../shared/xdg.nix
-    ../shared/theme.nix
-    ../shared/base-tools.nix
-    ../shared/work-tools.nix
-    ../shared/shells
-    ../shared/dev
-    ../shared/editors
-    ../shared/gaming
-
+    ../shared
     ../shared/desktop/hyprland
     # ../shared/desktop/i3
     # ../shared/desktop/sway
@@ -58,6 +50,21 @@
   };
   gaming.enable = false;
   
+  # Apps
+  apps.productivity.enable = true;
+  apps.communication.slack.enable = true;  # Work communication
+  apps.security.onepassword.enable = true;  # Work password manager
+  apps.browsers.firefox.enable = true;
+  apps.browsers.brave.enable = true;
+  apps.browsers.chromium.enable = true;
+  
+  # Tools
+  tools.monitoring.enable = true;
+  tools.bluetooth.enable = true;
+  
+  # Services
+  services.cloudSync.dropbox.enable = true;
+  
   # Dev tools - full profile for work laptop
   # Languages
   dev.languages.java.enable = true;
@@ -75,7 +82,15 @@
   dev.tools.containers.enable = true;
   dev.tools.api.enable = true;
   dev.tools.ai.enable = true;
+  dev.tools.docs.enable = true;  # Documentation tools
   # dev.tools.virtualization.enable = true;  # Uncomment if needed
+  
+  # Editors
+  editors.vim.enable = true;
+  editors.vim.defaultEditor = false;
+  editors.vscode.enable = true;
+  editors.intellij.enable = true;
+  editors.zed.enable = true;
   hyprland.autolock.enable = true;
   hyprland.autostart = [];
 

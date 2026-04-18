@@ -13,14 +13,7 @@
   
   # You can import other home-manager modules here
   imports = [
-    ../shared/xdg.nix
-    ../shared/theme.nix
-    ../shared/base-tools.nix
-#     ../shared/work-tools.nix
-    ../shared/shells
-    ../shared/dev
-    ../shared/editors
-    ../shared/gaming
+    ../shared
     ../shared/desktop/hyprland
   ];
 
@@ -33,12 +26,9 @@
   };
 
   # Add stuff for your user as you see fit:
-  # programs.neovim.enable = true;
   home.packages = with pkgs; [ 
     kdePackages.kate
     vlc
-    unstable.brave
-    chromium
     signal-desktop-bin
     prusa-slicer
     samba
@@ -61,10 +51,35 @@
   # Custom options
   gaming.enable = true;
   
+  # Apps
+  apps.productivity.enable = true;
+  apps.communication.discord.enable = true;
+  apps.security.bitwarden.enable = true;
+  apps.security.proton.enable = true;
+  apps.media.spotify.enable = true;
+  apps.browsers.firefox.enable = true;
+  apps.browsers.brave.enable = true;
+  
+  # Tools
+  tools.monitoring.enable = true;
+  tools.bluetooth.enable = true;
+  tools.peripherals.enable = true;
+  
+  # Services
+  services.cloudSync.dropbox.enable = true;
+  services.cloudSync.synology.enable = true;
+  services.cloudSync.qbz.enable = true;
+  services.cloudSync.tailscale.enable = true;
+  
   # Dev tools - minimal profile for desktop
   dev.languages.python.enable = true;
   dev.languages.nodejs.enable = true;
   dev.tools.ai.enable = true;
+  
+  # Editors
+  editors.vim.enable = true;
+  editors.vim.defaultEditor = true;
+  editors.vscode.enable = true;
   hyprland.autolock.enable = false;
   hyprland.autostart = [  
     "bitwarden"

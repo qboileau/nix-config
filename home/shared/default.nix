@@ -1,15 +1,21 @@
-# Custom packages, that can be defined similarly to ones from nixpkgs
-# You can build them using 'nix build .#example'
+# Home-manager shared modules
+# Core modules are always enabled, others have granular options
 
-pkgs: {
+{...} : {
   imports = [
-      ./xdg.nix
-      ./theme.nix
-      ./base-tools.nix
-      ./work-tools.nix
-
-      ./shells/default.nix
-      ./dev/default.nix
-      ./editors/default.nix
-    ];
+    ./xdg.nix
+    ./theme.nix
+    
+    # New organized structure
+    ./core
+    ./apps
+    ./tools
+    ./services
+    
+    # Existing organized modules
+    ./shells
+    ./dev
+    ./editors
+    ./gaming
+  ];
 }

@@ -1,25 +1,34 @@
-{pkgs, ...} :
-{
+{pkgs, config, lib, ...} :
+let
+  cfg = config.editors;
+in {
+  options = {
+    editors.neovim = {
+      enable = lib.mkEnableOption "Neovim with LazyVim configuration";
+    };
+  };
 
-  programs.neovim = {
+  config = lib.mkIf cfg.neovim.enable {
+    programs.neovim = {
+      enable = true;
 
-    extraPackages = with pkgs; [
-      # LazyVim
-      lua-language-server
-      stylua
-      # Telescope
-      ripgrep
-    ];
+      extraPackages = with pkgs; [
+        # LazyVim
+        lua-language-server
+        stylua
+        # Telescope
+        ripgrep
+      ];
 
-    plugins = with pkgs.vimPlugins; [
-      lazy-nvim
-    ];
+      plugins = with pkgs.vimPlugins; [
+        lazy-nvim
+      ];
 
     # extraC/onfig = ''
     #   set number relativenumber
     # '';
 
-    extraLuaConfig =
+      extraLuaConfig =
       let
         plugins = with pkgs.vimPlugins; [
           LazyVim
@@ -100,11 +109,11 @@
             { "williamboman/mason.nvim", enabled = false },
             -- import/override with your plugins
             { import = "plugins" },
-            -- treesitter handled by xdg.configFile."nvim/parser", put this line at the end of spec to clear ensure_installed
+            -- tree sitter handled by xdg.configFile."nvim/parser", put this line at the end of spec to clear ensure_installed
             { "nvim-treesitter/nvim-treesitter", opts = { ensure_installed = {} } },
           },
         })
       '';
+    };
   };
-
 }

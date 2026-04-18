@@ -1,8 +1,22 @@
-{pkgs, ...} :
-{
+{pkgs, config, lib, ...} :
+let
+  cfg = config.editors;
+in {
+  options = {
+    editors.vim = {
+      enable = lib.mkEnableOption "Vim text editor";
+      defaultEditor = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Set Vim as the default editor";
+      };
+    };
+  };
 
-  programs.vim = {
-    enable = true;
+  config = lib.mkIf cfg.vim.enable {
+    programs.vim = {
+      enable = true;
+      defaultEditor = cfg.vim.defaultEditor;
     plugins = with pkgs.vimPlugins; [ 
       vim-vagrant
     ];
@@ -15,6 +29,6 @@
       filetype plugin indent on
       syntax on
     '';
+    };
   };
-
 }

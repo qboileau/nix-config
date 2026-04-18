@@ -1,5 +1,6 @@
-{pkgs, ...} :
+{pkgs, config, lib, ...} :
 let
+  cfg = config.editors;
   claude-code-custom = pkgs.vscode-utils.buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "claude-code";
@@ -9,17 +10,23 @@ let
     };
   };
 in {
+  options = {
+    editors.vscode = {
+      enable = lib.mkEnableOption "Visual Studio Code";
+    };
+  };
 
-  programs.vscode = {
-    enable = true;
-    package = pkgs.unstable.vscode;
+  config = lib.mkIf cfg.vscode.enable {
+    programs.vscode = {
+      enable = true;
+      package = pkgs.unstable.vscode;
     };
     
 
-  home.packages = with pkgs; [ 
-    nixfmt-rfc-style
-    nil # Nix Language Server
-  ];
+    home.packages = with pkgs; [ 
+      nixfmt-rfc-style
+      nil # Nix Language Server
+    ];
 
   programs.vscode.profiles.default = {
     extensions = with pkgs.unstable; [
@@ -114,5 +121,5 @@ in {
       };
     };
   };
-
+  };
 }
