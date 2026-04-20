@@ -5,8 +5,8 @@ let
     mktplcRef = {
       name = "claude-code";
       publisher = "anthropic";
-      version = "2.1.38";
-      hash = "sha256-4Cv0mlYbIPkRJdZlx4/xUl5ZK5jYfcpUN/wnxssFCJI=";
+      version = "2.1.90"; # https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code
+      hash = "sha256-8xHAEqxxCA0bw/4eNFL2PutMquD2H7FO1o2yycAJ4ME=";
     };
   };
 in {
@@ -102,6 +102,12 @@ in {
       "git.replaceTagsWhenPull" = true;
       "github.copilot.chat.claudeCode.enabled" = true;
       "github.copilot.nextEditSuggestions.enabled" = true; 
+      "metals.serverProperties" = [
+        "-Xmx3G"
+      ];  
+      "metals.bloopJvmProperties" = [
+        "-Xmx3G"
+      ];
       "nix.enableLanguageServer" = true;
       "nix.serverSettings" = {
         "nil" = {

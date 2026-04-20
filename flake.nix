@@ -130,6 +130,7 @@
           agenix.nixosModules.default
           nixos-loading-plymouth.nixosModules.default
           home-manager.nixosModules.default
+          nixos-loading-plymouth.nixosModules.default
           {
             home-manager.extraSpecialArgs = specialArgs;
             home-manager.useGlobalPkgs = true;

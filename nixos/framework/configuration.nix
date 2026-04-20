@@ -38,6 +38,7 @@
 
   # Configure shared modules for framework (work laptop)
   boot.useLatestKernel = false; # Use LTS for stability
+  boot.plymouth.enable = false; 
 
   # Configure networking for work laptop
   networking = {
