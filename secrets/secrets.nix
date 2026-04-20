@@ -14,11 +14,11 @@ let
 
   # Host SSH public keys (from /etc/ssh/ssh_host_ed25519_key.pub)
   desktop = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOVTpuB4XpKSysDwocjtYlMMo06fUO4FoMQxVQhtGSNa";
-  framework = "ssh-ed25519 AAAA..."; # TODO: replace with actual framework host key
+  framework = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJryB+et0QwCGwOFGqTbi7a4qsKXnmMQth/aRZNBCNhl";
 
   # All keys that should be able to decrypt
   # NOTE: add framework here once its real host key is set above
-  allKeys = [ master desktop ];
+  allKeys = [ master desktop framework];
 in {
   # --- SSH ---
   "ssh/pro_id_rsa.age".publicKeys = allKeys;
@@ -35,20 +35,20 @@ in {
 
   # --- Git (per host) ---
   "git/desktop/work.age".publicKeys = [ master desktop ];
-  # "git/desktop/conduktor.age".publicKeys = [ master desktop ];
-  # "git/framework/work.age".publicKeys = [ master framework ];       # TODO: uncomment once framework key is set
-  # "git/framework/conduktor.age".publicKeys = [ master framework ];
+  "git/desktop/conduktor.age".publicKeys = [ master desktop ];
+  "git/framework/work.age".publicKeys = [ master framework ];
+  "git/framework/conduktor.age".publicKeys = [ master framework ];
 
   # --- Shell secrets (per host) ---
   "shell/desktop/work.bashrc.age".publicKeys = [ master desktop ];
-  # "shell/framework/work.bashrc.age".publicKeys = [ master framework ];   # TODO: uncomment once framework key is set
-  # "shell/framework/conduktor.bashrc.age".publicKeys = [ master framework ];
+  "shell/framework/work.bashrc.age".publicKeys = [ master framework ];
+  "shell/framework/conduktor.bashrc.age".publicKeys = [ master framework ];
 
   # --- NetworkManager (per host) ---
   "network/desktop/connections.tar.age".publicKeys = [ master desktop ];
-  # "network/framework/connections.tar.age".publicKeys = [ master framework ];  # TODO: uncomment once framework key is set
+  "network/framework/connections.tar.age".publicKeys = [ master framework ];
 
   # --- Bluetooth (per host) ---
   "bluetooth/desktop/devices.tar.age".publicKeys = [ master desktop ];
-  # "bluetooth/framework/devices.tar.age".publicKeys = [ master framework ];  # TODO: uncomment once framework key is set
+  "bluetooth/framework/devices.tar.age".publicKeys = [ master framework ];
 }
