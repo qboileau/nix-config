@@ -5,8 +5,8 @@ let
     mktplcRef = {
       name = "claude-code";
       publisher = "anthropic";
-      version = "2.1.90"; # https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code
-      hash = "sha256-8xHAEqxxCA0bw/4eNFL2PutMquD2H7FO1o2yycAJ4ME=";
+      version = "2.1.114"; # https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code
+      hash = "sha256-TfVradC9ZjfLBp8QvZ0AptCS9j2ogzSlsRXxksp+N9I=";
     };
   };
 in {
