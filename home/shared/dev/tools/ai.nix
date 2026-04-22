@@ -1,6 +1,34 @@
 {pkgs, config, lib, ...} :
 let
   cfg = config.dev.tools;
+  boucleHooks = pkgs.boucle-framework-hooks;
+  claudeSettings = {
+    hooks = {
+      PreToolUse = [
+        {
+          matcher = "Read";
+          hooks = [{
+            type = "command";
+            command = "${boucleHooks}/libexec/read-once/hook.sh";
+          }];
+        }
+        {
+          matcher = "Bash";
+          hooks = [{
+            type = "command";
+            command = "${boucleHooks}/libexec/git-safe/hook.sh";
+          }];
+        }
+      ];
+      PostCompact = [{
+        matcher = "";
+        hooks = [{
+          type = "command";
+          command = "${boucleHooks}/libexec/read-once/compact.sh";
+        }];
+      }];
+    };
+  };
   systemToolsInstructions = ''
     # System CLI Tool Replacements
 
@@ -50,6 +78,7 @@ in {
       unstable.tgpt
       unstable.aichat
       unstable.python314Packages.transformers
+      boucle-framework-hooks 
       # unstable.gpt4all
       # unstable.restate
     ];
@@ -87,6 +116,7 @@ in {
     programs.claude-code = {
       enable = true;
       package = pkgs.unstable.claude-code;
+      settings = claudeSettings;
     };
 
     # Claude Code - global instructions via ~/.claude/CLAUDE.md
