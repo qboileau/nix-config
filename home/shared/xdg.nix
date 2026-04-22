@@ -36,7 +36,6 @@ in {
         config.common."org.freedesktop.portal.FileChooser" = "gtk";
       };
 
-
       # list of .desktop
       # ls /run/current-system/sw/share/applications # for global packages
       # ls /etc/profiles/per-user/$(id -n -u)/share/applications # for user packages

@@ -29,7 +29,6 @@
   home.packages = with pkgs; [ 
     kdePackages.kate
     vlc
-    signal-desktop-bin
     prusa-slicer
     samba
   ];
@@ -54,9 +53,11 @@
   # Apps
   apps.productivity.enable = true;
   apps.communication.discord.enable = true;
+  apps.communication.signal.enable = true;
   apps.security.bitwarden.enable = true;
   apps.security.proton.enable = true;
   apps.media.spotify.enable = true;
+  apps.media.qbz.enable = true;
   apps.browsers.firefox.enable = true;
   apps.browsers.brave.enable = true;
   
@@ -68,7 +69,6 @@
   # Services
   services.cloudSync.dropbox.enable = true;
   services.cloudSync.synology.enable = true;
-  services.cloudSync.qbz.enable = true;
   services.cloudSync.tailscale.enable = true;
   
   # Dev tools - minimal profile for desktop
@@ -85,9 +85,9 @@
     "bitwarden"
     "firefox"
     "steam"
-    "discordptb"
+    "discord"  # Flatpak: com.discordapp.Discord
     "protonvpn-app"
-    "signal-desktop"
+    "signal-desktop"  # Flatpak: org.signal.Signal
     "tail-tray"
   ];
 

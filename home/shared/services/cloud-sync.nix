@@ -1,4 +1,4 @@
-{pkgs, config, lib, inputs, ...} :
+{pkgs, config, lib, ...} :
 let
   cfg = config.services.cloudSync;
 in {
@@ -9,9 +9,6 @@ in {
       };
       synology = {
         enable = lib.mkEnableOption "Synology Drive client";
-      };
-      qbz = {
-        enable = lib.mkEnableOption "QBZ backup tool";
       };
       tailscale = {
         enable = lib.mkEnableOption "Tailscale VPN tray";
@@ -27,12 +24,6 @@ in {
     (lib.mkIf cfg.synology.enable {
       home.packages = with pkgs; [ 
         synology-drive-client
-      ];
-    })
-    
-    (lib.mkIf cfg.qbz.enable {
-      home.packages = [
-        inputs.qbz.packages.${pkgs.system}.default
       ];
     })
     

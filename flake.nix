@@ -48,6 +48,9 @@
     # Secrets management
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Declarative Flatpak management
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.7.0";
   };
 
   outputs = {
@@ -57,6 +60,7 @@
     home-manager,
     disko,
     nixos-hardware,
+    nix-flatpak,
     auto-cpufreq,
     krewfile,
     hyprland,
@@ -132,6 +136,7 @@
             home-manager.backupFileExtension = "bak";
             home-manager.sharedModules = [
               krewfile.homeManagerModules.krewfile
+              nix-flatpak.homeManagerModules.nix-flatpak
               # ironbar.homeManagerModules.default
             ];
             home-manager.useUserPackages = true;
@@ -154,6 +159,7 @@
             home-manager.backupFileExtension = "bak";
             home-manager.sharedModules = [
               krewfile.homeManagerModules.krewfile
+              nix-flatpak.homeManagerModules.nix-flatpak
               # ironbar.homeManagerModules.default
               noctalia.homeModules.default
             ];

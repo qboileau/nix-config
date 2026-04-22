@@ -43,6 +43,15 @@ in {
         wayland.enable = cfg.sddm.wayland;
         theme = cfg.sddm.theme;
       };
+
+      # Enable Flatpak for GUI application management
+      services.flatpak.enable = true;
+      
+      # XDG Desktop Portal for proper desktop integration (required for Flatpak)
+      xdg.portal = {
+        enable = true;
+        extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      };
     }
 
     # Auto-login configuration (if enabled)

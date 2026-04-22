@@ -4,6 +4,7 @@
   # Choose which applications to install per host
   
   imports = [
+    ./flatpak.nix
     ./productivity.nix
     ./communication.nix
     ./security.nix
