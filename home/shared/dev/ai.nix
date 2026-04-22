@@ -1,5 +1,34 @@
 {pkgs, ...} :
 let
+  boucleHooks = pkgs.boucle-framework-hooks;
+  claudeSettings = builtins.toJSON {
+    "$schema" = "https://json.schemastore.org/claude-code-settings.json";
+    hooks = {
+      PreToolUse = [
+        {
+          matcher = "Read";
+          hooks = [{
+            type = "command";
+            command = "${boucleHooks}/libexec/read-once/hook.sh";
+          }];
+        }
+        {
+          matcher = "Bash";
+          hooks = [{
+            type = "command";
+            command = "${boucleHooks}/libexec/git-safe/hook.sh";
+          }];
+        }
+      ];
+      PostCompact = [{
+        matcher = "";
+        hooks = [{
+          type = "command";
+          command = "${boucleHooks}/libexec/read-once/compact.sh";
+        }];
+      }];
+    };
+  };
   systemToolsInstructions = ''
     # System CLI Tool Replacements
 
@@ -26,11 +55,12 @@ let
   '';
 in {
   
-  home.packages = with pkgs; [ 
+  home.packages = with pkgs; [
     unstable.claude-code
     unstable.claude-monitor
     unstable.github-copilot-cli
     unstable.mistral-vibe
+    boucle-framework-hooks
   ];
 
   # GitHub Copilot (VS Code) — user-level instructions, loaded in all workspaces
@@ -46,6 +76,11 @@ in {
   # Claude Code — global instructions via ~/.claude/CLAUDE.md
   home.file.".claude/CLAUDE.md" = {
     text = systemToolsInstructions;
+  };
+
+  # Claude Code — settings with read-once hooks
+  home.file.".claude/settings.json" = {
+    text = claudeSettings;
   };
 
 }
