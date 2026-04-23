@@ -57,7 +57,9 @@
   apps.browsers.firefox.enable = true;
   apps.browsers.brave.enable = true;
   apps.browsers.chromium.enable = true;
-  
+  apps.media.spotify.enable = true;
+  apps.media.qbz.enable = true;
+
   # Tools
   tools.monitoring.enable = true;
   tools.bluetooth.enable = true;
