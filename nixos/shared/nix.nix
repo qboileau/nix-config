@@ -18,6 +18,20 @@
       nix-path = config.nix.nixPath;
       download-buffer-size = 524288000; # Set to 500 MiB
       auto-optimise-store = true;
+      
+      # Use binary caches to avoid building from source
+      substituters = [
+        "https://cache.nixos.org"
+        "https://nix-community.cachix.org"
+      ];
+      trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
+      
+      # Limit parallel builds to prevent system freeze
+      max-jobs = 5;  # Max 5 parallel package builds
+      cores = 10;    # Each build can use up to 10 CPU cores
     };
 
     gc = {

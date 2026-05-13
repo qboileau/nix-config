@@ -52,6 +52,11 @@ in {
         enable = true;
         extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
       };
+      
+      # Enable getty on TTY2-6 for emergency access
+      # (TTY1 is used by SDDM, but TTY2-6 provide fallback login)
+      systemd.services."getty@tty2".enable = true;
+      systemd.services."getty@tty3".enable = true;
     }
 
     # Auto-login configuration (if enabled)

@@ -18,13 +18,13 @@ in {
   boot.extraModulePackages = [ ];
   services.xserver.videoDrivers = [ "amdgpu" ];
 
-  fileSystems."/" ={ 
+  fileSystems."/" = { 
     device = "/dev/disk/by-uuid/7a1db630-a289-42e3-a6e8-8d8ac9c00326";
     fsType = "btrfs";
     options = [ "subvol=@" ];
   };
 
-  fileSystems."/boot" ={ 
+  fileSystems."/boot" = { 
     device = "/dev/disk/by-uuid/062E-A48B";
     fsType = "vfat";
     options = [ "fmask=0077" "dmask=0077" ];
@@ -47,7 +47,11 @@ in {
     options = [ "defaults" "nofail" "windows_names" ];
   };
 
-  swapDevices = [ ];
+  swapDevices = [
+    { 
+      device = "/swap/swapfile"; # Created with "sudo btrfs filesystem mkswapfile --size 16g /swap/swapfile"
+    } 
+  ];
 
   # Make the mount visible to the desktop environment.
   services.udisks2.enable = true;

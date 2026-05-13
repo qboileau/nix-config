@@ -1,5 +1,9 @@
 
 HOSTNAME := $(shell hostname)
+BUILD_JOBS := 5
+BUILD_CORES := 10
+CACHE_URLS := "https://cache.nixos.org https://nix-community.cachix.org"
+CACHE_KEYS := "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
 
 .PHONY: help
 help: ## Prints help for targets with comments
@@ -16,18 +20,34 @@ update-input: ## Update a single flake input (e.g., make update-input INPUT=nixp
 .PHONY: update-system
 update-system: ## Update NixOS configuration (use TAG=mytag to label the generation in boot menu)
 ifdef TAG
-	sudo NIXOS_LABEL="$(TAG)" nixos-rebuild switch --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace
+	sudo NIXOS_LABEL="$(TAG)" nixos-rebuild switch --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace \
+		--option substituters $(CACHE_URLS) \
+		--option trusted-public-keys $(CACHE_KEYS) \
+		--max-jobs $(BUILD_JOBS) --cores $(BUILD_CORES)
 else
-	sudo nixos-rebuild switch --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace
+	sudo nixos-rebuild switch --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace \
+		--option substituters $(CACHE_URLS) \
+		--option trusted-public-keys $(CACHE_KEYS) \
+		--max-jobs $(BUILD_JOBS) --cores $(BUILD_CORES)
 endif
 
 .PHONY: test-system
 test-system: ## Test NixOS configuration (use TAG=mytag to label the generation in boot menu)
 ifdef TAG
-	sudo NIXOS_LABEL="$(TAG)" nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace
+	sudo NIXOS_LABEL="$(TAG)" nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace \
+		--option substituters $(CACHE_URLS) \
+		--option trusted-public-keys $(CACHE_KEYS) \
+		--max-jobs $(BUILD_JOBS) --cores $(BUILD_CORES)
 else
-	sudo nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace
+	sudo nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace \
+		--option substituters $(CACHE_URLS) \
+		--option trusted-public-keys $(CACHE_KEYS) \
+		--max-jobs $(BUILD_JOBS) --cores $(BUILD_CORES)
 endif
+
+.PHONY: restart-display
+restart-display: ## Restart display manager (use if test-system kills your session)
+	sudo systemctl restart display-manager.service
 
 .PHONY: update-home
 update-home: ## Update Home Manager configuration

@@ -56,6 +56,7 @@ in {
       localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
       gamescopeSession.enable = true;
       protontricks.enable = true;
+      extest.enable = true; # translate X11 input events to uinput events 
     };
 
     hardware.steam-hardware.enable = true;
