@@ -50,6 +50,9 @@ in {
       package = pkgs.unstable.steam.override {
         extraEnv = gameEnv;
       };
+      extraPackages = with pkgs; [ 
+        hidapi
+      ];
 
       remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
       dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
