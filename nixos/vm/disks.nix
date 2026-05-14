@@ -20,7 +20,7 @@
                 type = "filesystem";
                 format = "vfat";
                 mountpoint = "/boot";
-                mountOptions = [ "fmask=0022" "dmask=0022"  ];
+                mountOptions = [ "fmask=0077" "dmask=0022" ];
               };
             };
             luks = {
