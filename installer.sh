@@ -37,6 +37,14 @@ fi
 
 mount | grep /mnt
 
+echo "Bootstrap age master key for agenix secrets"
+echo "This will prompt for your Bitwarden credentials"
+./scripts/bootstrap-secrets.sh
+# Copy master key to target system
+mkdir -p /mnt/var/lib/age
+cp /var/lib/age/key.txt /mnt/var/lib/age/key.txt
+chmod 600 /mnt/var/lib/age/key.txt
+
 echo "Install nixOs"
 nixos-install --flake .#$HOSTNAME --no-root-password
 
