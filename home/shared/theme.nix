@@ -16,6 +16,9 @@
     # extracted from https://github.com/nix-community/home-manager/blob/release-25.11/modules/misc/qt.nix#L25-L28
     libsForQt5.qtstyleplugins
     kdePackages.qt6gtk2
+
+    # Dark mode tools
+    xdg-desktop-portal
   ];
 
   home.pointerCursor = {
@@ -88,6 +91,7 @@
       Appearance = {
         style = "Breeze";
         icon_theme = "Breeze Dark";
+        color_scheme_path = "${pkgs.kdePackages.breeze}/share/color-schemes/BreezeDark.colors";
         standar_dialogs = "xdgdesktopportal";
       };
       Fonts = {
@@ -96,5 +100,13 @@
       };
     };
   };
-  
+
+  # Set dark mode preference via dconf (used by many apps)
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+      gtk-theme = "Breeze-Dark";
+    };
+  };
+
 }

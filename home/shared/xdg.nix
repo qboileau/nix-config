@@ -34,6 +34,8 @@ in {
         config.common.default = "hyprland;gtk";
         config.common."org.freedesktop.impl.portal.FileChooser" = "gtk";
         config.common."org.freedesktop.portal.FileChooser" = "gtk";
+        config.common."org.freedesktop.impl.portal.Settings" = "gtk";
+        xdgOpenUsePortal = true;
       };
 
       # list of .desktop
