@@ -24,7 +24,12 @@ in {
 
     xdg = {
       enable = true;
-      
+
+      userDirs = {
+        enable = true;
+        createDirectories = true;
+      };
+
       # avoid conflict on mimeapps.list
       configFile."mimeapps.list".force = true;
 
