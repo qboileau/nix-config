@@ -5,6 +5,12 @@ set -eu
 HOSTNAME=${1:?Missing target HOSTNAME}
 TMP_SOURCE_DIR=$(mktemp -d)
 
+# Build configuration (can be overridden via environment variables)
+BUILD_JOBS=${BUILD_JOBS:-5}
+BUILD_CORES=${BUILD_CORES:-10}
+CACHE_URLS=${CACHE_URLS:-"https://cache.nixos.org https://nix-community.cachix.org"}
+CACHE_KEYS=${CACHE_KEYS:-"cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="}
+
 check_command(){
     if ! command -v "${1}" &> /dev/null
     then
@@ -21,6 +27,12 @@ fi
 check_command nix
 check_command git
 check_command nixos-install
+
+echo "Build configuration:"
+echo "  Jobs: $BUILD_JOBS"
+echo "  Cores: $BUILD_CORES"
+echo "  Caches: $CACHE_URLS"
+echo ""
 
 mkdir -p "$TMP_SOURCE_DIR"
 
@@ -65,7 +77,10 @@ else
 fi
 
 echo "Install nixOs"
-nixos-install --flake .#$HOSTNAME --no-root-password
+nixos-install --flake .#$HOSTNAME --no-root-password \
+    --option substituters "$CACHE_URLS" \
+    --option trusted-public-keys "$CACHE_KEYS" \
+    --max-jobs "$BUILD_JOBS" --cores "$BUILD_CORES"
 
 echo "Set User password"
 nixos-enter -c "su -c 'passwd qboileau'"
