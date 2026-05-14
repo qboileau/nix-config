@@ -144,6 +144,32 @@
           }
         ];
       };
+      framework-amd = nixpkgs.lib.nixosSystem {
+        specialArgs = specialArgs // {
+          hostUsers = hostsSettings.framework.users;
+        };
+        modules = [
+          ./nixos/framework-amd/configuration.nix
+          disko.nixosModules.disko
+          nixos-hardware.nixosModules.framework-amd-ai-300-series
+          auto-cpufreq.nixosModules.default
+          agenix.nixosModules.default
+          nixos-loading-plymouth.nixosModules.default
+          home-manager.nixosModules.default
+          {
+            home-manager.extraSpecialArgs = specialArgs;
+            home-manager.useGlobalPkgs = true;
+            home-manager.backupFileExtension = "bak";
+            home-manager.sharedModules = [
+              krewfile.homeManagerModules.krewfile
+              nix-flatpak.homeManagerModules.nix-flatpak
+              # ironbar.homeManagerModules.default
+            ];
+            home-manager.useUserPackages = true;
+            home-manager.users.${username} = import ./home/qboileau/framework-amd.nix;
+          }
+        ];
+      };
       desktop = nixpkgs.lib.nixosSystem {
         specialArgs = specialArgs // {
           hostUsers = hostsSettings.desktop.users;
