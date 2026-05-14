@@ -28,7 +28,7 @@ error() { echo -e "${RED}[ERROR]${NC} $*" >&2; }
 if ! command -v bw &> /dev/null; then
     info "Bitwarden CLI not found, entering nix shell..."
     SCRIPT_PATH="$(readlink -f "$0")"
-    exec nix shell nixpkgs#bitwarden-cli --command bash "$SCRIPT_PATH" "$@"
+    exec nix --extra-experimental-features "nix-command flakes" shell nixpkgs#bitwarden-cli --command bash "$SCRIPT_PATH" "$@"
 fi
 
 # Check if already bootstrapped
