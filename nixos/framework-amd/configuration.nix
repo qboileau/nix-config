@@ -38,12 +38,12 @@
 
   # Configure shared modules for framework (work laptop)
   boot.useLatestKernel = false; # Use LTS for stability
-  boot.bootloader = "grub";
-  boot.grub = {
-    theme = "breeze"; # Match your desktop theme
-    resolution = "2256x1504"; # Adjust to your display
-    timeout = 5;
-  };
+  boot.bootloader = "systemd-boot";
+  # boot.grub = {
+  #   theme = "breeze"; # Match your desktop theme
+  #   resolution = "2256x1504"; # Adjust to your display
+  #   timeout = 5;
+  # };
   boot.plymouth.enable = true; 
 
   # Configure networking for work laptop
