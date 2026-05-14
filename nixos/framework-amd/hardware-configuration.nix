@@ -14,7 +14,7 @@
   boot.extraModulePackages = [ ];
   
   # TODO get offset with : btrfs inspect-internal map-swapfile -r /swap/swapfile
-  # boot.kernelParams = ["resume_offset=533760"];
+  boot.kernelParams = ["resume_offset=533760"];
   boot.resumeDevice = "/dev/disk/by-label/nixos";
 
   # fileSystems."/" =
