@@ -4,6 +4,7 @@
   # Hardware-specific and monitoring tools
   
   imports = [
+    ./gnupg.nix
     ./monitoring.nix
     ./bluetooth.nix
     ./peripherals.nix

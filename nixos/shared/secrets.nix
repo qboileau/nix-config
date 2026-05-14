@@ -37,24 +37,27 @@
       path = "/home/${username}/.ssh/config";
     };
 
-    # --- GPG (armored exports) ---
+    # --- GPG (armored exports) imported via home-manager activation ---
     gpg_secret_keys = {
       file = ../../secrets/gpg/secret-keys.asc.age;
       owner = username;
       group = "users";
       mode = "0600";
+      path = "/run/agenix/gpg_secret_keys";
     };
     gpg_public_keys = {
       file = ../../secrets/gpg/public-keys.asc.age;
       owner = username;
       group = "users";
       mode = "0644";
+      path = "/run/agenix/gpg_public_keys";
     };
     gpg_ownertrust = {
       file = ../../secrets/gpg/ownertrust.txt.age;
       owner = username;
       group = "users";
       mode = "0600";
+      path = "/run/agenix/gpg_ownertrust";
     };
 
     # --- Git (shared) ---
@@ -123,29 +126,6 @@
       mode = "0600";
     };
   });
-
-  # Restore GPG keyring from decrypted armored exports
-  system.activationScripts.restoreGpgKeys = lib.stringAfter [ "agenix" ] ''
-    GPG_HOME="/home/${username}/.gnupg"
-    mkdir -p "$GPG_HOME"
-    chown ${username}:users "$GPG_HOME"
-    chmod 700 "$GPG_HOME"
-
-    # Import secret keys
-    if [ -f "${config.age.secrets.gpg_secret_keys.path}" ]; then
-      su - ${username} -c "${pkgs.gnupg}/bin/gpg --batch --import ${config.age.secrets.gpg_secret_keys.path}" 2>/dev/null || true
-    fi
-
-    # Import public keys
-    if [ -f "${config.age.secrets.gpg_public_keys.path}" ]; then
-      su - ${username} -c "${pkgs.gnupg}/bin/gpg --batch --import ${config.age.secrets.gpg_public_keys.path}" 2>/dev/null || true
-    fi
-
-    # Restore ownertrust
-    if [ -f "${config.age.secrets.gpg_ownertrust.path}" ]; then
-      su - ${username} -c "${pkgs.gnupg}/bin/gpg --batch --import-ownertrust ${config.age.secrets.gpg_ownertrust.path}" 2>/dev/null || true
-    fi
-  '';
 
   # Restore NetworkManager connections
   system.activationScripts.restoreNetworkManager = lib.stringAfter [ "agenix" ] ''

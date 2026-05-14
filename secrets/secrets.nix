@@ -15,10 +15,11 @@ let
   # Host SSH public keys (from /etc/ssh/ssh_host_ed25519_key.pub)
   desktop = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOVTpuB4XpKSysDwocjtYlMMo06fUO4FoMQxVQhtGSNa";
   framework = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJryB+et0QwCGwOFGqTbi7a4qsKXnmMQth/aRZNBCNhl";
+  framework-amd = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINRaWSmEwtkxVMbUqIB0plJZkvpUHU9oAhdzdosrVzpd";
 
   # All keys that should be able to decrypt
   # NOTE: add framework here once its real host key is set above
-  allKeys = [ master desktop framework];
+  allKeys = [ master desktop framework framework-amd ];
 in {
   # --- SSH ---
   "ssh/pro_id_rsa.age".publicKeys = allKeys;
@@ -36,19 +37,19 @@ in {
   # --- Git (per host) ---
   "git/desktop/work.age".publicKeys = [ master desktop ];
   "git/desktop/conduktor.age".publicKeys = [ master desktop ];
-  "git/framework/work.age".publicKeys = [ master framework ];
-  "git/framework/conduktor.age".publicKeys = [ master framework ];
+  "git/framework/work.age".publicKeys = [ master framework framework-amd ];
+  "git/framework/conduktor.age".publicKeys = [ master framework framework-amd ];
 
   # --- Shell secrets (per host) ---
   "shell/desktop/work.bashrc.age".publicKeys = [ master desktop ];
-  "shell/framework/work.bashrc.age".publicKeys = [ master framework ];
-  "shell/framework/conduktor.bashrc.age".publicKeys = [ master framework ];
+  "shell/framework/work.bashrc.age".publicKeys = [ master framework framework-amd ];
+  "shell/framework/conduktor.bashrc.age".publicKeys = [ master framework framework-amd ];
 
   # --- NetworkManager (per host) ---
   "network/desktop/connections.tar.age".publicKeys = [ master desktop ];
-  "network/framework/connections.tar.age".publicKeys = [ master framework ];
+  "network/framework/connections.tar.age".publicKeys = [ master framework framework-amd ];
 
   # --- Bluetooth (per host) ---
   "bluetooth/desktop/devices.tar.age".publicKeys = [ master desktop ];
-  "bluetooth/framework/devices.tar.age".publicKeys = [ master framework ];
+  "bluetooth/framework/devices.tar.age".publicKeys = [ master framework framework-amd ];
 }
