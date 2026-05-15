@@ -49,6 +49,7 @@
   
   # Custom options
   gaming.enable = true;
+  gaming.gameLocations = [ "/mnt/LinuxGames/" ];
   
   # Apps
   apps.productivity.enable = true;

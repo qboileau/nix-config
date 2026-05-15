@@ -65,9 +65,7 @@ in {
     hardware.steam-hardware.enable = true;
 
     environment.systemPackages = with pkgs.unstable; [
-        heroic
         protonup-qt
-        bottles # wine prefix manager
         vulkan-tools
         vulkan-loader
         libGL
