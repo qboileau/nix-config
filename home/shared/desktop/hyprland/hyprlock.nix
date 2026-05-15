@@ -11,15 +11,14 @@ in {
           hide_cursor = false;
       };
 
-      # uncomment to enable fingerprint authentication
-      # auth {
-      #     fingerprint {
-      #         enabled = true
-      #         ready_message = Scan fingerprint to unlock
-      #         present_message = Scanning...
-      #         retry_delay = 250 # in milliseconds
-      #     }
-      # }
+      auth = {
+        fingerprint = {
+          enabled = true;
+          ready_message = "Scan fingerprint to unlock";
+          present_message = "Scanning...";
+          retry_delay = 250;
+        };
+      };
   
       animations = {
         enabled = true;

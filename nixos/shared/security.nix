@@ -25,11 +25,14 @@ in {
             sddm = {
               kwallet.enable = true;
               gnupg.enable = true;
+              fprintAuth = true;
             };
             login = {
               kwallet.enable = true;
               gnupg.enable = true;
+              fprintAuth = true;
             };
+            sudo.fprintAuth = true;
           };
         };
       };
