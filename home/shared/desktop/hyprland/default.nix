@@ -56,11 +56,20 @@ with lib;
       enable = true;
       systemd.enable = true;
       xwayland.enable = true;
-      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-      portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-      # extraConfig = ''
-      #   plugin = ${inputs.hy3.packages.x86_64-linux.hy3}/lib/libhy3.so
-      # '';
+      # Using pkgs.unstable.hyprland (fully cached, hy3 always in sync via hyprlandPlugins.hy3).
+      # To switch back to flake pin, replace the two lines below with:
+      #   package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+      #   portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+      package = pkgs.unstable.hyprland;
+      portalPackage = pkgs.unstable.xdg-desktop-portal-hyprland;
+      plugins = [
+        # hy3 plugin — built against pkgs.unstable.hyprland, always in sync.
+        # To enable: uncomment the line below.
+        pkgs.unstable.hyprlandPlugins.hy3
+        #
+        # Flake pin alternative (use if unstable hy3 lags behind unstable hyprland):
+        # inputs.hy3.packages.${pkgs.stdenv.hostPlatform.system}.hy3
+      ];
     };
 
     wayland.windowManager.hyprland.settings = {

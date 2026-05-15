@@ -5,6 +5,13 @@ BUILD_CORES := 10
 CACHE_URLS := "https://cache.nixos.org https://nix-community.cachix.org"
 CACHE_KEYS := "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
 
+# Pass GitHub token to Nix to avoid API rate-limiting when fetching flake inputs.
+# Set GITHUB_TOKEN in your shell environment before running make.
+ifdef GITHUB_TOKEN
+  NIX_CONFIG := access-tokens = github.com=$(GITHUB_TOKEN)
+  export NIX_CONFIG
+endif
+
 .PHONY: help
 help: ## Prints help for targets with comments
 	@cat $(MAKEFILE_LIST) | grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
@@ -12,7 +19,6 @@ help: ## Prints help for targets with comments
 .PHONY: update-inputs
 update-inputs: ## Update flake inputs
 	nix flake update
-
 .PHONY: update-input
 update-input: ## Update a single flake input (e.g., make update-input INPUT=nixpkgs)
 	nix flake update $(INPUT)
@@ -20,12 +26,12 @@ update-input: ## Update a single flake input (e.g., make update-input INPUT=nixp
 .PHONY: update-system
 update-system: ## Update NixOS configuration (use TAG=mytag to label the generation in boot menu)
 ifdef TAG
-	sudo NIXOS_LABEL="$(TAG)" nixos-rebuild switch --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace \
+	sudo NIX_CONFIG="$(NIX_CONFIG)" NIXOS_LABEL="$(TAG)" nixos-rebuild switch --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace \
 		--option substituters $(CACHE_URLS) \
 		--option trusted-public-keys $(CACHE_KEYS) \
 		--max-jobs $(BUILD_JOBS) --cores $(BUILD_CORES)
 else
-	sudo nixos-rebuild switch --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace \
+	sudo NIX_CONFIG="$(NIX_CONFIG)" nixos-rebuild switch --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace \
 		--option substituters $(CACHE_URLS) \
 		--option trusted-public-keys $(CACHE_KEYS) \
 		--max-jobs $(BUILD_JOBS) --cores $(BUILD_CORES)
@@ -34,12 +40,12 @@ endif
 .PHONY: test-system
 test-system: ## Test NixOS configuration (use TAG=mytag to label the generation in boot menu)
 ifdef TAG
-	sudo NIXOS_LABEL="$(TAG)" nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace \
+	sudo NIX_CONFIG="$(NIX_CONFIG)" NIXOS_LABEL="$(TAG)" nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace \
 		--option substituters $(CACHE_URLS) \
 		--option trusted-public-keys $(CACHE_KEYS) \
 		--max-jobs $(BUILD_JOBS) --cores $(BUILD_CORES)
 else
-	sudo nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace \
+	sudo NIX_CONFIG="$(NIX_CONFIG)" nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace \
 		--option substituters $(CACHE_URLS) \
 		--option trusted-public-keys $(CACHE_KEYS) \
 		--max-jobs $(BUILD_JOBS) --cores $(BUILD_CORES)

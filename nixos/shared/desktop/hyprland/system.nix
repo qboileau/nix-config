@@ -1,5 +1,5 @@
 # i3 setup to be imported in nixOS configuration.nix 
-{inputs, pkgs, ...} :
+{pkgs, ...} :
 {
 
   services.displayManager.defaultSession = "hyprland";
@@ -13,10 +13,12 @@
 
   programs.hyprland = {
     enable = true;
-    # set the flake package
-    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-    # make sure to also set the portal package, so that they are in sync
-    portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+    # Using pkgs.unstable.hyprland (fully cached via cache.nixos.org, hy3 plugin always in sync).
+    # To switch back to flake pin, replace the two lines below with:
+    #   package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+    #   portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+    package = pkgs.unstable.hyprland;
+    portalPackage = pkgs.unstable.xdg-desktop-portal-hyprland;
 
     withUWSM  = false; # use SDDM
     xwayland.enable = true;
@@ -24,8 +26,10 @@
 
   xdg.portal = {
     enable = true;
-    extraPortals = [ 
-      inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland 
+    extraPortals = [
+      pkgs.unstable.xdg-desktop-portal-hyprland
+      # flake pin alternative:
+      # inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland
     ];
 
     config.common.default = "*";

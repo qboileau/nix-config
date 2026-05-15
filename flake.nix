@@ -4,8 +4,10 @@
   inputs = {
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
-    # Unstable channel used in overlay
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    # Unstable channel used in overlay.
+    # Uses the channel URL (not the git branch) so nix flake update always picks
+    # a commit that Hydra has finished building — never raw uncached branch HEAD.
+    nixpkgs-unstable.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz";
     systems.url = "github:nix-systems/default-linux";
 
     # Home manager
@@ -26,12 +28,12 @@
     krewfile.url = "github:brumhard/krewfile"; 
     krewfile.inputs.nixpkgs.follows = "nixpkgs";
 
-    hyprland.url = "github:hyprwm/Hyprland?submodules=1&ref=refs/tags/v0.54.2";
+    #hyprland.url = "github:hyprwm/Hyprland?submodules=1&ref=refs/tags/v0.54.2";
     #https://github.com/outfoxxed/hy3
     # hy3.url = "github:outfoxxed/hy3"; 
     # hy3.inputs.hyprland.follows = "hyprland";
-    hyprqt6engine.url = "github:hyprwm/hyprqt6engine";
-    hyprqt6engine.inputs.nixpkgs.follows = "nixpkgs";
+    #hyprqt6engine.url = "github:hyprwm/hyprqt6engine";
+    #hyprqt6engine.inputs.nixpkgs.follows = "nixpkgs";
 
     # ironbar.url = "github:JakeStanger/ironbar";
     # ironbar.inputs.nixpkgs.follows = "nixpkgs";
@@ -40,6 +42,7 @@
     noctalia.inputs.nixpkgs.follows = "nixpkgs";
     
     nixos-loading-plymouth.url = "github:qboileau/nixos-load-plymouth";
+    nixos-loading-plymouth.inputs.nixpkgs.follows = "nixpkgs";
 
     # qbz.url = "github:vicrodh/qbz?ref=refs/tags/v1.2.4";
     qbz.url = "github:qboileau/qbz/feature/external/nix-flake-direct-input-install";
@@ -63,9 +66,9 @@
     nix-flatpak,
     auto-cpufreq,
     krewfile,
-    hyprland,
-    hyprqt6engine,
-    # hy3,
+    # hyprland, # now using pkgs.unstable.hyprland
+    # hyprqt6engine, # now using pkgs.unstable.hyprland-qt-support
+    # hy3, # now using pkgs.unstable.hyprlandPlugins.hy3
     # ironbar,
     noctalia,
     nixos-loading-plymouth,
