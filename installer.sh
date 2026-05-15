@@ -82,6 +82,9 @@ nixos-install --flake .#$HOSTNAME --no-root-password \
     --option trusted-public-keys "$CACHE_KEYS" \
     --max-jobs "$BUILD_JOBS" --cores "$BUILD_CORES"
 
+echo "Fix home directory ownership (for agenix-created directories)"
+nixos-enter -c "chown -R qboileau:users /home/qboileau"
+
 echo "Set User password"
 nixos-enter -c "su -c 'passwd qboileau'"
 
