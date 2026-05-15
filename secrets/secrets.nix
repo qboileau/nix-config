@@ -39,11 +39,15 @@ in {
   "git/desktop/conduktor.age".publicKeys = [ master desktop ];
   "git/framework/work.age".publicKeys = [ master framework framework-amd ];
   "git/framework/conduktor.age".publicKeys = [ master framework framework-amd ];
+  "git/framework-amd/work.age".publicKeys = [ master framework-amd ];
+  "git/framework-amd/conduktor.age".publicKeys = [ master framework-amd ];
 
   # --- Shell secrets (per host) ---
   "shell/desktop/work.bashrc.age".publicKeys = [ master desktop ];
   "shell/framework/work.bashrc.age".publicKeys = [ master framework framework-amd ];
   "shell/framework/conduktor.bashrc.age".publicKeys = [ master framework framework-amd ];
+  "shell/framework-amd/work.bashrc.age".publicKeys = [ master framework-amd ];
+  "shell/framework-amd/conduktor.bashrc.age".publicKeys = [ master framework-amd ];
 
   # --- NetworkManager (per host) ---
   "network/desktop/connections.tar.age".publicKeys = [ master desktop ];
