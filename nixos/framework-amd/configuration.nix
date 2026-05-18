@@ -88,6 +88,7 @@
   ];
 
   security.enableClamAv = true;
+  security.enableFingerprintAuth = true;
 
   # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
   users.users = builtins.listToAttrs (map (user: lib.nameValuePair user {

@@ -12,6 +12,11 @@ in {
       default = false;
       description = "Enable ClamAV antivirus daemon";
     };
+    enableFingerprintAuth = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Enable fingerprint authentication via fprintd";
+    };
   };
 
   config = lib.mkMerge [
@@ -25,14 +30,14 @@ in {
             sddm = {
               kwallet.enable = true;
               gnupg.enable = true;
-              fprintAuth = true;
+              fprintAuth = cfg.enableFingerprintAuth;
             };
             login = {
               kwallet.enable = true;
               gnupg.enable = true;
-              fprintAuth = true;
+              fprintAuth = cfg.enableFingerprintAuth;
             };
-            sudo.fprintAuth = true;
+            sudo.fprintAuth = cfg.enableFingerprintAuth;
           };
         };
       };
