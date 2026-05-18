@@ -55,15 +55,6 @@ endif
 restart-display: ## Restart display manager (use if test-system kills your session)
 	sudo systemctl restart display-manager.service
 
-.PHONY: update-home
-update-home: ## Update Home Manager configuration
-	@echo ".#$(HOSTNAME)@${USER}"
-	home-manager switch --flake ".#${USER}@$(HOSTNAME)" #--show-trace -b "bkp"
-
-revert-home: ## Revert to previous
-	home-manager generations
-	home-manager switch --rollback
-
 .PHONY: secrets-bootstrap
 secrets-bootstrap: ## Bootstrap age master key from Bitwarden vault (first-time setup)
 	./scripts/bootstrap-secrets.sh
