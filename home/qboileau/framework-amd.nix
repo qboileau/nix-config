@@ -90,9 +90,12 @@
   editors.vim.defaultEditor = false;
   editors.vscode.enable = true;
   editors.intellij.enable = true;
+  editors.xed.enable = true;
   editors.zed.enable = true;
   hyprland.autolock.enable = true;
-  hyprland.autostart = [];
+  hyprland.autostart = [
+    "touchegg"
+  ];
 
   # Background deamon
   #nm-applet
