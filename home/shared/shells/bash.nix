@@ -35,10 +35,6 @@
     done
     '';
   };
-
   
   programs.direnv.enableBashIntegration = true;
-
-  # already enabled in configuration.nix
-  services.gpg-agent.enableBashIntegration = true;
 }

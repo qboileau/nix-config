@@ -5,7 +5,7 @@
   ...
 }: {
   # GPG configuration with automatic key restoration from agenix secrets
-  
+
   programs.gpg = {
     enable = true;
     settings = {
@@ -14,6 +14,18 @@
       with-fingerprint = true;
     };
   };
+
+  # gpg-agent configuration via home-manager.
+  # pinentry-qt works on Wayland; without an explicit pinentry the agent
+  # hangs ~40s on timeout before the passphrase prompt can appear.
+  services.gpg-agent = {
+    enable = true;
+    pinentryPackage = pkgs.pinentry-qt;
+    defaultCacheTtl = 3600;
+    maxCacheTtl = 86400;
+    enableBashIntegration = true;
+  };
+
 
   # Restore GPG keys from age-encrypted armored exports
   # This runs as the user during home-manager activation
