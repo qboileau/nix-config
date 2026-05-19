@@ -9,7 +9,7 @@
         #fullscreen = true;
         corner-roundness = 1;
         initial-tool = "brush";
-        output-filename = "${config.home.homeDirectory}/Images/Screenshots/screenshot-%Y-%m-%d_%H:%M:%S.png";
+        output-filename = "${config.xdg.userDirs.pictures}/screenshot-%Y-%m-%d_%H:%M:%S.png";
       };
     };
   };
