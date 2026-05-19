@@ -52,6 +52,33 @@ with lib;
     programs.kitty.enable = true; # required for the default Hyprland config
     services.hyprpolkitagent.enable = true;
 
+    # kwalletd6 is launched by pam_kwallet5.so via D-Bus activation during the
+    # SDDM login PAM session (before the graphical session starts). It opens the
+    # default wallet ("Default Keyring") automatically using the login password,
+    # so no manual systemd service is needed — relying on D-Bus activation
+    # avoids a duplicate-process conflict when the graphical session starts.
+    #
+    # ksecretd provides the org.freedesktop.secrets D-Bus interface (SecretService
+    # API). Starting it as a user service at graphical-session.target ensures it
+    # registers the name with a proper Wayland environment before apps like Brave
+    # can connect, preventing GNOME Keyring (or D-Bus auto-activation) from
+    # grabbing the name first.
+    systemd.user.services.ksecretd = {
+      Unit = {
+        Description = "KDE SecretService Daemon";
+        PartOf = [ "graphical-session.target" ];
+        After = [ "graphical-session.target" ];
+      };
+      Service = {
+        ExecStart = "${pkgs.kdePackages.kwallet}/bin/ksecretd";
+        Restart = "on-failure";
+        RestartSec = 2;
+      };
+      Install = {
+        WantedBy = [ "graphical-session.target" ];
+      };
+    };
+
     wayland.windowManager.hyprland = {
       enable = true;
       systemd.enable = true;
@@ -165,7 +192,6 @@ with lib;
         "systemctl --user start hyprpolkitagent"
         "dropbox start"
         "synology-drive"
-        "touchegg"
         #https://gist.github.com/brunoanc/2dea6ddf6974ba4e5d26c3139ffb7580#editing-the-configuration-file
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
         # https://wiki.hypr.land/Hypr-Ecosystem/xdg-desktop-portal-hyprland/#share-picker-doesnt-use-the-system-theme

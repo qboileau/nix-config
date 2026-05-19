@@ -41,10 +41,12 @@ in {
           };
         };
       };
-      # Enable Gnome keyring for some GTK apps like protonvpn
-      services.gnome.gnome-keyring.enable = true;
-      # Disable gnome-keyring's SSH agent (we use ssh-agent + ksshaskpass)
-      services.gnome.gcr-ssh-agent.enable = false;
+      # KDE KWallet (kwalletd6 + ksecretd) handles all secret storage, including
+      # the org.freedesktop.secrets SecretService API used by GTK apps. Keeping
+      # GNOME Keyring disabled avoids a D-Bus race where it grabs
+      # org.freedesktop.secrets before ksecretd can, causing the ~1 min delay
+      # in Brave's first startup after each boot.
+      services.gnome.gnome-keyring.enable = false;
 
 
       # Common GnuPG configuration
