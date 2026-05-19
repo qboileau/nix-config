@@ -18,14 +18,14 @@ in {
       kubeconform
       k9s
       k3d
-      lens
+      freelens-bin
       chart-testing
       openshift
       # Custom packages
       openlens
       helm-readme-generator
     ];
-
+    
     # kubectl extensions
     programs.krewfile = {
       enable = true;

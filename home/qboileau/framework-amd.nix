@@ -51,10 +51,14 @@
   # Apps
   apps.productivity.enable = true;
   apps.communication.slack.enable = true;  # Work communication
+  
   apps.security.onepassword.enable = true;  # Work password manager
+  apps.security.proton.enable = true;
+  
   apps.browsers.firefox.enable = true;
   apps.browsers.brave.enable = true;
   apps.browsers.chromium.enable = true;
+  
   apps.media.spotify.enable = true;
   apps.media.qbz.enable = true;
 

@@ -25,7 +25,8 @@ in {
 
     home.packages = with pkgs; [ 
       nixfmt-rfc-style
-      nil # Nix Language Server
+      nil  # Nix Language Server
+      nixd # Nix Language Server
     ];
 
   programs.vscode.profiles.default = {
