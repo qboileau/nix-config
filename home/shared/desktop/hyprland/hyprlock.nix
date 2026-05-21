@@ -23,19 +23,11 @@ in {
       animations = {
         enabled = true;
         bezier = "linear, 1, 1, 0, 0";
-
-        fade_in = {
-          duration = 5;
-          bezier = "linear";
-        };
-        fade_out = {
-          duration = 5;
-          bezier = "linear";
-        };
-        input_field_dots = {
-          duration = 2;
-          bezier = "linear";
-        };
+        animation = [
+          "fadeIn, 1, 5, linear"
+          "fadeOut, 1, 5, linear"
+          "inputFieldDots, 1, 2, linear"
+        ];
       };
 
       background = [
