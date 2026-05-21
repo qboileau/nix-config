@@ -3,6 +3,7 @@ let
   cfg = config.dev.tools;
   boucleHooks = pkgs.boucle-framework-hooks;
   claudeSettings = {
+    model = "opus";
     hooks = {
       PreToolUse = [
         {
@@ -75,6 +76,7 @@ in {
       unstable.mistral-vibe
       unstable.llama-cpp 
       unstable.oterm
+      unstable.lmstudio
       unstable.tgpt
       unstable.aichat
       unstable.python314Packages.transformers
