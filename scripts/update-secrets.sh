@@ -199,16 +199,23 @@ do_git() {
 do_shell() {
     section "Shell Secrets (.bashrc.d → $HOSTNAME)"
 
-    # Encrypt non-home-manager-managed files in .bashrc.d into per-host dir
+    # Encrypt files in .bashrc.d into per-host dir.
+    # - Skip home-manager symlinks (resolve into /nix/store, managed declaratively).
+    # - Follow agenix symlinks (resolve into /run/agenix*) so live edits are re-encrypted.
     for f in "$HOME_DIR"/.bashrc.d/*; do
         [ -f "$f" ] || continue
-        # Skip home-manager symlinks (those are managed declaratively)
-        if [ -L "$f" ]; then
-            continue
-        fi
-        local basename
+        local basename src
         basename=$(basename "$f")
-        agenix_encrypt "$f" "shell/$HOSTNAME/${basename}.age"
+        src="$f"
+        if [ -L "$f" ]; then
+            local target
+            target=$(readlink -f "$f")
+            if [[ "$target" == /nix/store/* ]]; then
+                continue
+            fi
+            src="$target"
+        fi
+        agenix_encrypt "$src" "shell/$HOSTNAME/${basename}.age"
     done
 }
 
