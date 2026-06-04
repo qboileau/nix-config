@@ -1,7 +1,13 @@
-{pkgs, config, lib, ...} :
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 let
   cfg = config.editors;
-in {
+in
+{
   options = {
     editors.zed = {
       enable = lib.mkEnableOption "Zed editor";
@@ -9,8 +15,23 @@ in {
   };
 
   config = lib.mkIf cfg.zed.enable {
-    home.packages = with pkgs; [ 
-      zed-editor
-    ];
+    programs.zed-editor = {
+      enable = true;
+      package = pkgs.unstable.zed-editor;
+      installRemoteServer = false;
+      extensions = [
+        "make"
+        "nix"
+        "agnix"
+        "java"
+        "kotlin"
+        "scala"
+        "terraform"
+        "dockerfile"
+        "docker-compose"
+        "helm"
+        "claude-acp"
+      ];
+    };
   };
 }
