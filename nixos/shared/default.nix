@@ -9,6 +9,7 @@
     ./secrets.nix
     ./boot.nix
     ./network.nix
+    ./wifi.nix
     ./virtualization.nix
     ./desktop.nix
     ./udev.nix

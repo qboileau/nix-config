@@ -55,6 +55,10 @@
       "127.0.0.1" = ["framework-amd"];
       "::1" = ["framework-amd"];
     };
+
+    # Out-of-tree mt76 driver — works around the mt7925 RTNL deadlock on
+    # 6.18.y. Drop once an LTS kernel ships the backport.
+    wifi.mt7925Patched.enable = true;
   };
 
   # Configure desktop for framework
