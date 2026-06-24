@@ -21,6 +21,7 @@ in
       installRemoteServer = false;
       extensions = [
         "make"
+        "toml"
         "nix"
         "agnix"
         "java"
