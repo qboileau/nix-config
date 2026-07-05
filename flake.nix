@@ -110,7 +110,7 @@
   in {
     inherit lib;
 
-    packages = forEachSystem (pkgs: import ./pkgs pkgs);
+    packages = forEachSystem (pkgs: import ./pkgs (pkgs.extend outputs.overlays.unstable-packages));
     formatter = forEachSystem (pkgs: pkgs.alejandra);
 
     # Custom packages and modifications, exported as overlays
