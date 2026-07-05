@@ -76,10 +76,12 @@
   dev.languages.python.enable = true;
   dev.languages.nodejs.enable = true;
   dev.tools.ai.enable = true;
+  dev.tools.security.enable = true;
   
   # Editors
   editors.vim.enable = true;
   editors.vim.defaultEditor = true;
+  editors.xed.enable = true;
   editors.vscode.enable = true;
   hyprland.autolock.enable = false;
   hyprland.autostart = [  

@@ -12,5 +12,6 @@
     ./api.nix
     ./ai.nix
     ./docs.nix
+    ./security.nix
   ];
 }

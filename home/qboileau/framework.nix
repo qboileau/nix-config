@@ -84,6 +84,7 @@
   dev.tools.containers.enable = true;
   dev.tools.api.enable = true;
   dev.tools.ai.enable = true;
+  dev.tools.security.enable = true;
   dev.tools.docs.enable = true;  # Documentation tools
   # dev.tools.virtualization.enable = true;  # Uncomment if needed
   
