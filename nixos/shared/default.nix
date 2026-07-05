@@ -28,6 +28,9 @@
     statix
     age
     sops
+    nix-prefetch
+    nix-prefetch-github
+    nix-prefetch-git
 
     # archives
     unzip
