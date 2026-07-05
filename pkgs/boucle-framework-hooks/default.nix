@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation {
   pname = "boucle-framework-hooks";
-  version = "unstable-9d7090f";
+  version = "unstable-4302a71";
 
   src = fetchFromGitHub {
     owner = "Bande-a-Bonnot";
     repo = "Boucle-framework";
-    rev = "9d7090fbd715004fe462d7b49b0688c5201883a3";
-    hash = "sha256-GHLqRjO40BZNJ+c/BXEOcrZq+MybDY2EJ+Ds6Gk2M4I=";
+    rev = "4302a712aa28edc60e9cf12d05f679d85408ef94";
+    hash = "sha256-n50AvHN9akWI11RSZofwPHMG26c/rfetAIrUgTzmodk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -47,12 +47,20 @@ stdenv.mkDerivation {
     cp tools/git-safe/hook.sh $out/libexec/git-safe/hook.sh
     chmod +x $out/libexec/git-safe/hook.sh
 
+    # session-log hook https://github.com/Bande-a-Bonnot/Boucle-framework/tree/main/tools/session-log
+    mkdir -p $out/libexec/session-log
+    cp tools/session-log/hook.sh $out/libexec/session-log/hook.sh
+    cp tools/session-log/report.sh $out/libexec/session-log/report.sh
+    chmod +x $out/libexec/session-log/{hook.sh,report.sh}
+
     # Wrap all scripts with runtime dependencies
     for script in \
       $out/libexec/read-once/hook.sh \
       $out/libexec/read-once/compact.sh \
       $out/libexec/read-once/read-once \
-      $out/libexec/git-safe/hook.sh; do
+      $out/libexec/git-safe/hook.sh \
+      $out/libexec/session-log/hook.sh \
+      $out/libexec/session-log/report.sh; do
       wrapProgram "$script" --prefix PATH : "${runtimePath}"
     done
 

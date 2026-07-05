@@ -66,6 +66,7 @@ in {
   options = {
     dev.tools.ai = {
       enable = lib.mkEnableOption "AI development and productivity tools";
+      amd = lib.mkEnableOption "Enable AMD GPU support for AI tools (e.g. Mistral Vibe, LLaMA.cpp)";
     };
   };
 
@@ -83,7 +84,13 @@ in {
       boucle-framework-hooks 
       # unstable.gpt4all
       # unstable.restate
+    ] ++ lib.optional cfg.ai.amd [
+      unstable.ollama-rocm
+    ] ++ lib.optional (!cfg.ai.amd) [
+      unstable.ollama
     ];
+
+    
 
     # aichat configuration — use local Ollama as default backend
     xdg.configFile."aichat/config.yaml" = {
