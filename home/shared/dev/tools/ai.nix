@@ -71,6 +71,7 @@ in {
 
   config = lib.mkIf cfg.ai.enable {
     home.packages = with pkgs; [ 
+      free-claude-code
       unstable.claude-monitor
       unstable.github-copilot-cli
       unstable.mistral-vibe

@@ -15,4 +15,5 @@ pkgs: {
   "vscode-extension-carlocardella.vscode-texttoolbox" = pkgs.callPackage ./vscode-extension-carlocardella.vscode-texttoolbox { };
   "vscode-extension-buenon.scratchpads" = pkgs.callPackage ./vscode-extension-buenon.scratchpads { };
   boucle-framework-hooks = pkgs.callPackage ./boucle-framework-hooks { };
+  free-claude-code = pkgs.callPackage ./free-claude-code { inherit (pkgs.unstable) python313Packages; };
 }
