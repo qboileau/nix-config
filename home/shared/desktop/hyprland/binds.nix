@@ -112,8 +112,8 @@ let
   final-bind = base-bind ++ dwindle-bind;
 in {
   
-   home.packages = with pkgs; [ 
-    hypr-i3-move
+   home.packages = with pkgs; [
+    local.hypr-i3-move
   ];
 
   wayland.windowManager.hyprland.settings = {

@@ -1,7 +1,7 @@
 {pkgs, config, lib, ...} :
 let
   cfg = config.dev.tools;
-  boucleHooks = pkgs.boucle-framework-hooks;
+  boucleHooks = pkgs.local.boucle-framework-hooks;
   claudeSettings = {
     model = "opus";
     hooks = {
@@ -81,7 +81,7 @@ in {
       unstable.tgpt
       unstable.aichat
       unstable.python314Packages.transformers
-      boucle-framework-hooks 
+      local.boucle-framework-hooks
       # unstable.gpt4all
       # unstable.restate
     ] ++ lib.optionals cfg.ai.amd [

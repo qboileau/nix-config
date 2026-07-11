@@ -8,6 +8,7 @@
 # OR nix-prefetch-url "<tag-zip-sources>" --unpack | xargs nix hash to-sri --type sha256
 
 pkgs: {
+  openlogi = pkgs.callPackage ./openlogi { };
   openlens = pkgs.callPackage ./openlens { };
   hypr-i3-move = pkgs.callPackage ./hypr-i3-move { };
   helm-readme-generator = pkgs.callPackage ./helm-readme-generator { };

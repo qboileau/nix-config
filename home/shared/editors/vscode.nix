@@ -62,9 +62,9 @@ in {
       vscode-extensions.ms-azuretools.vscode-containers
       vscode-extensions.ms-python.python
     ] ++ [
-      pkgs.vscode-extension-4ops-terraform # custom package
-      pkgs."vscode-extension-carlocardella.vscode-texttoolbox" # custom package
-      pkgs."vscode-extension-buenon.scratchpads" # custom package
+      pkgs.local.vscode-extension-4ops-terraform
+      pkgs.local."vscode-extension-carlocardella.vscode-texttoolbox"
+      pkgs.local."vscode-extension-buenon.scratchpads"
       claude-code-custom
     ];
     keybindings = [

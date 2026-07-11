@@ -22,8 +22,8 @@ in {
       chart-testing
       openshift
       # Custom packages
-      openlens
-      helm-readme-generator
+      local.openlens
+      local.helm-readme-generator
     ];
     
     # kubectl extensions

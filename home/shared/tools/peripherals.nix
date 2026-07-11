@@ -9,8 +9,9 @@ in {
   };
 
   config = lib.mkIf cfg.peripherals.enable {
-    home.packages = with pkgs; [ 
+    home.packages = with pkgs; [
       solaar              # Logitech devices GUI
+      local.openlogi      # Logitech HID++ companion
       cameractrls-gtk4    # Camera controls
       ddcui               # Display control utility
     ];
