@@ -84,9 +84,9 @@ in {
       boucle-framework-hooks 
       # unstable.gpt4all
       # unstable.restate
-    ] ++ lib.optional cfg.ai.amd [
+    ] ++ lib.optionals cfg.ai.amd [
       unstable.ollama-rocm
-    ] ++ lib.optional (!cfg.ai.amd) [
+    ] ++ lib.optionals (!cfg.ai.amd) [
       unstable.ollama
     ];
 
