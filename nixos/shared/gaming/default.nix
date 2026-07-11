@@ -24,6 +24,10 @@ in {
   ];
 
   config = mkIf gaming.enable {
+    # ntsync is built-in on linux_latest; on LTS it ships as a module that
+    # must be explicitly loaded for PROTON_USE_NTSYNC to take effect.
+    boot.kernelModules = mkIf (!config.boot.useLatestKernel) [ "ntsync" ];
+
     # Add support of game devices
     hardware.uinput.enable = true;
     services.udev.packages = with pkgs; [
@@ -45,13 +49,22 @@ in {
       };
     };
 
+    programs.gamescope = {
+      enable = true;
+      capSysNice = true;
+    };
+
     programs.steam = {
       enable = true;
       package = pkgs.unstable.steam.override {
         extraEnv = gameEnv;
       };
-      extraPackages = with pkgs; [ 
+      extraPackages = with pkgs; [
+        extest # 64bit version
         hidapi
+      ];
+      extraCompatPackages = with pkgs; [
+        proton-ge-bin
       ];
 
       remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
@@ -59,7 +72,7 @@ in {
       localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
       gamescopeSession.enable = true;
       protontricks.enable = true;
-      extest.enable = true; # translate X11 input events to uinput events 
+      extest.enable = true; # translate X11 input events to uinput events
     };
 
     hardware.steam-hardware.enable = true;

@@ -50,10 +50,32 @@ in {
   config = lib.mkMerge [
     # Kernel selection based on configuration
     {
-      boot.kernelPackages = 
-        if cfg.useLatestKernel 
+      boot.kernelPackages =
+        if cfg.useLatestKernel
         then pkgs.linuxPackages_latest
         else pkgs.linuxPackages_6_18;
+    }
+
+    # Performance and gaming sysctl tuning
+    {
+      boot.kernel.sysctl = {
+        "kernel.split_lock_mitigate" = 0;
+        "kernel.nmi_watchdog" = 0;
+        "vm.max_map_count" = 16777216;
+        "vm.swappiness" = 10;
+        "vm.vfs_cache_pressure" = 50;
+        "vm.dirty_bytes" = 268435456;
+        "vm.dirty_background_bytes" = 67108864;
+        "vm.dirty_writeback_centisecs" = 1500;
+        "vm.page-cluster" = 0;
+      };
+
+      zramSwap = {
+        enable = true;
+        algorithm = "zstd";
+        memoryPercent = 25;
+        priority = 5;
+      };
     }
 
     # systemd-boot configuration
