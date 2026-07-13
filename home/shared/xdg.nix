@@ -28,6 +28,7 @@ in {
       userDirs = {
         enable = true;
         createDirectories = true;
+        setSessionVariables = true;
       };
 
       # avoid conflict on mimeapps.list

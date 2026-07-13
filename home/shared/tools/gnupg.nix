@@ -20,7 +20,7 @@
   # hangs ~40s on timeout before the passphrase prompt can appear.
   services.gpg-agent = {
     enable = true;
-    pinentryPackage = pkgs.pinentry-qt;
+    pinentry.package = pkgs.pinentry-qt;
     defaultCacheTtl = 3600;
     maxCacheTtl = 86400;
     enableBashIntegration = true;

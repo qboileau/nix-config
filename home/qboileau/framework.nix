@@ -24,25 +24,6 @@
     homeDirectory = "/home/${username}";
   };
 
-  home.packages = with pkgs; [ 
-    vlc
-    imv
-  ];
-
-  programs.mpv = {
-    enable = true;
-    package = (
-      pkgs.mpv-unwrapped.wrapper {
-        scripts = with pkgs.mpvScripts; [
-          uosc
-        ];
-        mpv = pkgs.mpv-unwrapped.override {
-          ffmpeg = pkgs.ffmpeg-full;
-        };
-      }
-    );
-  };
-
   # Custom options
   defaultBrowser = {
     package = pkgs.unstable.brave;
@@ -59,6 +40,7 @@
   apps.browsers.chromium.enable = true;
   apps.media.spotify.enable = true;
   apps.media.qbz.enable = true;
+  apps.media.mpv.enable = true;
 
   # Tools
   tools.monitoring.enable = true;

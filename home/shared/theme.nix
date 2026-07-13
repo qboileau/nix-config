@@ -1,4 +1,4 @@
-{pkgs, ...}:
+{pkgs, config, ...}:
 {
   
   home.packages = with pkgs; [
@@ -69,14 +69,18 @@
       "gtk-enable-input-feedback-sounds" = "false";
       "gtk-enable-animations" = "true";
     };
-
-    gtk4.extraConfig = {
-      "gtk-application-prefer-dark-theme" = "true";
-      "gtk-enable-primary-paste" = "true";
-      "gtk-enable-event-sounds" = "false";
-      "gtk-enable-input-feedback-sounds" = "false";
-      "gtk-enable-animations" = "true";
+    
+    gtk4 = {
+      theme = config.gtk.theme;
+      extraConfig = {
+        "gtk-application-prefer-dark-theme" = "true";
+        "gtk-enable-primary-paste" = "true";
+        "gtk-enable-event-sounds" = "false";
+        "gtk-enable-input-feedback-sounds" = "false";
+        "gtk-enable-animations" = "true";
+      };
     };
+    
   };
 
   qt = {

@@ -26,27 +26,12 @@
   };
 
   # Add stuff for your user as you see fit:
-  home.packages = with pkgs; [ 
+  home.packages = with pkgs; [
     kdePackages.kate
-    vlc
     prusa-slicer
     samba
   ];
 
-  programs.mpv = {
-    enable = true;
-    package = (
-      pkgs.mpv-unwrapped.wrapper {
-        scripts = with pkgs.mpvScripts; [
-          uosc
-        ];
-        mpv = pkgs.mpv-unwrapped.override {
-          ffmpeg = pkgs.ffmpeg-full;
-        };
-      }
-    );
-  };
-  
   # Custom options
   gaming.enable = true;
   gaming.gameLocations = [ "/mnt/LinuxGames/" ];
@@ -59,6 +44,7 @@
   apps.security.proton.enable = true;
   apps.media.spotify.enable = true;
   apps.media.qbz.enable = true;
+  apps.media.mpv.enable = true;
   apps.browsers.firefox.enable = true;
   apps.browsers.brave.enable = true;
   

@@ -19,6 +19,7 @@ in {
   config = lib.mkMerge [
     (lib.mkIf cfg.firefox.enable {
       programs.firefox.enable = true;
+      programs.firefox.configPath = ".mozilla/firefox";
     })
     
     (lib.mkIf cfg.brave.enable {

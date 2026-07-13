@@ -61,7 +61,7 @@ in {
       #   };
       # };
       # Nix version (uncomment to use instead):
-      home.packages = with pkgs; [ signal-desktop-bin ];
+      home.packages = with pkgs; [ signal-desktop ];
     })
   ];
 }

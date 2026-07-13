@@ -3,7 +3,7 @@
 
   inputs = {
     # Nixpkgs
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     # Unstable channel used in overlay.
     # Uses the channel URL (not the git branch) so nix flake update always picks
     # a commit that Hydra has finished building — never raw uncached branch HEAD.
@@ -11,7 +11,7 @@
     systems.url = "github:nix-systems/default-linux";
 
     # Home manager
-    home-manager.url = "github:nix-community/home-manager/release-25.11";
+    home-manager.url = "github:nix-community/home-manager/release-26.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     #Disko
@@ -52,7 +52,7 @@
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Declarative Flatpak management
+    # Declarative Flatpak management https://github.com/gmodena/nix-flatpak
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.7.0";
   };
 

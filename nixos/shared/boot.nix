@@ -195,7 +195,7 @@ in {
         nixos-loading.variant = "default";
         theme = "nixos-loading-default";
         themePackages = [
-          inputs.nixos-loading-plymouth.packages.${pkgs.system}.nixos-loading-default
+          inputs.nixos-loading-plymouth.packages.${pkgs.stdenv.hostPlatform.system}.nixos-loading-default
         ];
       };
     })

@@ -19,7 +19,6 @@ in {
       package = if cfg.acceleration == "false"
         then pkgs.unstable.ollama
         else pkgs.unstable."ollama-${cfg.acceleration}";
-      acceleration = cfg.acceleration;
     };
 
     services.open-webui = {

@@ -19,7 +19,7 @@ let
   };
 
   src = fetchurl {
-    inherit (sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}")) url hash;
+    inherit (sources.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")) url hash;
   };
 
   meta = with lib; {

@@ -43,7 +43,7 @@ in {
     (lib.mkIf cfg.proton.enable {
       home.packages = with pkgs; [ 
         proton-pass
-        protonvpn-gui
+        proton-vpn
         unstable.proton-authenticator
       ];
     })

@@ -53,7 +53,7 @@
   };
 
   desktop = {
-    enableAutoLogin = true; # Enable for convenience (consider security implications)
+    enableAutoLogin = false;
     enablePlasma = true; # Enable KDE Plasma
     sddm.theme = "breeze"; # Use default Plasma theme
   };

@@ -83,6 +83,7 @@ with lib;
       enable = true;
       systemd.enable = true;
       xwayland.enable = true;
+      configType = "hyprlang";
       # Using pkgs.unstable.hyprland (fully cached, hy3 always in sync via hyprlandPlugins.hy3).
       # To switch back to flake pin, replace the two lines below with:
       #   package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;

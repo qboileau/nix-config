@@ -10,10 +10,21 @@ in {
       qbz = {
         enable = lib.mkEnableOption "QBZ backup tool";
       };
+      mpv = {
+        enable = lib.mkEnableOption "mpv media player with uosc and full ffmpeg";
+      };
     };
   };
 
   config = lib.mkMerge [
+    # Default media players installed on all hosts
+    {
+      home.packages = with pkgs; [
+        vlc
+        imv
+      ];
+    }
+
     # Spotify - Flatpak version with X11 fallback for Electron compatibility
     (lib.mkIf cfg.spotify.enable {
       services.flatpak = {
@@ -25,7 +36,7 @@ in {
       # Nix version (uncomment to use instead):
       # home.packages = with pkgs; [ unstable.spotify ];
     })
-    
+
     # QBZ - Flatpak version (default)
     (lib.mkIf cfg.qbz.enable {
       services.flatpak = {
@@ -35,7 +46,22 @@ in {
         ];
       };
       # Nix version from flake input (uncomment to use instead):
-      # home.packages = [ inputs.qbz.packages.${pkgs.system}.default ];
+      # home.packages = [ inputs.qbz.packages.${pkgs.stdenv.hostPlatform.system}.default ];
+    })
+
+    # MPV - Nix version with uosc and full ffmpeg
+    (lib.mkIf cfg.mpv.enable {
+      programs.mpv = {
+        enable = true;
+        package = pkgs.mpv.override {
+          scripts = with pkgs.mpvScripts; [
+            uosc
+          ];
+          mpv-unwrapped = pkgs.mpv-unwrapped.override {
+            ffmpeg = pkgs.ffmpeg-full;
+          };
+        };
+      };
     })
   ];
 }

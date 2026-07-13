@@ -24,7 +24,7 @@ in {
     
 
     home.packages = with pkgs; [ 
-      nixfmt-rfc-style
+      nixfmt
       nil  # Nix Language Server
       nixd # Nix Language Server
     ];

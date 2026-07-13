@@ -136,7 +136,7 @@ in {
     programs.opencode = {
       enable = true;
       package = pkgs.unstable.opencode;
-      rules = systemToolsInstructions;
+      context = systemToolsInstructions;
       agents = {
         # https://github.com/nix-community/home-manager/blob/release-25.11/modules/programs/opencode.nix#L157
       };
@@ -144,10 +144,12 @@ in {
         # https://github.com/nix-community/home-manager/blob/release-25.11/modules/programs/opencode.nix#L128
       };
       settings = {
-        theme = "opencode";
         model = "anthropic/claude-sonnet-4-20250514";
         autoshare = false;
         autoupdate = true;
+      };
+      tui = {
+        theme = "opencode";
       };
     };
   };

@@ -11,7 +11,7 @@ in {
   config = lib.mkIf cfg.api.enable {
     home.packages = with pkgs; [ 
       postman
-      nixfmt-rfc-style
+      nixfmt
     ];
   };
 }
