@@ -77,7 +77,7 @@
     "discord"  # Flatpak: com.discordapp.Discord
     "protonvpn-app"
     "signal-desktop"  # Flatpak: org.signal.Signal
-    "tail-tray"
+    #"tail-tray"
   ];
 
   # Background deamon

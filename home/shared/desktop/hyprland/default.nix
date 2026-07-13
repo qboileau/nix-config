@@ -52,37 +52,28 @@ with lib;
     programs.kitty.enable = true; # required for the default Hyprland config
     services.hyprpolkitagent.enable = true;
 
-    # kwalletd6 is launched by pam_kwallet5.so via D-Bus activation during the
-    # SDDM login PAM session (before the graphical session starts). It opens the
-    # default wallet ("Default Keyring") automatically using the login password,
-    # so no manual systemd service is needed — relying on D-Bus activation
-    # avoids a duplicate-process conflict when the graphical session starts.
+    # NOTE: Do NOT start ksecretd as a systemd user service here.
     #
-    # ksecretd provides the org.freedesktop.secrets D-Bus interface (SecretService
-    # API). Starting it as a user service at graphical-session.target ensures it
-    # registers the name with a proper Wayland environment before apps like Brave
-    # can connect, preventing GNOME Keyring (or D-Bus auto-activation) from
-    # grabbing the name first.
-    systemd.user.services.ksecretd = {
-      Unit = {
-        Description = "KDE SecretService Daemon";
-        PartOf = [ "graphical-session.target" ];
-        After = [ "graphical-session.target" ];
-      };
-      Service = {
-        ExecStart = "${pkgs.kdePackages.kwallet}/bin/ksecretd";
-        Restart = "on-failure";
-        RestartSec = 2;
-      };
-      Install = {
-        WantedBy = [ "graphical-session.target" ];
-      };
-    };
+    # pam_kwallet5.so (wired up via security.pam.services.sddm.kwallet in
+    # nixos/shared/security.nix) already launches `ksecretd --pam-login` during
+    # the SDDM login PAM session, handing it your login password so it unlocks
+    # "kdewallet" before the graphical session even starts. In KDE 6 that single
+    # ksecretd provides BOTH the native KWallet API (org.kde.kwalletd6) and the
+    # org.freedesktop.secrets SecretService API used by Brave, GTK apps and the
+    # Proton VPN tray.
+    #
+    # A second, systemd-launched ksecretd starts WITHOUT the pam socket, wins the
+    # org.freedesktop.secrets D-Bus name race, and leaves the wallet locked — so
+    # every SecretService client (e.g. Proton VPN on startup) prompts for the
+    # wallet password a second time after the SDDM login. GNOME Keyring is already
+    # disabled (services.gnome.gnome-keyring.enable = false), so nothing else
+    # competes for the name and no manual service is needed.
 
     wayland.windowManager.hyprland = {
       enable = true;
       systemd.enable = true;
       xwayland.enable = true;
+
       configType = "hyprlang";
       # Using pkgs.unstable.hyprland (fully cached, hy3 always in sync via hyprlandPlugins.hy3).
       # To switch back to flake pin, replace the two lines below with:
@@ -108,7 +99,7 @@ with lib;
       #   "desc:Iiyama North America PL2440HS 1179410502548,1920x1080,auto-up,1"
       #   #"DP-4,5120x1440,auto-right,1"
       # ];
-
+      
       monitorv2 = [
         {
           output = "eDP-1";
@@ -152,7 +143,6 @@ with lib;
         cm_sdr_eotf = 3; # Treat unspecified as sRGB
       };
 
-      "$mod" = "SUPER";
       env = [
         #https://wiki.hypr.land/Configuring/Environment-variables/#xdg-specifications
         "XDG_CURRENT_DESKTOP,Hyprland"
@@ -185,7 +175,6 @@ with lib;
         "NIXOS_OZONE_WL,1" # tell Electron/Chromium to run on Wayland
         "ELECTRON_OZONE_PLATFORM_HINT,auto" # https://www.electronjs.org/docs/latest/api/environment-variables
       ];
-      
 
       exec-once = [
         "nm-applet"
@@ -199,7 +188,6 @@ with lib;
         "dbus-update-activation-environment --systemd --all"
         "systemctl --user import-environment QT_QPA_PLATFORMTHEME"
       ] ++ config.hyprland.autostart;
-
 
       # https://wiki.hyprland.org/Configuring/Variables/#general
       general = {

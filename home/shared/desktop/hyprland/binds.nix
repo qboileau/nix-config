@@ -20,7 +20,7 @@ let
     "$mod, V, togglefloating,"
     "$mod, D, exec, ${menu}"
     "$mod, P, pin, active"
-    "$mod, J, togglesplit," 
+    # "$mod, J, togglesplit," 
     "$mod, L, exec, ${lock}"
     ", Print, exec, ${screenshot}"    
     "$mod, mouse_down, workspace, e+1"
@@ -117,6 +117,7 @@ in {
   ];
 
   wayland.windowManager.hyprland.settings = {
+    "$mod" = "SUPER";
     bind = final-bind;
     
     bindm = [
