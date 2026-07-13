@@ -86,3 +86,15 @@ fix: ## Fix linting issues
 .PHONY: check-option
 check-option: ## Check a NixOS option value (e.g., make check-option OPT=services.nginx.enable)
 	nixos-option -F . $(OPT)
+
+.PHONY: list-generations
+list-generations: ## List NixOS system generations with their closure size on disk
+	./scripts/list-generations.sh
+
+.PHONY: gc-estimate
+gc-estimate: ## Estimate reclaimable space from garbage collection (SYSTEM=1 to include old system generations)
+ifdef SYSTEM
+	./scripts/gc-estimate.sh --system
+else
+	./scripts/gc-estimate.sh
+endif
