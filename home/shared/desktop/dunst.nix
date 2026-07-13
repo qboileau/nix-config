@@ -15,8 +15,9 @@
       offset = "30x50";
       origin = "top-right";
       transparency = 15;
-      bounce_freq = 5;
       show_age_threshold = 60;
+      # [frame] section is deprecated in modern dunst; frame options live in global.
+      frame_width = 1;
       frame_color = "#eceff1";
       font = "Droid Sans 9";
       icon_position = "left";
@@ -26,19 +27,15 @@
       sticky_history = "yes";
       history_length = 20;
       show_indicators = "yes";
-      allow_markup = "yes";
-      startup_notification = false;
+      markup = "full";
       browser = "brave";
-      format = "%s %p\n%b";
+      # Escaped \n so the generated dunstrc keeps a literal "\n" on one line;
+      # an unescaped newline splits the value across two lines and dunst rejects it.
+      format = "%s %p\\n%b";
       word_wrap = "no";
       ignore_newline = "no";
       sort = "yes";
       indicate_hidden = "yes";
-    };
-
-    frame = {
-      width = 1;
-      color = "#16A085";
     };
 
     urgency_low = {

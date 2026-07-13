@@ -12,6 +12,7 @@ in {
     home.packages = with pkgs; [ 
       fastfetch
       glances
+      baobab
     ];
 
     programs.htop.enable = true;

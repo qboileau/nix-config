@@ -21,20 +21,36 @@ in {
     services.flatpak.packages = [
       { appId = "net.lutris.Lutris"; origin = "flathub"; }
       { appId = "com.usebottles.bottles"; origin = "flathub"; }
-      { appId = "org.freedesktop.Platform.VulkanLayer.gamescope"; origin = "flathub"; }
-      { appId = "org.freedesktop.Platform.VulkanLayer.vkBasalt"; origin = "flathub"; }
       { appId = "com.heroicgameslauncher.hgl"; origin = "flathub"; }
     ];
 
-    # nix-flatpak v0.7.0 has no `branch` field, so it can't express the
-    # `runtime/org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/25.08` ref.
-    # Use a home.activation script instead — idempotent, exact CLI control.
+    # nix-flatpak v0.7.0 has no `branch` field, so it can't express the versioned
+    # `runtime/org.freedesktop.Platform.VulkanLayer.<x>/x86_64/25.08` refs.
+    # Listing these VulkanLayer *runtimes* as bare appIds in the declarative package
+    # list makes `flatpak-managed-install.service` fail every boot with
+    #   "No ref chosen to resolve matches for 'org.freedesktop.Platform.VulkanLayer.*'"
+    # because the ref is ambiguous without a branch. Install them via activation
+    # scripts instead — idempotent, exact CLI control.
     # 25.08 must match Heroic's platform runtime (org.freedesktop.Platform/25.08).
     # To check: flatpak info com.heroicgameslauncher.hgl | grep Runtime
     home.activation.installMangoHudVulkanLayer = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       if ! ${pkgs.flatpak}/bin/flatpak --user info org.freedesktop.Platform.VulkanLayer.MangoHud//25.08 &>/dev/null; then
         $DRY_RUN_CMD ${pkgs.flatpak}/bin/flatpak install --user -y --noninteractive \
           flathub runtime/org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/25.08
+      fi
+    '';
+
+    home.activation.installGamescopeVulkanLayer = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      if ! ${pkgs.flatpak}/bin/flatpak --user info org.freedesktop.Platform.VulkanLayer.gamescope//25.08 &>/dev/null; then
+        $DRY_RUN_CMD ${pkgs.flatpak}/bin/flatpak install --user -y --noninteractive \
+          flathub runtime/org.freedesktop.Platform.VulkanLayer.gamescope/x86_64/25.08
+      fi
+    '';
+
+    home.activation.installVkBasaltVulkanLayer = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      if ! ${pkgs.flatpak}/bin/flatpak --user info org.freedesktop.Platform.VulkanLayer.vkBasalt//25.08 &>/dev/null; then
+        $DRY_RUN_CMD ${pkgs.flatpak}/bin/flatpak install --user -y --noninteractive \
+          flathub runtime/org.freedesktop.Platform.VulkanLayer.vkBasalt/x86_64/25.08
       fi
     '';
 

@@ -38,7 +38,6 @@
 
   programs.uwsm.enable = false; # use SDDM
   programs.hyprlock.enable = true;
-  services.hypridle.enable = true;
   
   # Register kio-fuse D-Bus session service so it auto-activates
   # when Dolphin needs to open remote files with external apps (mpv, vlc, etc.)
