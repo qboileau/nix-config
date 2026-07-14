@@ -1,6 +1,11 @@
-# i3 setup to be imported in nixOS configuration.nix 
+# i3 setup to be imported in nixOS configuration.nix
 {pkgs, ...} :
 {
+
+  imports = [
+    # KDE apps (Dolphin, Okular, ...) and KIO/kio-fuse integration.
+    ../kde
+  ];
 
   services.displayManager.defaultSession = "hyprland";
 
@@ -37,11 +42,18 @@
   };
 
   programs.uwsm.enable = false; # use SDDM
-  programs.hyprlock.enable = true;
-  
-  # Register kio-fuse D-Bus session service so it auto-activates
-  # when Dolphin needs to open remote files with external apps (mpv, vlc, etc.)
-  services.dbus.packages = [ pkgs.kdePackages.kio-fuse ];
+
+  # NOTE: we deliberately do NOT use programs.hyprlock.enable. That module only
+  # adds hyprlock to systemPackages (already done below + via home-manager) and
+  # sets up PAM, but it ALSO force-enables the system-level services.hypridle
+  # unit. hypridle's config (~/.config/hypr/hypridle.conf) is only deployed by
+  # home-manager when hyprland.autolock.enable is true, so on hosts with autolock
+  # off (desktop) that unit starts with no config and crash-loops:
+  # "Could not find config ... /etc/hypr" -> start-limit-hit. Instead we enable
+  # only the piece we need — hyprlock's PAM stack — so it authenticates via PAM
+  # rather than falling back to `su`. Where idle IS wanted (framework,
+  # autolock=true) home-manager runs its own hypridle unit + config.
+  security.pam.services.hyprlock = { };
 
   environment.systemPackages = with pkgs; [
     kitty
@@ -75,25 +87,5 @@
     dunst
     pcmanfm
     #hyprsysteminfo
-
-    # KDE apps
-    kdePackages.ark
-    kdePackages.okular
-    kdePackages.gwenview
-    kdePackages.dolphin
-    kdePackages.dolphin-plugins
-    kdePackages.qtsvg
-    kdePackages.kio
-    kdePackages.kio-fuse
-    kdePackages.kio-extras
-    kdePackages.breeze
-    kdePackages.breeze-icons
-    kdePackages.breeze-gtk
-    kdePackages.kwallet
-    kdePackages.kwallet-pam
-    kdePackages.kwalletmanager
-
-    kdePackages.knewstuff
-    kdePackages.ksvg
   ];
 }
