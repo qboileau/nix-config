@@ -48,7 +48,14 @@ in {
       services.samba-wsdd.enable = true; # samba discovery
       services.samba.winbindd.enable = true;
       services.gvfs.enable = true; # https://nixos.wiki/wiki/Samba#Browsing_samba_shares_with_GVFS
-      services.gvfs.package = pkgs.gvfs;
+      # gnomeSupport = true enables the meson `keyring` feature, which links
+      # gvfs against libsecret. Without it gvfs is built with -Dkeyring=false and
+      # cannot talk to the Secret Service at all — so pcmanfm's "remember
+      # password" is a no-op and SMB creds are re-prompted every time even though
+      # ksecretd/KWallet already hold them. libsecret is only a client library;
+      # it does not start gnome-keyring, so the ksecretd SecretService setup
+      # (see nixos/shared/security.nix) is untouched.
+      services.gvfs.package = pkgs.gvfs.override { gnomeSupport = true; };
       environment.systemPackages = with pkgs; [
         cifs-utils # Samba client
         wireguard-tools # Required for NetworkManager WireGuard support
