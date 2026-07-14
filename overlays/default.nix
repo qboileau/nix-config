@@ -14,6 +14,15 @@
     # ...
     # });
 
+    ## Strip the `gtkconfig` kded plugin from kde-gtk-config.
+    # kdePackages = prev.kdePackages // {
+    #   kde-gtk-config = prev.kdePackages.kde-gtk-config.overrideAttrs (old:
+    #   {  
+    #     postInstall = (old.postInstall or "") + ''
+    #       rm -f "$out/lib/qt-6/plugins/kf6/kded/gtkconfig.so"
+    #     '';
+    #   });
+    # };
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will

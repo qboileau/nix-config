@@ -36,13 +36,13 @@
     kdePackages.kio
     kdePackages.kio-fuse
     kdePackages.kio-extras
+    kdePackages.kservice # kbuildsycoca6 resolve MIME type -> default application
     kdePackages.breeze
     kdePackages.breeze-icons
     kdePackages.breeze-gtk
     kdePackages.kwallet
     kdePackages.kwallet-pam
     kdePackages.kwalletmanager
-
     kdePackages.knewstuff
     kdePackages.ksvg
   ];

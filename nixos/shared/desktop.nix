@@ -6,6 +6,22 @@
   ...
 }: let
   cfg = config.desktop;
+  # Preconfigured sddm-astronaut greeter. Pick a bundled variant with
+  # embeddedTheme (astronaut, purple_leaves, cyberpunk, black_hole,
+  # jake_the_dog, hyprland_kath, japanese_aesthetic, pixel_sakura,
+  # post-apocalyptic_hacker) and override its Themes/<name>.conf [General]
+  # keys via themeConfig. Full key list:
+  # https://github.com/Keyitdev/sddm-astronaut-theme
+  custom-sddm-theme = pkgs.sddm-astronaut.override {
+    embeddedTheme = "astronaut";
+    themeConfig = {
+      HeaderText = "Welcome";
+      Font = "Noto Sans";
+      FontSize = "12";
+      HideVirtualKeyboard = "true";
+      PartialBlur = "false";
+    };
+  };
 in {
   options.desktop = {
     enableAutoLogin = lib.mkOption {
@@ -23,8 +39,8 @@ in {
     sddm = {
       theme = lib.mkOption {
         type = lib.types.str;
-        default = "breeze";
-        description = "SDDM theme to use";
+        default = "sddm-astronaut-theme";
+        description = "SDDM theme to use (directory name under share/sddm/themes).";
       };
 
       wayland = lib.mkOption {
@@ -42,6 +58,12 @@ in {
         enable = true;
         wayland.enable = cfg.sddm.wayland;
         theme = cfg.sddm.theme;
+        extraPackages = with pkgs; [
+          kdePackages.qtmultimedia
+          kdePackages.qtvirtualkeyboard
+          kdePackages.qtsvg
+          custom-sddm-theme
+        ];
       };
 
       # Enable Flatpak for GUI application management

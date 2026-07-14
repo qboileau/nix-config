@@ -54,8 +54,11 @@
 
   desktop = {
     enableAutoLogin = false;
-    enablePlasma = true; # Enable KDE Plasma
-    sddm.theme = "breeze"; # Use default Plasma theme
+    enablePlasma = false;
+    # sddm.theme defaults to "sddm-astronaut-theme" (see nixos/shared/desktop.nix),
+    # which installs a preconfigured astronaut greeter + greeter Qt modules.
+    # To change the variant or its [General] keys, edit the custom-sddm-theme
+    # override in nixos/shared/desktop.nix.
   };
 
   virtualisation = {
