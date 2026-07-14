@@ -32,7 +32,7 @@ in {
       };
 
       # avoid conflict on mimeapps.list
-      configFile."mimeapps.list".force = true;
+      configFile."mimeapps.list".force = lib.mkForce true;
 
       portal = {
         enable = true;

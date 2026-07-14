@@ -1,4 +1,4 @@
-{pkgs, config, ...}:
+{pkgs, lib, config, ...}:
 {
   
   home.packages = with pkgs; [
@@ -82,6 +82,15 @@
     };
     
   };
+  
+  # Force HM ownership as KDE's kde-gtk-config rewrites ~/.gtkrc-2.0 at login
+  home.file."${config.home.homeDirectory}/.gtkrc-2.0".force = lib.mkForce true;
+  # disable kde-gtk-config autoload to avoid it overwriting ~/.gtkrc-2.0 at login
+  home.activation.disableKdeGtkConfigModule =
+    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      run ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 \
+        --file kded6rc --group Module-gtkconfig --key autoload false
+    '';
 
   qt = {
     enable = true;
