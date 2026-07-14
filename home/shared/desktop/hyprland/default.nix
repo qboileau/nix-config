@@ -137,7 +137,7 @@ with lib;
       xwayland.force_zero_scaling = true;
 
       render = {
-        direct_scanout = 2; # auto scanout to reduce lag, set to 0 if game/app have glitches 
+        direct_scanout = 0; # disabled: =2 (auto) caused waybar + focused-window (e.g. VS Code) to flicker/go black on damage under Hyprland 0.55 on RDNA4 (RX 9070). Scanout is only a fullscreen-game latency optimization; off is safe.
         cm_enabled = true;
         cm_auto_hdr = 1; # switch to hdr
         cm_sdr_eotf = 3; # Treat unspecified as sRGB
