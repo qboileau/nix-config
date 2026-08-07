@@ -1,4 +1,10 @@
-{config, pkgs, lib,inputs, ...} :
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 with lib;
 {
 
@@ -9,7 +15,7 @@ with lib;
       };
       autostart = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
+        default = [ ];
         description = "List of applications to autostart with Hyprland";
       };
       bar = lib.mkOption {
@@ -39,10 +45,8 @@ with lib;
     #./smartgaps.nix
   ];
 
-  
-
   config = {
-    home.packages = with pkgs; [ 
+    home.packages = with pkgs; [
       hyprland-qt-support
       # inputs.hyprqt6engine.packages.${pkgs.stdenv.hostPlatform.system}.hyprqt6engine
       kdePackages.qt6ct
@@ -145,7 +149,7 @@ with lib;
       xwayland.force_zero_scaling = true;
 
       render = {
-        direct_scanout = 2; # auto scanout to reduce lag, set to 0 if game/app have glitches 
+        direct_scanout = 2; # auto scanout to reduce lag, set to 0 if game/app have glitches
         cm_enabled = true;
         cm_auto_hdr = 1; # switch to hdr
         cm_sdr_eotf = 3; # Treat unspecified as sRGB
@@ -158,7 +162,7 @@ with lib;
         "XDG_SESSION_TYPE,wayland"
         "XDG_SESSION_DESKTOP,Hyprland"
         "XDG_MENU_PREFIX,plasma-" # fix xdg file associations for Dolphin
-        
+
         #https://wiki.hypr.land/Configuring/Environment-variables/#qt-variables
         "QT_QPA_PLATFORM,wayland;xcb"
         "QT_AUTO_SCREEN_SCALE_FACTOR,1"
@@ -184,7 +188,6 @@ with lib;
         "NIXOS_OZONE_WL,1" # tell Electron/Chromium to run on Wayland
         "ELECTRON_OZONE_PLATFORM_HINT,auto" # https://www.electronjs.org/docs/latest/api/environment-variables
       ];
-      
 
       exec-once = [
         "nm-applet"
@@ -197,8 +200,8 @@ with lib;
         # https://wiki.hypr.land/Hypr-Ecosystem/xdg-desktop-portal-hyprland/#share-picker-doesnt-use-the-system-theme
         "dbus-update-activation-environment --systemd --all"
         "systemctl --user import-environment QT_QPA_PLATFORMTHEME"
-      ] ++ config.hyprland.autostart;
-
+      ]
+      ++ config.hyprland.autostart;
 
       # https://wiki.hyprland.org/Configuring/Variables/#general
       general = {
@@ -225,12 +228,12 @@ with lib;
           font_size = 12;
           font_weight_active = "bold";
           "col.active" = "0x6600BCD1";
-          "col.inactive" = "0x66006A75";  
+          "col.inactive" = "0x66006A75";
           "col.locked_active" = "0x6600BCD1";
           "col.locked_inactive" = "0x66006A75";
         };
       };
-      
+
       dwindle = {
         force_split = 2; # always split to the right/bottom (i3-like)
         preserve_split = true; # keep split direction when windows are removed
@@ -264,7 +267,7 @@ with lib;
         sensitivity = 0; # -1.0 - 1.0, 0 means no modification.
 
         touchpad = {
-            natural_scroll = false;
+          natural_scroll = false;
         };
       };
       windowrule = [
@@ -281,7 +284,7 @@ with lib;
         # set this to your leftmost monitor id, otherwise you have to move your cursor to the leftmost monitor
         # before executing flameshot
         # "monitor 1, match:class ^(flameshot)$"
-  
+
         # Screen sharing Xwayland
         "opacity 0.0 override, match:class ^(xwaylandvideobridge)$"
         "no_anim true, match:class ^(xwaylandvideobridge)$"
@@ -295,6 +298,7 @@ with lib;
         "float true, match:class vlc"
         "float true, match:class mpv"
         "float true, match:class Bitwarden"
+        "float true, match:class org.kde.kwalletmanager"
         "float true, match:class brave,match:title (.*)(wants to open)"
         "float true, match:class brave,match:title (.*)(wants to save)"
         # Firefox videos windows
@@ -312,8 +316,8 @@ with lib;
       #   "pin,match:class (flameshot),match:title (flameshot)"
       #   "fullscreenstate,match:class (flameshot),match:title (flameshot)"
       #   "float,match:class (flameshot),match:title (flameshot)"
-        
-      #   # intellij 
+
+      #   # intellij
       #   "nofocus,match:class ^jetbrains-(?!toolbox),floating:1,match:title ^win\d+$"
       # ];
     };
