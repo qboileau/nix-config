@@ -274,6 +274,7 @@ lib.mkIf (config.hyprland.configType == "lua") {
       { match = { class = "vlc"; }; float = true; }
       { match = { class = "mpv"; }; float = true; }
       { match = { class = "Bitwarden"; }; float = true; }
+      { match = { class = "org.kde.kwalletmanager"; }; float = true; }
       # satty, the screenshot annotator the Print bind pipes grim into
       { match = { class = "com.gabm.satty"; }; float = true; }
       { match = { class = "brave"; title = "(.*)(wants to open)"; }; float = true; }

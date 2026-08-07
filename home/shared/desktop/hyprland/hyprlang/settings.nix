@@ -229,6 +229,7 @@ lib.mkIf (config.hyprland.configType == "hyprlang") {
       "float true, match:class vlc"
       "float true, match:class mpv"
       "float true, match:class Bitwarden"
+      "float true, match:class org.kde.kwalletmanager"
       # satty, the screenshot annotator the Print bind pipes grim into
       "float true, match:class com.gabm.satty"
       "float true, match:class brave,match:title (.*)(wants to open)"
