@@ -53,7 +53,7 @@
   # Apps
   apps.productivity.enable = true;
   apps.communication.slack.enable = true;  # Work communication
-  apps.security.onepassword.enable = true;  # Work password manager
+  # 1Password is enabled at the system level (security.onepassword)
   apps.browsers.firefox.enable = true;
   apps.browsers.brave.enable = true;
   apps.browsers.chromium.enable = true;

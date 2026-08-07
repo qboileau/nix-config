@@ -93,6 +93,16 @@
 
   security.enableClamAv = true;
   security.enableFingerprintAuth = true;
+  security.onepassword = {
+    enable = true; # Work password manager
+    # Nixpkgs launches browsers through a wrapper, so 1Password sees the
+    # `.<name>-wrapped` binary and rejects the extension without these.
+    customAllowedBrowsers = [
+      ".brave-wrapped"
+      ".chromium-wrapped"
+      ".firefox-wrapped"
+    ];
+  };
 
   # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
   users.users = builtins.listToAttrs (map (user: lib.nameValuePair user {
