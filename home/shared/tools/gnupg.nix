@@ -15,6 +15,19 @@
     };
   };
 
+  # Disable keyboxd (the newer sqlite-backed public-key daemon).
+  # Its per-DB lock (public-keys.d/pubring.db.lock) intermittently wedges when a
+  # second keyboxd spawns and races the first (e.g. after suspend/resume or a new
+  # login session). The stale instance keeps the lock, so `gpg --sign` spins on
+  # "database_open ... waiting for lock (held by <pid>)" until keydb_search times
+  # out, breaking git's commit signing. Keeping public keys in the classic
+  # pubring.kbx avoids the daemon entirely. Managing common.conf here also stops a
+  # stray `use-keyboxd` file from reappearing outside the Nix store.
+  home.file.".gnupg/common.conf".text = ''
+    # Managed by home-manager (home/shared/tools/gnupg.nix).
+    # Intentionally empty: keyboxd stays disabled.
+  '';
+
   # gpg-agent configuration via home-manager.
   # pinentry-qt works on Wayland; without an explicit pinentry the agent
   # hangs ~40s on timeout before the passphrase prompt can appear.
