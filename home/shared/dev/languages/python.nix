@@ -13,5 +13,9 @@ in {
       python3
       python314Packages.uv
     ];
+
+    # UV tools directory
+    home.sessionPath = ["${config.home.homeDirectory}/.local/bin"];
   };
+
 }
