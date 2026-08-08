@@ -48,6 +48,7 @@ let
 
     - Use `bat` instead of `cat` for reading files. If you need raw output without paging, use `bat --plain --paging=never` or call `$(which cat)` directly.
     - Use `rg` instead of `grep`. Note: `rg` flags differ from `grep` (e.g., `-E` is not supported, use `-e` for patterns, `--pcre2` for advanced regex).
+    - **`rg -r` is NOT recursive** — it means in-place replacement (like `sed`). `rg` is always recursive by default. Use `-r <replacement>` only when doing substitutions (e.g., `rg foo -r bar`).
     - Use `eza` instead of `ls`. Common flags: `--tree`, `--git`, `-lah`.
     - Use `fd` instead of `find`. Syntax: `fd <pattern>` instead of `find . -name <pattern>`.
     - Shell aliases are set: `cat=bat`, `grep=rg`, `ls=eza`, `df=duf`. Avoid piping alias-incompatible flags.
@@ -61,6 +62,19 @@ let
     - If `shell.nix` exists, wrap every command with: `nix-shell --run '<command>'`
     - Commands that are already prefixed with `nix develop` or `nix-shell` do not need wrapping.
     - A PreToolUse hook enforces this: bare commands will be blocked. Retry with the wrapped version from the hook output.
+
+    ## Code style principles
+
+    - **YAGNI**: Don't add features, abstractions, or options that aren't needed right now.
+    - **KISS**: Prefer the simplest solution. Avoid over-engineering.
+    - **DRY**: Avoid duplication, but don't over-abstract for single-use cases.
+    - **One-liners**: Prefer concise expressions over verbose equivalents when readability is not lost.
+    - **Comments**: Only comment non-obvious code. Skip comments that restate what the code clearly does. Keep comments short — one line when possible.
+    - **Explicit over implicit**: Avoid magic values — use named constants.
+    - **Pure functions**: Prefer side-effect-free functions. Isolate side effects at the edges.
+    - **Fail loudly**: Don't swallow errors silently. Surface failures with actionable messages.
+    - **No defensive bloat**: Skip null checks and guards for cases that can't happen — only validate at system boundaries.
+    - **Don't assume**: When intent or context is unclear, verify by inspecting the code/files first, or ask for confirmation before proceeding.
   '';
 in {
   options = {
