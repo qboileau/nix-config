@@ -8,7 +8,7 @@ let
   wl-copy = "${pkgs.wl-clipboard}/bin/wl-copy"; # ${wl-copy} -t image/png
   lock = "hyprlock";
   menu = "wofi --show drun";
-  screenshot = "${grim} -g \"$(${slurp})\" -t ppm - | ${satty} --filename -";
+  screenshot = "${grim} -g \"$(${slurp})\" -t png - | ${satty} --filename -";
 
   base-bind = [
     "$mod, Return, exec, ${terminal}"
