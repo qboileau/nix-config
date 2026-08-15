@@ -88,7 +88,7 @@ in {
     home.packages = with pkgs; [ 
       unstable.claude-monitor
       unstable.github-copilot-cli
-      unstable.mistral-vibe
+      #unstable.mistral-vibe
       unstable.llama-cpp 
       unstable.oterm
       unstable.lmstudio
