@@ -28,6 +28,11 @@
     krewfile.url = "github:brumhard/krewfile"; 
     krewfile.inputs.nixpkgs.follows = "nixpkgs";
 
+    # BISECT (grim/screencopy stale-buffer regression, commit 41356f8): pin Hyprland to the
+    # last known-good 0.54.3, taken from the pre-26.05 unstable rev, while keeping the new
+    # Mesa/kernel. Wired into home/shared/desktop/hyprland/default.nix. Remove to revert.
+    nixpkgs-hyprland-054.url = "github:nixos/nixpkgs/da5ad661ba4e5ef59ba743f0d112cbc30e474f32";
+
     #hyprland.url = "github:hyprwm/Hyprland?submodules=1&ref=refs/tags/v0.54.2";
     #https://github.com/outfoxxed/hy3
     # hy3.url = "github:outfoxxed/hy3"; 

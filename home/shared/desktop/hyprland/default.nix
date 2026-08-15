@@ -1,5 +1,13 @@
 {config, pkgs, lib,inputs, ...} :
 with lib;
+let
+  # Pre-wired FALLBACK to known-good Hyprland 0.54.3 (pre-26.05 unstable rev), for the RDNA4
+  # HDR flicker + screencopy corruption bug (Hyprland #14845) on RX 9070 XT. 0.54 predates the
+  # broken 0.55 HDR render path. Currently INACTIVE (package lines below use pkgs.unstable =
+  # 0.55.4); activate by swapping the three package lines to their hyprland054.* variants.
+  # See memory hyprland-rdna4-screencopy-stale.
+  hyprland054 = inputs.nixpkgs-hyprland-054.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+in
 {
 
   options = {
@@ -79,12 +87,13 @@ with lib;
       # To switch back to flake pin, replace the two lines below with:
       #   package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
       #   portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-      package = pkgs.unstable.hyprland;
-      portalPackage = pkgs.unstable.xdg-desktop-portal-hyprland;
+      # Active: Hyprland 0.55.4 from unstable. To fall back to 0.54.3, swap the three
+      # pkgs.unstable.* lines below for the hyprland054.* variants noted in each comment.
+      package = pkgs.unstable.hyprland; # FALLBACK: hyprland054.hyprland (0.54.3)
+      portalPackage = pkgs.unstable.xdg-desktop-portal-hyprland; # FALLBACK: hyprland054.xdg-desktop-portal-hyprland
       plugins = [
         # hy3 plugin — built against pkgs.unstable.hyprland, always in sync.
-        # To enable: uncomment the line below.
-        pkgs.unstable.hyprlandPlugins.hy3
+        pkgs.unstable.hyprlandPlugins.hy3 # FALLBACK: hyprland054.hyprlandPlugins.hy3
         #
         # Flake pin alternative (use if unstable hy3 lags behind unstable hyprland):
         # inputs.hy3.packages.${pkgs.stdenv.hostPlatform.system}.hy3
@@ -114,15 +123,22 @@ with lib;
           position = "auto-right";
           scale = 1;
           bitdepth = 10;
-          cm = "hdr";
+          # HDR DISABLED (2026-07-16): the Hyprland 0.55 HDR render path corrupts the display
+          # (waybar/window black-flicker) AND screencopy/screenshots on RX 9070 XT (gfx1201) —
+          # Hyprland #14845. Wide-gamut color management WITHOUT HDR bypasses the buggy tonemap /
+          # SDR-modifier path while keeping colors correct. Re-enable by restoring cm="hdr" and
+          # uncommenting the supports_hdr / luminance / sdr* lines once #14845 is fixed (or on the
+          # 0.54.3 fallback).
+          cm = "wide"; # was "hdr"
           supports_wide_color = 1;
-          supports_hdr = 1;
-          sdr_min_luminance = 0.05;
-          min_luminance = 0.05;
-          sdr_max_luminance = 200;
-          max_luminance = 400;
-          sdrbrightness = 1.0;
-          sdrsaturation = 1.0;
+          # --- HDR-only options, disabled together with HDR ---
+          # supports_hdr = 1;
+          # sdr_min_luminance = 0.05;
+          # min_luminance = 0.05;
+          # sdr_max_luminance = 200;
+          # max_luminance = 400;
+          # sdrbrightness = 1.0;
+          # sdrsaturation = 1.0;
           vrr = 3;
         }
         {
@@ -138,8 +154,8 @@ with lib;
 
       render = {
         direct_scanout = 0; # disabled: =2 (auto) caused waybar + focused-window (e.g. VS Code) to flicker/go black on damage under Hyprland 0.55 on RDNA4 (RX 9070). Scanout is only a fullscreen-game latency optimization; off is safe.
-        cm_enabled = true;
-        cm_auto_hdr = 1; # switch to hdr
+        cm_enabled = true; # keep color management on so wide-gamut Philips colors are mapped correctly (off => oversaturated)
+        cm_auto_hdr = 0; # DEBUG (RX 9070 / Hyprland 0.55 flicker): auto-promoting SDR content to HDR toggles the color pipeline on damage, flashing waybar + focused window black together. Was 1.
         cm_sdr_eotf = 3; # Treat unspecified as sRGB
       };
 
