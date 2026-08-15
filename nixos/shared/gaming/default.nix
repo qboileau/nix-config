@@ -89,7 +89,10 @@ in {
         beetle-psx-hw
       ]))
       ryubing # switch emulator
-      rpcs3 # ps3 emulator
+      # rpcs3 0.0.40 (rev 96f73f4) uses AVCodec.pix_fmts, removed in ffmpeg 9.0 which is
+      # the new nixpkgs-unstable default. Pin to ffmpeg_8 (8.1.2), the version it built
+      # against pre-update. Drop the override once nixpkgs bumps rpcs3 to an ffmpeg-9 fix.
+      (rpcs3.override {ffmpeg = ffmpeg_8;}) # ps3 emulator
     ];
 
     # Enable SCX service https://wiki.cachyos.org/configuration/sched-ext/
