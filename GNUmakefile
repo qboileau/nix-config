@@ -88,13 +88,13 @@ check-option: ## Check a NixOS option value (e.g., make check-option OPT=service
 	nixos-option -F . $(OPT)
 
 .PHONY: list-generations
-list-generations: ## List NixOS system generations with their closure size on disk
+list-generations: ## List NixOS system + home-manager generations with their closure size on disk
 	./scripts/list-generations.sh
 
 .PHONY: gc-estimate
-gc-estimate: ## Estimate reclaimable space from garbage collection (SYSTEM=1 to include old system generations)
-ifdef SYSTEM
-	./scripts/gc-estimate.sh --system
-else
+gc-estimate: ## Estimate reclaimable space from deleting old system + home-manager generations
 	./scripts/gc-estimate.sh
-endif
+
+.PHONY: gc
+gc: ## Delete old system + home-manager generations and collect garbage (needs sudo)
+	sudo nix-collect-garbage -d
