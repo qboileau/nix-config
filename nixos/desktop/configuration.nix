@@ -55,6 +55,7 @@
   desktop = {
     enableAutoLogin = false;
     enablePlasma = false;
+    sddm.theme = "chili";
     # sddm.theme defaults to "sddm-astronaut-theme" (see nixos/shared/desktop.nix),
     # which installs a preconfigured astronaut greeter + greeter Qt modules.
     # To change the variant or its [General] keys, edit the custom-sddm-theme
