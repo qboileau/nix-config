@@ -129,16 +129,17 @@ in
           # SDR-modifier path while keeping colors correct. Re-enable by restoring cm="hdr" and
           # uncommenting the supports_hdr / luminance / sdr* lines once #14845 is fixed (or on the
           # 0.54.3 fallback).
-          cm = "wide"; # was "hdr"
-          supports_wide_color = 1;
+          #cm = "wide"; # was "hdr"
+          #supports_wide_color = 1;
           # --- HDR-only options, disabled together with HDR ---
-          # supports_hdr = 1;
-          # sdr_min_luminance = 0.05;
-          # min_luminance = 0.05;
-          # sdr_max_luminance = 200;
-          # max_luminance = 400;
-          # sdrbrightness = 1.0;
-          # sdrsaturation = 1.0;
+          cm = "hdr";
+          supports_hdr = 1;
+          sdr_min_luminance = 0.05;
+          min_luminance = 0.05;
+          sdr_max_luminance = 200;
+          max_luminance = 400;
+          sdrbrightness = 1.0;
+          sdrsaturation = 1.0;
           vrr = 3;
         }
         {
