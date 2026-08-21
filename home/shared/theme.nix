@@ -119,6 +119,10 @@
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
       gtk-theme = "Breeze-Dark";
+      # gsettings-desktop-schemas 50 flipped this default to false. GTK4 reads it
+      # from xdg-desktop-portal instead of settings.ini, which kills copy-on-select
+      # and middle-click paste in Ghostty.
+      gtk-enable-primary-paste = true;
     };
   };
 
