@@ -70,6 +70,7 @@
   editors.xed.enable = true;
   editors.vscode.enable = true;
   hyprland.configType = "lua";
+  hyprland.layout = "hy3";
   hyprland.autolock.enable = false;
   hyprland.autostart = [  
     "bitwarden"

@@ -12,9 +12,23 @@ let
   menu = "wofi --show drun";
   screenshot = "${grim} -g \"$(${slurp})\" -t png - | ${satty} --filename -";
 
+  usingHy3 = config.hyprland.layout == "hy3";
+
+  # hy3 nodes are not plain windows: killactive on a focused tab group only takes the visible
+  # window, hy3:killactive acts on the node.
+  kill = if usingHy3 then "hy3:killactive," else "killactive,";
+
+  # Layout-agnostic, so both bind sets need them — they used to live only in dwindle-bind.
+  workspace-to-monitor-bind = [
+    "CTRL $mod SHIFT, right, movecurrentworkspacetomonitor, r"
+    "CTRL $mod SHIFT, left, movecurrentworkspacetomonitor, l"
+    "CTRL $mod SHIFT, up, movecurrentworkspacetomonitor, u"
+    "CTRL $mod SHIFT, down, movecurrentworkspacetomonitor, d"
+  ];
+
   base-bind = [
     "$mod, Return, exec, ${terminal}"
-    "$mod SHIFT, Q, killactive,"
+    "$mod SHIFT, Q, ${kill}"
     "$mod SHIFT, R, exec, hyprctl reload"
     "$mod, F, fullscreen,"
     "$mod, M, exit,"
@@ -45,6 +59,14 @@ let
     "$mod, g, hy3:makegroup, tab"
     "$mod, tab, hy3:togglefocuslayer"
 
+    # i3 split-orientation reflexes. i3 uses mod+h / mod+v / mod+e, but mod+V is togglefloating
+    # and mod+E is the file manager here, so only mod+h keeps its i3 key.
+    "$mod SHIFT, h, hy3:makegroup, h"
+    "$mod SHIFT, v, hy3:makegroup, v"
+    "$mod SHIFT, e, hy3:changegroup, opposite"
+    "$mod SHIFT, g, hy3:changegroup, untab"
+    "$mod SHIFT, f, hy3:expand, maximize"
+
     # Move focus with mod + arrow keys
     "$mod, left, hy3:movefocus, l"
     "$mod, right, hy3:movefocus, r"
@@ -62,10 +84,9 @@ let
     "$mod SHIFT, up, hy3:movewindow, u, once"
     "$mod SHIFT, down, hy3:movewindow, d, once"
 
-    "$mod CTRL SHIFT, left, hy3:movewindow, l, once, visible"
-    "$mod CTRL SHIFT, right, hy3:movewindow, r, once, visible"
-    "$mod CTRL SHIFT, up, hy3:movewindow, u, once, visible"
-    "$mod CTRL SHIFT, down, hy3:movewindow, d, once, visible"
+    # NOTE the upstream hy3 reference config also binds $mod CTRL SHIFT + arrows to
+    # hy3:movewindow ... visible. Dropped deliberately: they collide with
+    # workspace-to-monitor-bind above (same mods+key), and only one survives.
   ] ++ (builtins.concatLists (builtins.genList (
       x: let
         ws = let
@@ -93,11 +114,6 @@ let
     "$mod SHIFT, down, exec, hypr-i3-move move d"
 
     "$mod, G, togglegroup,"
-
-    "CTRL $mod SHIFT, right, movecurrentworkspacetomonitor, r"
-    "CTRL $mod SHIFT, left, movecurrentworkspacetomonitor, l"
-    "CTRL $mod SHIFT, up, movecurrentworkspacetomonitor, u"
-    "CTRL $mod SHIFT, down, movecurrentworkspacetomonitor, d"
   ] ++ (builtins.concatLists (builtins.genList (
       x: let
         ws = let
@@ -111,7 +127,8 @@ let
     )
     10));
 
-  final-bind = base-bind ++ dwindle-bind;
+  final-bind =
+    base-bind ++ workspace-to-monitor-bind ++ (if usingHy3 then hy3-bind else dwindle-bind);
 in
 lib.mkIf (config.hyprland.configType == "hyprlang") {
   wayland.windowManager.hyprland.settings = {

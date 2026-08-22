@@ -125,8 +125,7 @@ lib.mkIf (config.hyprland.configType == "lua") {
       };
 
       general = {
-        #layout = "hy3";
-        layout = "dwindle";
+        layout = config.hyprland.layout;
         gaps_in = 1;
         gaps_out = 1;
         border_size = 1;
@@ -167,6 +166,27 @@ lib.mkIf (config.hyprland.configType == "lua") {
         smart_resizing = true; # prevent automatic resize adjustments
       };
 
+      # hy3's own options.
+      #
+      # These are only known to Hyprland once hy3 has registered them, and the plugin is loaded
+      # from the hyprland.start hook — i.e. after this file is first parsed. That works at
+      # runtime because loading a plugin schedules a full config reload
+      # (Hyprland src/plugins/PluginSystem.cpp:135), which re-applies everything below.
+      #
+      # It does mean `--verify-config` cannot see them and reports
+      #   unknown config key 'plugin.hy3.<key>'
+      # with exit 1 whenever layout = "hy3". Those specific lines are expected; anything else in
+      # a verify run is a real error. To pre-flight the rest of the config, verify with
+      # layout = "dwindle".
+      #
+      # Every key was checked against a running hy3 via `hyprctl getoption plugin:hy3:<key>`.
+      # Note it is tabs:colors:*, NOT the tabs:col.* spelling the native groupbar uses — a wrong
+      # key here is dropped silently.
+      #
+      # Emitted only when hy3 is selected (see the end of this attrset): on dwindle the plugin
+      # is never loaded, so these keys would never resolve and would break --verify-config for
+      # no reason.
+
       binds = {
         workspace_back_and_forth = true;
         scroll_event_delay = 100; # default is 300
@@ -189,6 +209,29 @@ lib.mkIf (config.hyprland.configType == "lua") {
         touchpad = {
           natural_scroll = false;
         };
+      };
+    }
+    // lib.optionalAttrs (config.hyprland.layout == "hy3") {
+      plugin.hy3 = {
+        # Match the native groupbar colours configured above, so tabs look the same.
+        tabs = {
+          height = 22;
+          padding = 2;
+          radius = 1;
+          border_width = 1;
+          text_height = 12;
+          text_font = "Noto Sans";
+          colors = {
+            active = "rgba(51, 204, 255, 0.17)";
+            focused = "rgba(96, 96, 96, 0.25)";
+            inactive = "rgba(48, 48, 48, 0.125)";
+            urgent = "rgba(255, 34, 51, 0.25)";
+            locked = "rgba(144, 144, 51, 0.25)";
+          };
+          opacity = 0.95;
+        };
+        # i3 splits along the longer axis by default; hy3 does not unless told to.
+        autotile.enable = true;
       };
     };
 

@@ -3,7 +3,32 @@
 # in ../lua/settings.nix; switch with `hyprland.configType`.
 {config, lib, ...} :
 lib.mkIf (config.hyprland.configType == "hyprlang") {
-  wayland.windowManager.hyprland.settings = {
+  wayland.windowManager.hyprland.settings =
+    # Mirror of the hy3 block in ../lua/settings.nix — keep the two in step. Applied on the
+    # config reload Hyprland schedules after loading a plugin. Under hyprlang the verify-time
+    # blind spot lands elsewhere: --verify-config accepts this section but rejects the hy3:*
+    # bind dispatchers, since the plugin is not loaded at verify time.
+    lib.optionalAttrs (config.hyprland.layout == "hy3") {
+      plugin.hy3 = {
+        tabs = {
+          height = 22;
+          padding = 2;
+          radius = 1;
+          border_width = 1;
+          text_height = 12;
+          text_font = "Noto Sans";
+          colors = {
+            active = "rgba(51, 204, 255, 0.17)";
+            focused = "rgba(96, 96, 96, 0.25)";
+            inactive = "rgba(48, 48, 48, 0.125)";
+            urgent = "rgba(255, 34, 51, 0.25)";
+            locked = "rgba(144, 144, 51, 0.25)";
+          };
+          opacity = 0.95;
+        };
+      };
+    }
+    // {
     # See https://wiki.hyprland.org/Configuring/Monitors/
     # "monitor" = [
     #   "eDP-1,2256x1504,0x0,1,bitdepth,10" #main framework laptop monitor
@@ -111,8 +136,7 @@ lib.mkIf (config.hyprland.configType == "hyprlang") {
 
     # https://wiki.hyprland.org/Configuring/Variables/#general
     general = {
-      #layout = "hy3";
-      layout = "dwindle";
+      layout = config.hyprland.layout;
       gaps_in = 1;
       gaps_out = 1;
       border_size = 1;
@@ -145,6 +169,7 @@ lib.mkIf (config.hyprland.configType == "hyprlang") {
       preserve_split = true; # keep split direction when windows are removed
       smart_resizing = true; # prevent automatic resize adjustments
     };
+
 
     binds = {
       workspace_back_and_forth = true;

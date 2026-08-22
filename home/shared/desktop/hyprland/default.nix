@@ -7,6 +7,31 @@ let
   # 0.55.4); activate by swapping the three package lines to their hyprland054.* variants.
   # See memory hyprland-rdna4-screencopy-stale.
   hyprland054 = inputs.nixpkgs-hyprland-054.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+
+  # Single source for Hyprland + its plugins. Taking both from ONE package set is what keeps
+  # them ABI-compatible: Hyprland refuses any plugin whose reported API version differs, and
+  # that string is its own git commit hash plus the minor versions of aquamarine/hyprutils/
+  # hyprgraphics (src/plugins/PluginAPI.hpp), so "same 0.56.x" is not sufficient — it has to be
+  # the same build. Never mix this with a flake-pinned hyprland.
+  hyprPkgs = pkgs.unstable;
+  hyprlandPkg = hyprPkgs.hyprland;
+  hy3Pkg = hyprPkgs.hyprlandPlugins.hy3;
+
+  # hy3 is versioned after the Hyprland it targets (upstream tags are hl<hyprland ver>.<n>, so
+  # 0.56.0.1 -> Hyprland 0.56.x). nixpkgs' mkHyprlandPlugin asserts NOTHING about this, so when
+  # nixpkgs bumps Hyprland before hy3 catches up you get a plugin built against headers it does
+  # not support: either a failed build after a long rebuild, or a plugin that loads and misbehaves.
+  hy3TargetsHyprland =
+    lib.versions.majorMinor hy3Pkg.version == lib.versions.majorMinor hyprlandPkg.version;
+
+  # Backstop for the other direction: hy3 compiled against a *different* hyprland derivation
+  # than the one being installed (the case a version check cannot see).
+  hy3LinkedHyprland =
+    lib.findFirst (d: (d.pname or "") == "hyprland") null (hy3Pkg.buildInputs or [ ]);
+  hy3LinkedSameHyprland =
+    hy3LinkedHyprland != null && hy3LinkedHyprland.drvPath == hyprlandPkg.drvPath;
+
+  usingHy3 = config.hyprland.layout == "hy3";
 in
 {
 
@@ -27,6 +52,25 @@ in
         ];
         default = "waybar";
         description = "Select the bar to use with Hyprland. Either waybar or ironbar";
+      };
+      layout = lib.mkOption {
+        type = lib.types.enum [
+          "dwindle"
+          "hy3"
+        ];
+        default = "dwindle";
+        description = ''
+          Tiling layout. "dwindle" is Hyprland's built-in automatic split layout, driven by the
+          i3-like focus/move helper (./lua/i3move.lua, or pkgs/hypr-i3-move under hyprlang).
+          "hy3" is the hy3 plugin: manual i3/sway-style tiling with real tab groups.
+
+          Selecting hy3 swaps the whole arrow-key bind set AND pulls in the plugin, which is
+          only loaded at compositor start — so flipping this needs a full Hyprland restart,
+          not just `hyprctl reload`.
+
+          The plugin is only installed when this is "hy3", which is deliberate: a stale hy3 in
+          nixpkgs then cannot block a system update while you are on dwindle.
+        '';
       };
       configType = lib.mkOption {
         type = lib.types.enum [
@@ -72,6 +116,33 @@ in
   
 
   config = {
+    # Version gate for hy3. Only enforced when hy3 is actually selected, so a lagging hy3 in
+    # nixpkgs cannot block `nix flake update` + rebuild while you are on dwindle.
+    assertions = [
+      {
+        assertion = !usingHy3 || hy3TargetsHyprland;
+        message = ''
+          hyprland.layout = "hy3" but hy3 ${hy3Pkg.version} targets Hyprland ${lib.versions.majorMinor hy3Pkg.version}.x,
+          while the configured Hyprland is ${hyprlandPkg.version}. hy3 normally lags a new Hyprland
+          release by a few days, so nixpkgs has probably moved Hyprland ahead of it.
+
+          Either wait for hy3 ${lib.versions.majorMinor hyprlandPkg.version}.x to land, pin nixpkgs-unstable back, or set
+          hyprland.layout = "dwindle" to keep updating without the plugin.
+        '';
+      }
+      {
+        assertion = !usingHy3 || hy3LinkedSameHyprland;
+        message = ''
+          hy3 was built against a different Hyprland derivation than the one being installed.
+          Hyprland compares its git commit hash when loading a plugin, so this combination will
+          be refused at runtime and you would boot into a session with no working layout.
+
+          Take hyprland and hyprlandPlugins.hy3 from the SAME package set (see hyprPkgs in
+          home/shared/desktop/hyprland/default.nix); do not mix nixpkgs with a flake pin.
+        '';
+      }
+    ];
+
     home.packages = with pkgs; [
       hyprland-qt-support
       # inputs.hyprqt6engine.packages.${pkgs.stdenv.hostPlatform.system}.hyprqt6engine
@@ -110,21 +181,14 @@ in
 
       # Settings/binds for the selected format come from ./hyprlang or ./lua.
       configType = config.hyprland.configType;
-      # Using pkgs.unstable.hyprland (fully cached, hy3 always in sync via hyprlandPlugins.hy3).
-      # To switch back to flake pin, replace the two lines below with:
-      #   package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-      #   portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-      # Active: Hyprland 0.55.4 from unstable. To fall back to 0.54.3, swap the three
-      # pkgs.unstable.* lines below for the hyprland054.* variants noted in each comment.
-      package = pkgs.unstable.hyprland; # FALLBACK: hyprland054.hyprland (0.54.3)
-      portalPackage = pkgs.unstable.xdg-desktop-portal-hyprland; # FALLBACK: hyprland054.xdg-desktop-portal-hyprland
-      plugins = [
-        # hy3 plugin — built against pkgs.unstable.hyprland, always in sync.
-        pkgs.unstable.hyprlandPlugins.hy3 # FALLBACK: hyprland054.hyprlandPlugins.hy3
-        #
-        # Flake pin alternative (use if unstable hy3 lags behind unstable hyprland):
-        # inputs.hy3.packages.${pkgs.stdenv.hostPlatform.system}.hy3
-      ];
+      # Hyprland + plugins both come from hyprPkgs (see the let block) so they are guaranteed to
+      # be the same build. To fall back to 0.54.3 for the RDNA4 bug, point hyprPkgs at
+      # hyprland054 instead of editing these lines; that keeps hy3 in step automatically.
+      package = hyprlandPkg;
+      portalPackage = hyprPkgs.xdg-desktop-portal-hyprland;
+      # Only loaded when actually selected — see the hyprland.layout option. Plugins load at
+      # compositor start, so switching layout needs a Hyprland restart, not a reload.
+      plugins = lib.optional usingHy3 hy3Pkg;
     };
 
   };

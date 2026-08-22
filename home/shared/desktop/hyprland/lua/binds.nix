@@ -31,9 +31,24 @@ let
   # wrap each one in a function: hl.bind also accepts a callback, resolved at keypress time.
   hy3 = call: "function() hl.dispatch(hl.plugin.hy3.${call}) end";
 
+  usingHy3 = config.hyprland.layout == "hy3";
+
+  # hy3 nodes are not plain windows: closing a focused tab group with the stock dispatcher only
+  # takes the visible window, whereas hy3:kill_active acts on the node.
+  kill = if usingHy3 then hy3 "kill_active()" else "hl.dsp.window.close()";
+
+  # Layout-agnostic, so both bind sets need them — they used to live only in dwindle-bind, which
+  # meant switching to hy3 silently dropped all four.
+  workspace-to-monitor-bind = map (d: bind "CTRL + ${mod} + SHIFT + ${d}" ''hl.dsp.workspace.move({ monitor = "${builtins.substring 0 1 d}" })'') [
+    "right"
+    "left"
+    "up"
+    "down"
+  ];
+
   base-bind = [
     (bind "${mod} + Return" (exec terminal))
-    (bind "${mod} + SHIFT + Q" "hl.dsp.window.close()")
+    (bind "${mod} + SHIFT + Q" kill)
     (bind "${mod} + SHIFT + R" (exec "hyprctl reload"))
     (bind "${mod} + F" "hl.dsp.window.fullscreen()")
     (bind "${mod} + M" "hl.dsp.exit()")
@@ -63,6 +78,14 @@ let
     (bind "${mod} + g" (hy3 ''make_group("tab")''))
     (bind "${mod} + tab" (hy3 "toggle_focus_layer()"))
 
+    # i3 split-orientation reflexes. i3 puts these on mod+h / mod+v / mod+e, but mod+V is
+    # togglefloating and mod+E is the file manager here, so only mod+h keeps its i3 key.
+    (bind "${mod} + SHIFT + h" (hy3 ''make_group("h")''))
+    (bind "${mod} + SHIFT + v" (hy3 ''make_group("v")''))
+    (bind "${mod} + SHIFT + e" (hy3 ''change_group("opposite")''))
+    (bind "${mod} + SHIFT + g" (hy3 ''change_group("untab")''))
+    (bind "${mod} + SHIFT + f" (hy3 ''expand("maximize")''))
+
     # Move focus with mod + arrow keys
     (bind "${mod} + left" (hy3 ''move_focus("l")''))
     (bind "${mod} + right" (hy3 ''move_focus("r")''))
@@ -80,10 +103,10 @@ let
     (bind "${mod} + SHIFT + up" (hy3 ''move_window("u", { once = true })''))
     (bind "${mod} + SHIFT + down" (hy3 ''move_window("d", { once = true })''))
 
-    (bind "${mod} + CTRL + SHIFT + left" (hy3 ''move_window("l", { once = true, visible = true })''))
-    (bind "${mod} + CTRL + SHIFT + right" (hy3 ''move_window("r", { once = true, visible = true })''))
-    (bind "${mod} + CTRL + SHIFT + up" (hy3 ''move_window("u", { once = true, visible = true })''))
-    (bind "${mod} + CTRL + SHIFT + down" (hy3 ''move_window("d", { once = true, visible = true })''))
+    # NOTE the upstream hy3 reference config also binds mod+CTRL+SHIFT+arrows to
+    # move_window(..., visible). Those are deliberately dropped: they collide with the
+    # workspace-to-monitor binds above (same modmask+key, just written in a different order),
+    # and Hyprland silently keeps only one — --verify-config does not report duplicates.
   ] ++ (builtins.concatLists (builtins.genList (
       x: let
         ws = let
@@ -111,11 +134,6 @@ let
     (bind "${mod} + SHIFT + down" ''i3move.move("d")'')
 
     (bind "${mod} + G" "hl.dsp.group.toggle()")
-
-    (bind "CTRL + ${mod} + SHIFT + right" ''hl.dsp.workspace.move({ monitor = "r" })'')
-    (bind "CTRL + ${mod} + SHIFT + left" ''hl.dsp.workspace.move({ monitor = "l" })'')
-    (bind "CTRL + ${mod} + SHIFT + up" ''hl.dsp.workspace.move({ monitor = "u" })'')
-    (bind "CTRL + ${mod} + SHIFT + down" ''hl.dsp.workspace.move({ monitor = "d" })'')
   ] ++ (builtins.concatLists (builtins.genList (
       x: let
         ws = let
@@ -129,15 +147,20 @@ let
     )
     10));
 
-  final-bind = base-bind ++ dwindle-bind;
+  final-bind =
+    base-bind ++ workspace-to-monitor-bind ++ (if usingHy3 then hy3-bind else dwindle-bind);
 in
 lib.mkIf (config.hyprland.configType == "lua") {
   # package.path already covers ~/.config/hypr/?.lua, so this is require()-able by name.
-  xdg.configFile."hypr/i3move.lua".source = ./i3move.lua;
+  # hy3 does its own group-aware focus/move, so the helper is dwindle-only.
+  xdg.configFile."hypr/i3move.lua" = lib.mkIf (!usingHy3) { source = ./i3move.lua; };
 
-  wayland.windowManager.hyprland.settings = {
-    # `_var` renders as a `local` ahead of every hl.* call, so the binds below can use it.
-    i3move = { _var = mkLuaInline ''require("i3move")''; };
+  wayland.windowManager.hyprland.settings = lib.mkMerge [
+    (lib.mkIf (!usingHy3) {
+      # `_var` renders as a `local` ahead of every hl.* call, so the binds below can use it.
+      i3move = { _var = mkLuaInline ''require("i3move")''; };
+    })
+    {
 
     bind = final-bind
 
@@ -164,5 +187,6 @@ lib.mkIf (config.hyprland.configType == "lua") {
         { keys = "XF86MonBrightnessUp"; dsp = exec "brightnessctl s 10%+"; }
         { keys = "XF86MonBrightnessDown"; dsp = exec "brightnessctl s 10%-"; }
       ];
-  };
+    }
+  ];
 }
