@@ -69,6 +69,7 @@
   editors.vim.defaultEditor = true;
   editors.xed.enable = true;
   editors.vscode.enable = true;
+  hyprland.configType = "lua";
   hyprland.autolock.enable = false;
   hyprland.autostart = [  
     "bitwarden"

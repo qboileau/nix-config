@@ -1,6 +1,12 @@
 { pkgs, config, ... }:
 let
   enabled = config.hyprland.bar == "waybar";
+  # `hyprctl dispatch` takes legacy dispatcher names under hyprlang but evaluates its argument
+  # as lua under a lua config (hl.dispatch(<expr>)), with no legacy-name fallback.
+  quit =
+    if config.hyprland.configType == "lua"
+    then "hyprctl dispatch 'hl.dsp.exit()'"
+    else "hyprctl dispatch exit";
 in
 {
 
@@ -198,7 +204,7 @@ in
           format = "  ";
           tooltip = true;
           tooltip-format = "Quit";
-          on-click = "hyprctl dispatch exit";
+          on-click = quit;
         };
 
         "custom/lock" = {

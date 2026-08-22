@@ -1,4 +1,6 @@
-{config, pkgs, ...} :
+# Keybinds in the legacy hyprlang format. See ../lua/binds.nix for the lua equivalent;
+# switch with `hyprland.configType`.
+{config, pkgs, lib, ...} :
 let
   terminal = config.terminal.default;
   fileManager = "${pkgs.kdePackages.dolphin}/bin/dolphin";
@@ -110,12 +112,8 @@ let
     10));
 
   final-bind = base-bind ++ dwindle-bind;
-in {
-  
-   home.packages = with pkgs; [
-    local.hypr-i3-move
-  ];
-
+in
+lib.mkIf (config.hyprland.configType == "hyprlang") {
   wayland.windowManager.hyprland.settings = {
     "$mod" = "SUPER";
     bind = final-bind;
