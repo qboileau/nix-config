@@ -5,8 +5,10 @@ let
     mktplcRef = {
       name = "claude-code";
       publisher = "anthropic";
-      version = "2.1.114"; # https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code
-      hash = "sha256-TfVradC9ZjfLBp8QvZ0AptCS9j2ogzSlsRXxksp+N9I=";
+      version = "2.1.241"; # https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code
+      # Published per-platform since 2.1.89; without arch the fetch 404s.
+      arch = "linux-x64";
+      hash = "sha256-Gvn9Fv5VhzBzaFpuVir6VPFC0je0UAyh3LArY8MyjpA=";
     };
   };
 in {
@@ -87,7 +89,6 @@ in {
     userSettings = {
       "chat.viewSessions.orientation" = "stacked";
       "claudeCode.preferredLocation" = "panel";
-      "claudeCode.terminalCommand" = "${pkgs.unstable.claude-code}/bin/claude";
       "excalidraw.image" = {
         "exportScale" = 1;
         "exportWithBackground" = true;
