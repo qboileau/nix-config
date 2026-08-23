@@ -354,7 +354,49 @@
         "nixpkgs-unstable": "nixpkgs-unstable",
         "noctalia": "noctalia",
         "qbz": "qbz",
+        "sddm-chili-qt6": "sddm-chili-qt6",
+        "sddm-tui": "sddm-tui",
         "systems": "systems_4"
+      }
+    },
+    "sddm-chili-qt6": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1787482236,
+        "narHash": "sha256-GOKIJTm73ro08vifguyVLBc32wejUhf5/SD1r3zdln0=",
+        "owner": "qboileau",
+        "repo": "sddm-chili-qt6",
+        "rev": "0c06ab4856211d9f03848235db598a29af8a6fa0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "qboileau",
+        "repo": "sddm-chili-qt6",
+        "type": "github"
+      }
+    },
+    "sddm-tui": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1787484176,
+        "narHash": "sha256-LZ4rP3Jd9VJPLRCSZoEkQMRl5ptO+aJ1L8P3SMI3kgg=",
+        "owner": "qboileau",
+        "repo": "sddm-tui",
+        "rev": "6b1c5b2286152e9a6cbf584fff82e5143f2855df",
+        "type": "github"
+      },
+      "original": {
+        "owner": "qboileau",
+        "repo": "sddm-tui",
+        "type": "github"
       }
     },
     "systems": {

@@ -48,6 +48,12 @@
     
     nixos-loading-plymouth.url = "github:qboileau/nixos-load-plymouth";
     nixos-loading-plymouth.inputs.nixpkgs.follows = "nixpkgs";
+    
+    sddm-tui.url = "github:qboileau/sddm-tui";
+    sddm-tui.inputs.nixpkgs.follows = "nixpkgs";
+
+    sddm-chili-qt6.url = "github:qboileau/sddm-chili-qt6";
+    sddm-chili-qt6.inputs.nixpkgs.follows = "nixpkgs";
 
     # qbz.url = "github:vicrodh/qbz?ref=refs/tags/v1.2.4";
     qbz.url = "github:qboileau/qbz/feature/external/nix-flake-direct-input-install";

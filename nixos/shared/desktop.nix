@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   username,
   ...
 }: let
@@ -22,23 +23,27 @@
       PartialBlur = "false";
     };
   };
-  # Qt6 port of the chili theme (pkgs/sddm-chili-qt6). themeConfig keys map 1:1
-  # to theme.conf [General]: background, blur, recursiveBlurRadius,
-  # recursiveBlurLoops, PasswordFieldOutlined, FontPointSize, AvatarPixelSize,
-  # PowerIconSize, ScreenWidth, ScreenHeight, translation{Reboot,Suspend,PowerOff}.
-  # The greeter runs as user `sddm`, which cannot traverse /home/${username} (0700),
-  # so a wallpaper under $HOME silently fails to load. Stage it into a world-readable
-  # location at boot and point the theme there instead.
+  # Qt6 port of the chili theme (github:qboileau/sddm-chili-qt6, theme dir name
+  # "chili"). https://github.com/qboileau/sddm-chili-qt6#configuration
   sddmWallpaperSource = "/home/${username}/Dropbox/wallpapers/2x1/black_hole.jpg";
   sddmWallpaperDir = "/var/lib/sddm-theme";
   sddmWallpaper = "${sddmWallpaperDir}/wallpaper.jpg";
-  custom-sddm-chili-theme = pkgs.local.sddm-chili-qt6.override {
+  custom-sddm-chili-theme = inputs.sddm-chili-qt6.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
     themeConfig = {
       background = sddmWallpaper;
       blur = true;
       recursiveBlurRadius = 3;
       recursiveBlurLoops = 2;
       PasswordFieldOutlined = true;
+    };
+  };
+  
+  # (github:qboileau/sddm-tui https://github.com/qboileau/sddm-tui#themeconf-keys
+  variant = "nixos-spin";
+  custom-sddm-nixos-tui-theme = inputs.sddm-tui.packages.${pkgs.stdenv.hostPlatform.system}.${variant}.override {
+    themeConfig = {
+      OsLabel = "NixOS ${config.system.nixos.release} (${config.system.nixos.codeName})";
+      KernelLabel = config.boot.kernelPackages.kernel.version;
     };
   };
 in {
@@ -72,6 +77,7 @@ in {
       environment.systemPackages = [
         custom-sddm-astronaut-theme
         custom-sddm-chili-theme
+        custom-sddm-nixos-tui-theme
        ];
       services.displayManager.sddm = {
         enable = true;
@@ -84,6 +90,7 @@ in {
           kdePackages.qt5compat # chili: Qt5Compat.GraphicalEffects
           custom-sddm-astronaut-theme
           custom-sddm-chili-theme
+          custom-sddm-nixos-tui-theme
         ];
       };
 

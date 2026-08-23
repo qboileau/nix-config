@@ -16,5 +16,4 @@ pkgs: {
   "vscode-extension-carlocardella.vscode-texttoolbox" = pkgs.callPackage ./vscode-extension-carlocardella.vscode-texttoolbox { };
   "vscode-extension-buenon.scratchpads" = pkgs.callPackage ./vscode-extension-buenon.scratchpads { };
   boucle-framework-hooks = pkgs.callPackage ./boucle-framework-hooks { };
-  sddm-chili-qt6 = pkgs.callPackage ./sddm-chili-qt6 { };
 }
