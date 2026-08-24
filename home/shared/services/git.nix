@@ -1,19 +1,27 @@
-{config, pkgs, ...} :
+{ config, pkgs, ... }:
 {
   # Git configuration and related tools
-  
-  home.packages = with pkgs; [ 
+  home.packages = with pkgs; [
     meld
     git-interactive-rebase-tool
     gnupg
   ];
 
+  home.shellAliases = {
+    g = "git";
+    gs = "git status";
+    ga = "git add";
+    gc = "git commit";
+    gp = "git push";
+    gl = "git log --oneline --graph --decorate --all";
+  };
+
   programs.git = {
     enable = true;
     lfs.enable = true;
     settings = {
-       user.name = "Quentin Boileau";
-       alias = {
+      user.name = "Quentin Boileau";
+      alias = {
         fall = "fetch -a";
         pr = "pull --rebase";
         co = "checkout";
@@ -44,16 +52,16 @@
       credential = {
         helper = "libsecret";
       };
-      program = { 
+      program = {
         pgp = "gpg";
       };
       color = {
-          status = "always";
-          diff = "always";
-          branch = "always";
+        status = "always";
+        diff = "always";
+        branch = "always";
       };
     };
-   
+
     includes = [
       {
         path = "${config.home.homeDirectory}/.config/git/personal";
@@ -76,7 +84,10 @@
 
   programs.diff-so-fancy.enable = true;
   programs.diff-so-fancy.enableGitIntegration = true;
-  programs.diff-so-fancy.pagerOpts = [ "--tabs=4" "-RFX"];
+  programs.diff-so-fancy.pagerOpts = [
+    "--tabs=4"
+    "-RFX"
+  ];
 
   # Git identity configs are managed by agenix (encrypted secrets)
   # They are decrypted at activation to ~/.config/git/personal, work, conduktor
