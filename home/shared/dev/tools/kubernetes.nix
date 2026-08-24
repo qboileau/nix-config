@@ -1,6 +1,9 @@
-{pkgs, config, lib, ...} :
+{pkgs, config, lib, inputs, ...} :
 let
   cfg = config.dev.tools;
+  krewCfg = config.programs.krewfile;
+  krewfileBin = inputs.krewfile.packages.${pkgs.stdenv.hostPlatform.system}.krewfile;
+  krewfileContent = pkgs.writeText "krewfile" (lib.concatStringsSep "\n" krewCfg.plugins);
 in {
   options = {
     dev.tools.kubernetes = {
@@ -34,7 +37,19 @@ in {
         "resource-capacity"  # https://github.com/robscott/kube-capacity
       ];
     };
-    
+
+    # krewfile hits the network to refresh its index, but HM activation runs before
+    # the network is up at boot and while NetworkManager/dnsmasq restart during a
+    # nixos-rebuild switch. Don't fail the whole generation over it.
+    home.activation.krew = lib.mkForce (config.lib.dag.entryAfter [ "installPackages" ] ''
+      export KREW_ROOT="${krewCfg.krewRoot}"
+
+      run ${krewfileBin}/bin/krewfile \
+        -command ${krewCfg.krewPackage}/bin/krew \
+        -file ${krewfileContent} \
+        || warnEcho "krewfile failed (no network?); plugins left unchanged"
+    '');
+
     home.sessionVariables = {
       KUBECONFIG = "\$(generate_kubeconfig)";
     };
