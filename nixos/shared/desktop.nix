@@ -37,7 +37,7 @@
       PasswordFieldOutlined = true;
     };
   };
-  
+
   # (github:qboileau/sddm-tui https://github.com/qboileau/sddm-tui#themeconf-keys
   variant = "nixos-spin";
   custom-sddm-nixos-tui-theme = inputs.sddm-tui.packages.${pkgs.stdenv.hostPlatform.system}.${variant}.override {
@@ -82,6 +82,7 @@ in {
       services.displayManager.sddm = {
         enable = true;
         wayland.enable = true;
+        wayland.compositor = "kwin";
         theme = cfg.sddm.theme;
         extraPackages = with pkgs; [
           kdePackages.qtmultimedia
@@ -105,13 +106,13 @@ in {
 
       # Enable Flatpak for GUI application management
       services.flatpak.enable = true;
-      
+
       # XDG Desktop Portal for proper desktop integration (required for Flatpak)
       xdg.portal = {
         enable = true;
         extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
       };
-      
+
       # Enable getty on TTY2-6 for emergency access
       # (TTY1 is used by SDDM, but TTY2-6 provide fallback login)
       systemd.services."getty@tty2".enable = true;
