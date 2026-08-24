@@ -64,8 +64,8 @@
   # Configure desktop for framework
   desktop = {
     enableAutoLogin = false; # No auto-login on work laptop
-    enablePlasma = true; # Using Hyprland
-    sddm.theme = "breeze"; # Use default Plasma theme
+    enablePlasma = false; # Using Hyprland
+    sddm.theme = "nixos-tui-spin"; # Use default Plasma theme
   };
 
   # Configure virtualization for development work
@@ -87,9 +87,6 @@
   
   environment.pathsToLink = [ "/share/bash-completion" ]; # needed for bash completion
 
-  environment.systemPackages = with pkgs; [
-   sddm-chili-theme
-  ];
 
   security.enableClamAv = true;
   security.enableFingerprintAuth = true;
