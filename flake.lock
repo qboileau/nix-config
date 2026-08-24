@@ -226,11 +226,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1773700702,
-        "narHash": "sha256-5S9UeW1r/4eD0sCzeS8/UOa1+2gNOaqrCKIxItkOFhY=",
+        "lastModified": 1787577615,
+        "narHash": "sha256-NSNU46mG10eCJfQ3DMNCS4n/9SeVM/tTP7EsuPjyh2I=",
         "owner": "qboileau",
         "repo": "nixos-load-plymouth",
-        "rev": "9ec3339d4172099b5ffa8b1a685accf5602cc23d",
+        "rev": "17b1222819d0060412f80c02ebfa52eca4400bae",
         "type": "github"
       },
       "original": {
@@ -386,11 +386,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787486126,
-        "narHash": "sha256-HF+pJmQA0lQl57dlf4G7pVpf5FwE0dfRg7+WkThoXAs=",
+        "lastModified": 1787576569,
+        "narHash": "sha256-G0AXGE2FjrgZb/eIQnOlwZtXP1MzaGTP6Db8meWxlwk=",
         "owner": "qboileau",
         "repo": "sddm-tui",
-        "rev": "6f0b1cb9f1c946d475f36c97b9f801e513ad2d3f",
+        "rev": "c6d676594d436793ef16327d35fecc080938547d",
         "type": "github"
       },
       "original": {
