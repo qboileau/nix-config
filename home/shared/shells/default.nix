@@ -33,6 +33,13 @@
         font = {
           size = 12;
         };
+        keyboard.bindings = [
+          {
+            key = "Enter";
+            mods = "Shift";
+            chars = builtins.fromJSON ''"\u001b\r"'';
+          }
+        ];
       };
     };  
 

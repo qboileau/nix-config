@@ -85,6 +85,12 @@ in {
         command = "-workbench.action.quit";
         when = "";
       }
+      {
+        key = "shift+enter"; # Claude Code newline; /terminal-setup can't patch the read-only store symlink
+        command = "workbench.action.terminal.sendSequence";
+        args.text = builtins.fromJSON ''"\u001b\r"'';
+        when = "terminalFocus";
+      }
     ];
     userSettings = {
       "chat.viewSessions.orientation" = "stacked";
