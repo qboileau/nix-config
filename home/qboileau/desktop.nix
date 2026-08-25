@@ -61,6 +61,7 @@
   # Dev tools - minimal profile for desktop
   dev.languages.python.enable = true;
   dev.languages.nodejs.enable = true;
+  dev.languages.go.enable = true;
   dev.tools.ai.enable = true;
   dev.tools.security.enable = true;
   
