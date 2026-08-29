@@ -49,10 +49,17 @@ in
       bar = lib.mkOption {
         type = lib.types.enum [
           "waybar"
+          "ashell"
           "ironbar"
         ];
         default = "waybar";
-        description = "Select the bar to use with Hyprland. Either waybar or ironbar";
+        description = ''
+          Status bar to run under Hyprland. Exactly one is enabled; each bar's module owns its
+          own config (./waybar.nix, ./ashell.nix, ./ironbar.nix).
+
+          "ashell" is pinned to pkgs.unstable (see ./ashell.nix). "ironbar" is not imported at
+          the moment.
+        '';
       };
       layout = lib.mkOption {
         type = lib.types.enum [
@@ -105,6 +112,7 @@ in
     ./hyprlock.nix
     ./hyprpaper.nix
     ./waybar.nix
+    ./ashell.nix
     # ./ironbar.nix
     # ./flameshot.nix
     ./satty.nix
