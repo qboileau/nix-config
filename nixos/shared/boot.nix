@@ -192,7 +192,7 @@ in {
     # Plymouth configuration (uses official boot.plymouth.enable option)
     (lib.mkIf cfg.plymouth.enable {
       boot.plymouth = {
-        nixos-loading.variant = "default";
+        nixos-loading.variant = "spin";
         theme = "nixos-loading-default";
         themePackages = [
           inputs.nixos-loading-plymouth.packages.${pkgs.stdenv.hostPlatform.system}.nixos-loading-default
