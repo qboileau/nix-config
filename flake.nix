@@ -152,6 +152,7 @@
               krewfile.homeManagerModules.krewfile
               nix-flatpak.homeManagerModules.nix-flatpak
               # ironbar.homeManagerModules.default
+              outputs.homeManagerModules.cclaude
             ];
             home-manager.useUserPackages = true;
             home-manager.users.${username} = import ./home/qboileau/framework.nix;
@@ -178,6 +179,7 @@
               krewfile.homeManagerModules.krewfile
               nix-flatpak.homeManagerModules.nix-flatpak
               # ironbar.homeManagerModules.default
+              outputs.homeManagerModules.cclaude
             ];
             home-manager.useUserPackages = true;
             home-manager.users.${username} = import ./home/qboileau/framework-amd.nix;
@@ -202,6 +204,7 @@
               nix-flatpak.homeManagerModules.nix-flatpak
               # ironbar.homeManagerModules.default
               noctalia.homeModules.default
+              outputs.homeManagerModules.cclaude
             ];
             home-manager.useUserPackages = true;
             home-manager.users.${username} = import ./home/qboileau/desktop.nix;

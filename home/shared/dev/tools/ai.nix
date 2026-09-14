@@ -85,15 +85,16 @@ in {
   };
 
   config = lib.mkIf cfg.ai.enable {
-    home.packages = with pkgs; [ 
+    home.packages = with pkgs; [
       unstable.claude-monitor
       unstable.github-copilot-cli
       #unstable.mistral-vibe
-      unstable.llama-cpp 
+      unstable.llama-cpp
       unstable.oterm
       unstable.lmstudio
       unstable.tgpt
       unstable.aichat
+      unstable.graphify
       unstable.python314Packages.transformers
       local.boucle-framework-hooks
       # unstable.gpt4all
@@ -103,8 +104,6 @@ in {
     ] ++ lib.optionals (!cfg.ai.amd) [
       unstable.ollama
     ];
-
-    
 
     # aichat configuration — use local Ollama as default backend
     xdg.configFile."aichat/config.yaml" = {
@@ -140,6 +139,12 @@ in {
       enable = true;
       package = pkgs.unstable.claude-code;
       settings = claudeSettings;
+    };
+
+    # `cclaude`: same Claude Code, but sandboxed in a container
+    programs.cclaude = {
+      enable = true;
+      package = pkgs.unstable.claude-code;
     };
 
     # Claude Code - global instructions via ~/.claude/CLAUDE.md
