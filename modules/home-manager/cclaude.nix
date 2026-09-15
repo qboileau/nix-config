@@ -1,6 +1,10 @@
 # Runs Claude Code inside a docker container (`cclaude`) instead of on the host:
-# only $PWD and ~/.claude* are visible, env is an explicit allow-list, but the
-# host /nix store and nix-daemon are shared so `nix shell` stays cheap.
+# only $PWD is writable, the claude config is shared read-only (plus the
+# credentials, for account and MCP auth) while the session state stays in the
+# box, the env is an explicit allow-list and the network is a
+# plain bridge (`cclaude --net host` opts back into the host loopback). The
+# host /nix store and nix-daemon are shared so `nix shell` stays cheap — note
+# that the daemon is a privileged socket, even though this client is untrusted.
 { config, lib, pkgs, osConfig, ... }:
 
 let
@@ -43,9 +47,40 @@ let
     name = "cclaude";
     runtimeInputs = [ dockerPkg ];
     text = ''
+      # `cclaude --net host` re-exposes the host loopback (kubectl port-forwards,
+      # ollama, ...) to the container; the default bridge keeps it out.
+      NET=bridge
+      if [ "''${1:-}" = "--net" ]; then
+        NET="$2"
+        shift 2
+      fi
+
       HERE="$(pwd)"
-      mkdir -p "$HOME/.claude"
-      touch "$HOME/.claude.json"
+
+      # The box keeps its own claude state: the host ~/.claude holds the OAuth
+      # credentials and every past session transcript, and is writable enough to
+      # plant hooks that the *host* claude would then run.
+      STATE="''${XDG_DATA_HOME:-$HOME/.local/share}/cclaude"
+      mkdir -p "$STATE/claude"
+      touch "$STATE/claude.json"
+
+      # Config is still shared from the host, so the box behaves like the host
+      # claude. Mountpoints are pre-created, otherwise docker makes them
+      # root-owned inside $STATE.
+      shared=()
+      add_share() { # <name in ~/.claude> [mount options]
+        local src="$HOME/.claude/$1"
+        [ -e "$src" ] || return 0
+        if [ ! -e "$STATE/claude/$1" ]; then
+          if [ -d "$src" ]; then mkdir -p "$STATE/claude/$1"; else touch "$STATE/claude/$1"; fi
+        fi
+        shared+=(-v "$src:/home/claude/.claude/$1''${2:+:$2}")
+      }
+      for f in CLAUDE.md settings.json .credentials.json skills; do add_share "$f" ro; done
+
+      if [ -z "''${CLAUDE_CODE_OAUTH_TOKEN:-}" ] && [ ! -e "$HOME/.claude/.credentials.json" ]; then
+        echo "[cclaude] no credentials found: the box logs in separately, its state lives in $STATE" >&2
+      fi
 
       # nix and git resolve $HOME through getpwuid, so the host uid needs a
       # passwd entry; it is only known at runtime, hence generated here.
@@ -57,10 +92,14 @@ let
 
       exec docker run --rm -it \
         --user "$(id -u):$(id -g)" \
-        --network host \
+        --network "$NET" \
+        --security-opt no-new-privileges \
+        --cap-drop ALL \
+        --pids-limit 2048 \
         -v "$HERE:/workspace" \
-        -v "$HOME/.claude:/home/claude/.claude" \
-        -v "$HOME/.claude.json:/home/claude/.claude.json" \
+        -v "$STATE/claude:/home/claude/.claude" \
+        -v "$STATE/claude.json:/home/claude/.claude.json" \
+        "''${shared[@]}" \
         -v "$NSS_DIR/passwd:/etc/passwd:ro" \
         -v "$NSS_DIR/group:/etc/group:ro" \
         -v /nix:/nix:ro \
