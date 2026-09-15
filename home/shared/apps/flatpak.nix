@@ -39,6 +39,11 @@ in {
           # Force Wayland where possible for better performance and security
           Context.sockets = lib.mkDefault ["wayland" "!x11" "!fallback-x11"];
           
+          # Drop host-only QML style from the sandbox: org.hyprland.style lives in
+          # hyprland-qtutils on the host, so Qt apps inside a Flatpak fail to start
+          # ("module org.hyprland.style is not installed").
+          Context."unset-environment" = ["QT_QUICK_CONTROLS_STYLE"];
+          
           Environment = {
             # Fix cursor theme in Flatpak apps
             XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
