@@ -1,7 +1,7 @@
 # Runs Claude Code inside a docker container (`cclaude`) instead of on the host:
-# only $PWD is writable, the claude config is shared read-only (plus the
-# credentials, for account and MCP auth) while the session state stays in the
-# box, the env is an explicit allow-list and the network is a
+# only $PWD is writable, the claude config is shared read-only while the
+# session state and the login stay in the box, the env is an explicit
+# allow-list and the network is a
 # plain bridge (`cclaude --net host` opts back into the host loopback). The
 # host /nix store and nix-daemon are shared so `nix shell` stays cheap — note
 # that the daemon is a privileged socket, even though this client is untrusted.
@@ -57,12 +57,16 @@ let
 
       HERE="$(pwd)"
 
-      # The box keeps its own claude state: the host ~/.claude holds the OAuth
-      # credentials and every past session transcript, and is writable enough to
-      # plant hooks that the *host* claude would then run.
+      # The box keeps its own claude state: the host ~/.claude holds every past
+      # session transcript, and is writable enough to plant hooks that the
+      # *host* claude would then run.
+      # Mounted as the whole container $HOME: claude rewrites ~/.claude.json by
+      # rename, which is EBUSY against a bind-mounted *file* but fine inside a
+      # bind-mounted directory. It is seeded rather than touch'd because claude
+      # parses it at startup and an empty file is a JSON error.
       STATE="''${XDG_DATA_HOME:-$HOME/.local/share}/cclaude"
-      mkdir -p "$STATE/claude"
-      touch "$STATE/claude.json"
+      mkdir -p "$STATE/.claude"
+      [ -s "$STATE/.claude.json" ] || echo '{}' > "$STATE/.claude.json"
 
       # Config is still shared from the host, so the box behaves like the host
       # claude. Mountpoints are pre-created, otherwise docker makes them
@@ -71,15 +75,20 @@ let
       add_share() { # <name in ~/.claude> [mount options]
         local src="$HOME/.claude/$1"
         [ -e "$src" ] || return 0
-        if [ ! -e "$STATE/claude/$1" ]; then
-          if [ -d "$src" ]; then mkdir -p "$STATE/claude/$1"; else touch "$STATE/claude/$1"; fi
+        if [ ! -e "$STATE/.claude/$1" ]; then
+          if [ -d "$src" ]; then mkdir -p "$STATE/.claude/$1"; else touch "$STATE/.claude/$1"; fi
         fi
         shared+=(-v "$src:/home/claude/.claude/$1''${2:+:$2}")
       }
-      for f in CLAUDE.md settings.json .credentials.json skills; do add_share "$f" ro; done
+      for f in CLAUDE.md settings.json skills; do add_share "$f" ro; done
 
-      if [ -z "''${CLAUDE_CODE_OAUTH_TOKEN:-}" ] && [ ! -e "$HOME/.claude/.credentials.json" ]; then
-        echo "[cclaude] no credentials found: the box logs in separately, its state lives in $STATE" >&2
+      # Credentials are deliberately *not* shared: they are the one piece of
+      # config claude has to write back (the login flow, and every OAuth
+      # refresh afterwards), so a ro mount silently loses the session. Sharing
+      # them writable would instead let the box rotate the refresh token out
+      # from under the host claude. So the box logs in once, on its own.
+      if [ -z "''${CLAUDE_CODE_OAUTH_TOKEN:-}" ] && [ ! -s "$STATE/.claude/.credentials.json" ]; then
+        echo "[cclaude] the box logs in separately from the host; its state lives in $STATE" >&2
       fi
 
       # nix and git resolve $HOME through getpwuid, so the host uid needs a
@@ -97,8 +106,7 @@ let
         --cap-drop ALL \
         --pids-limit 2048 \
         -v "$HERE:/workspace" \
-        -v "$STATE/claude:/home/claude/.claude" \
-        -v "$STATE/claude.json:/home/claude/.claude.json" \
+        -v "$STATE:/home/claude" \
         "''${shared[@]}" \
         -v "$NSS_DIR/passwd:/etc/passwd:ro" \
         -v "$NSS_DIR/group:/etc/group:ro" \
