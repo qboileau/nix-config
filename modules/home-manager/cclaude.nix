@@ -57,6 +57,17 @@ let
 
       HERE="$(pwd)"
 
+      # cclaude_<workdir>_<random>: the suffix keeps concurrent boxes in the
+      # same directory from colliding. Docker names allow [a-zA-Z0-9_.-] only,
+      # and the constant prefix covers the must-be-alphanumeric first char.
+      SUFFIX_CHARS=abcdefghijklmnopqrstuvwxyz0123456789
+      SUFFIX=""
+      for _ in 1 2 3 4 5; do
+        SUFFIX+="''${SUFFIX_CHARS:RANDOM%''${#SUFFIX_CHARS}:1}"
+      done
+      NAME="''${HERE##*/}"
+      NAME="cclaude_''${NAME//[^a-zA-Z0-9_.-]/_}_$SUFFIX"
+
       # The box keeps its own claude state: the host ~/.claude holds every past
       # session transcript, and is writable enough to plant hooks that the
       # *host* claude would then run.
@@ -100,6 +111,7 @@ let
       printf 'root:x:0:\nclaude:x:%s:\n' "$(id -g)" > "$NSS_DIR/group"
 
       exec docker run --rm -it \
+        --name "$NAME" \
         --user "$(id -u):$(id -g)" \
         --network "$NET" \
         --security-opt no-new-privileges \

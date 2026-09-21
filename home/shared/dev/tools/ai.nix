@@ -69,12 +69,30 @@ let
     - **KISS**: Prefer the simplest solution. Avoid over-engineering.
     - **DRY**: Avoid duplication, but don't over-abstract for single-use cases.
     - **One-liners**: Prefer concise expressions over verbose equivalents when readability is not lost.
-    - **Comments**: Only comment non-obvious code. Skip comments that restate what the code clearly does. Keep comments short — one line when possible.
+    - **Comments**: Code must be self-explanatory. Well-named functions, variables, types and small units need no narration. Write a comment only when it says what the code cannot: *why* a non-obvious choice was made, a workaround and the reason it exists, a link to a spec/issue/doc, or an invariant not visible locally. Never restate what the code does, never add section labels (`// loop over users`), never leave commented-out code, never write a docstring that just repeats the signature. If you feel a comment is needed to explain *what* happens, rename or extract instead. Keep comments short — one line when possible.
     - **Explicit over implicit**: Avoid magic values — use named constants.
     - **Pure functions**: Prefer side-effect-free functions. Isolate side effects at the edges.
     - **Fail loudly**: Don't swallow errors silently. Surface failures with actionable messages.
     - **No defensive bloat**: Skip null checks and guards for cases that can't happen — only validate at system boundaries.
+    - **Types encode the rules**: Let the type system carry the business constraints so invalid states cannot be represented, instead of guarding against them at runtime. Prefer sum types (enums, unions, sealed/ADT) over boolean flags and stringly-typed values, dedicated types over raw `string`/`int`, non-empty/refined types over emptiness checks, required fields over optional-plus-null-check, immutable structures over mutation guards. Parse and validate once at the boundary, return a precise type, and let everything downstream trust it rather than re-checking. When the compiler can reject a bad state, no test or guard should be written for it.
+    - **Hexagonal by default**: Keep the business domain free of infrastructure. Domain logic must not import HTTP, SQL, queues, files or SDK types; external concerns live in adapters behind an interface the domain owns. No need for a strict ports-and-adapters ceremony — what matters is that layers stay clearly separated so any connector can be swapped or faked, and the domain can be tested without booting anything.
+    - **Bounded contexts**: Before adding to an existing module, ask which context the concept belongs to. Don't merge two contexts into one shared model just because they use the same word — each context keeps its own model, vocabulary and owner, and they talk through explicit translation at the boundary rather than by sharing entities. Prefer a little duplication across contexts over a coupled god-model.
     - **Don't assume**: When intent or context is unclear, verify by inspecting the code/files first, or ask for confirmation before proceeding.
+
+    ### When principles collide
+
+    - Scale first: YAGNI and KISS win on scripts and small single-purpose tools; hexagonal separation and bounded contexts win as soon as the code has more than one connector or more than one owner.
+    - Bounded contexts beat DRY: duplication across contexts is correct, duplication within one context is not.
+    - Types beat guards, guards beat silent failure. In dynamic languages, apply "types encode the rules" by validating once into a single boundary type (dataclass, schema, branded type) instead of re-checking downstream.
+    - Readability beats concision: when a one-liner hides intent, name the parts.
+
+    ## Keeping these principles applied
+
+    These rules hold for the whole session, not just the first edit:
+    - Every plan, todo list or task breakdown that touches code ends with a review step: "check the diff against the code style principles".
+    - Before reporting any coding task as done, self-review your own diff and verify: no comment that restates the code, no commented-out code, no avoidable runtime guard for a state the type system could make unrepresentable, no abstraction with a single use.
+    - Fix what the self-review finds before reporting completion — don't report it as a known caveat.
+    - After a context compaction or a long session, re-read these principles before continuing to edit code.
   '';
 in {
   options = {
