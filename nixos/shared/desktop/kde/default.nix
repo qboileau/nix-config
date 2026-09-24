@@ -26,6 +26,20 @@
     };
   };
 
+  # KService (kbuildsycoca6) only registers applications listed in the XDG
+  # applications.menu, which only DEs ship. Without it Dolphin sees no handlers and
+  # prompts "Open with" for every file despite mimeapps.list.
+  environment.etc."xdg/menus/applications.menu".text = ''
+    <!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN" "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd">
+    <Menu>
+      <Name>Applications</Name>
+      <DefaultAppDirs/>
+      <DefaultDirectoryDirs/>
+      <DefaultMergeDirs/>
+      <Include><All/></Include>
+    </Menu>
+  '';
+
   environment.systemPackages = with pkgs; [
     kdePackages.ark
     kdePackages.okular

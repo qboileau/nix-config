@@ -51,6 +51,7 @@ in {
       mime.enable = true;
       mimeApps = let 
         codeEditor = "code.desktop";
+        textEditor = "org.x.editor.desktop";
         archive = "org.kde.ark.desktop";
         imageViewer = "org.kde.gwenview.desktop";
         videoPlayer = "mpv.desktop";
@@ -69,6 +70,8 @@ in {
           "application/yaml" = codeEditor;
           "application/xml" = codeEditor;
           "application/json" = codeEditor;
+          "text/plain" = textEditor;
+          "text/x-log" = textEditor;
           "application/x-gzip" = archive;
           "application/zip" = archive;
           "application/rar" = archive;

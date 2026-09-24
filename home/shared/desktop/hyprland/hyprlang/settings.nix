@@ -93,7 +93,6 @@ lib.mkIf (config.hyprland.configType == "hyprlang") {
       "XDG_CURRENT_DESKTOP,Hyprland"
       "XDG_SESSION_TYPE,wayland"
       "XDG_SESSION_DESKTOP,Hyprland"
-      "XDG_MENU_PREFIX,plasma-" # fix xdg file associations for Dolphin
 
       #https://wiki.hypr.land/Configuring/Environment-variables/#qt-variables
       "QT_QPA_PLATFORM,wayland;xcb"
