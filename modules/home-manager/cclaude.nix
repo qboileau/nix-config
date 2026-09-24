@@ -30,13 +30,13 @@ let
         "PATH=/bin:/usr/bin"
       ];
       Entrypoint = [ "${cfg.package}/bin/claude" ];
-      WorkingDir = "/workspace";
+      WorkingDir = "/workspaces";
     };
     # The container runs as the host uid, which owns nothing in the image, so
     # $HOME has to be world-writable for claude to write its own state there.
     extraCommands = ''
-      mkdir -p home/claude workspace tmp
-      chmod -R 0777 home tmp workspace
+      mkdir -p home/claude workspaces tmp
+      chmod -R 0777 home tmp workspaces
     '';
   };
 
@@ -57,16 +57,28 @@ let
 
       HERE="$(pwd)"
 
+      # Sanitized once and reused for both the container name and the workspace
+      # path. Docker names allow [a-zA-Z0-9_.-] only, which is the stricter of
+      # the two, so one slug satisfies both.
+      DIR="''${HERE##*/}"
+      DIR="''${DIR//[^a-zA-Z0-9_.-]/_}"
+      [ -n "$DIR" ] || DIR=root # cclaude run from /
+
+      # Claude keys session history by cwd, so mounting every project on a
+      # single /workspace piled all of their transcripts into one bucket.
+      # Per-directory mountpoints keep that history separated. Note that two
+      # host directories sharing a basename still land on the same workspace.
+      WORKSPACE="/workspaces/$DIR"
+
       # cclaude_<workdir>_<random>: the suffix keeps concurrent boxes in the
-      # same directory from colliding. Docker names allow [a-zA-Z0-9_.-] only,
-      # and the constant prefix covers the must-be-alphanumeric first char.
+      # same directory from colliding, the constant prefix covers docker's
+      # must-be-alphanumeric first char.
       SUFFIX_CHARS=abcdefghijklmnopqrstuvwxyz0123456789
       SUFFIX=""
       for _ in 1 2 3 4 5; do
         SUFFIX+="''${SUFFIX_CHARS:RANDOM%''${#SUFFIX_CHARS}:1}"
       done
-      NAME="''${HERE##*/}"
-      NAME="cclaude_''${NAME//[^a-zA-Z0-9_.-]/_}_$SUFFIX"
+      NAME="cclaude_''${DIR}_$SUFFIX"
 
       # The box keeps its own claude state: the host ~/.claude holds every past
       # session transcript, and is writable enough to plant hooks that the
@@ -117,7 +129,8 @@ let
         --security-opt no-new-privileges \
         --cap-drop ALL \
         --pids-limit 2048 \
-        -v "$HERE:/workspace" \
+        -v "$HERE:$WORKSPACE" \
+        --workdir "$WORKSPACE" \
         -v "$STATE:/home/claude" \
         "''${shared[@]}" \
         -v "$NSS_DIR/passwd:/etc/passwd:ro" \
