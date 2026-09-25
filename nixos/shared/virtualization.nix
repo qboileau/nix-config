@@ -68,6 +68,13 @@ in {
           };
         };
       };
+
+      # Chromium aborts in-flight requests (ERR_NETWORK_CHANGED) on any IP address change, and the
+      # kernel assigns fe80:: to every docker veth/bridge; daemon.json has no option to prevent it.
+      # https://github.com/docker/for-linux/issues/914
+      services.udev.extraRules = ''
+        ACTION=="add", SUBSYSTEM=="net", KERNEL=="veth*|br-*|docker0", RUN+="${pkgs.procps}/bin/sysctl -w net.ipv6.conf.$name.disable_ipv6=1"
+      '';
     }
 
     # libvirtd and virt-manager
