@@ -1,9 +1,8 @@
 # Runs Claude Code inside a docker container (`cclaude`) instead of on the host:
-# only $PWD is writable, the claude config is shared read-only while the
-# session state and the login stay in the box, the env is an explicit
-# allow-list and the network is a
-# plain bridge (`cclaude --net host` opts back into the host loopback). The
-# host /nix store and nix-daemon are shared so `nix shell` stays cheap — note
+# only $PWD and its sibling worktree dir are writable, the claude config is
+# shared read-only while the session state and the login stay in the box, the
+# env is an explicit allow-list and the network is a plain bridge (`cclaude
+# --net host` opts back into the host loopback). The host /nix store and nix-daemon are shared so `nix shell` stays cheap — note
 # that the daemon is a privileged socket, even though this client is untrusted.
 { config, lib, pkgs, osConfig, ... }:
 
@@ -14,7 +13,7 @@ let
     name = "cclaude";
     tag = "latest";
     contents = [ cfg.package pkgs.dockerTools.usrBinEnv ] ++ (with pkgs; [
-      bashInteractive coreutils gnugrep gnused which findutils gnumake
+      bashInteractive coreutils gnugrep gnused which findutils gnumake less
       git cacert gnupg openssh curl wget
       ripgrep jq gh
       fd bat eza
@@ -45,7 +44,7 @@ let
 
   cclaude = pkgs.writeShellApplication {
     name = "cclaude";
-    runtimeInputs = [ dockerPkg ];
+    runtimeInputs = [ dockerPkg pkgs.git ];
     text = ''
       # `cclaude --net host` re-exposes the host loopback (kubectl port-forwards,
       # ollama, ...) to the container; the default bridge keeps it out.
@@ -69,6 +68,45 @@ let
       # Per-directory mountpoints keep that history separated. Note that two
       # host directories sharing a basename still land on the same workspace.
       WORKSPACE="/workspaces/$DIR"
+
+      # Worktrees live next to the project rather than inside it, so they stay
+      # out of rg/IDE/build scans and need no gitignore. The mount mirrors the
+      # host layout and git records relative links (worktree.useRelativePaths),
+      # so the same worktree resolves from the host for review.
+      WORKTREES_HOST="''${HERE%/*}/.cclaude-worktrees/$DIR"
+      WORKTREES="/workspaces/.cclaude-worktrees/$DIR"
+      mkdir -p "$WORKTREES_HOST"
+      WORKTREE_PROMPT="You run in a container where only $WORKSPACE and $WORKTREES are shared with the host. \
+      When you need a git worktree, do not use the built-in worktree tool (it would nest it under .claude/worktrees): \
+      create it with \`git worktree add $WORKTREES/<name> -b <branch>\` and leave it in place so the user can review it from the host."
+
+      # Git config reaches the box as GIT_CONFIG_* env values, never as the
+      # host files: those carry credential helpers, and their includeIf rules
+      # would not match under /workspaces anyway.
+      git_env=()
+      git_count=0
+      set_git() { # <key> <value>
+        git_env+=(-e "GIT_CONFIG_KEY_$git_count=$1" -e "GIT_CONFIG_VALUE_$git_count=$2")
+        git_count=$((git_count + 1))
+      }
+      set_git worktree.useRelativePaths true
+
+      # Resolved against $HERE so the host includeIf picks the right identity.
+      for key in user.name user.email; do
+        value="$(git -C "$HERE" config "$key")" || continue
+        set_git "$key" "$value"
+      done
+
+      # No key material enters the box: its commits stay unsigned and the user
+      # signs them from the host after review.
+      set_git commit.gpgsign false
+      set_git tag.gpgsign false
+
+      # GitHub over HTTPS with the (ideally fine-grained) GITHUB_TOKEN instead
+      # of forwarding the ssh-agent, which would expose every loaded key.
+      set_git url.https://github.com/.insteadOf git@github.com:
+      set_git url.https://github.com/.insteadOf ssh://git@github.com/
+      set_git credential.https://github.com.helper '!gh auth git-credential'
 
       # cclaude_<workdir>_<random>: the suffix keeps concurrent boxes in the
       # same directory from colliding, the constant prefix covers docker's
@@ -131,6 +169,9 @@ let
         --pids-limit 2048 \
         -v "$HERE:$WORKSPACE" \
         --workdir "$WORKSPACE" \
+        -v "$WORKTREES_HOST:$WORKTREES" \
+        -e GIT_CONFIG_COUNT="$git_count" \
+        "''${git_env[@]}" \
         -v "$STATE:/home/claude" \
         "''${shared[@]}" \
         -v "$NSS_DIR/passwd:/etc/passwd:ro" \
@@ -140,7 +181,7 @@ let
         -v /etc/nix/registry.json:/etc/nix/registry.json:ro \
         -e CLAUDE_CODE_OAUTH_TOKEN \
         -e GITHUB_TOKEN \
-        cclaude:latest "$@"
+        cclaude:latest --append-system-prompt "$WORKTREE_PROMPT" "$@"
     '';
   };
 in {
