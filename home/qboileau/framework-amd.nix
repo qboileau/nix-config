@@ -10,7 +10,7 @@
   username,
   ...
 }: {
-  
+
   # You can import other home-manager modules here
   imports = [
     ../shared
@@ -28,18 +28,18 @@
     desktopFile = "brave-browser.desktop";
   };
   gaming.enable = false;
-  
+
   # Apps
   apps.productivity.enable = true;
   apps.communication.slack.enable = true;  # Work communication
-  
+
   # 1Password is enabled at the system level (security.onepassword)
   apps.security.proton.enable = true;
-  
+
   apps.browsers.firefox.enable = true;
   apps.browsers.brave.enable = true;
   apps.browsers.chromium.enable = true;
-  
+
   apps.media.spotify.enable = true;
   apps.media.qbz.enable = true;
   apps.media.mpv.enable = true;
@@ -47,10 +47,10 @@
   # Tools
   tools.monitoring.enable = true;
   tools.bluetooth.enable = true;
-  
+
   # Services
   services.cloudSync.dropbox.enable = true;
-  
+
   # Dev tools - full profile for work laptop
   # Languages
   dev.languages.java.enable = true;
@@ -58,7 +58,7 @@
   dev.languages.nodejs.enable = true;
   dev.languages.go.enable = true;
   dev.languages.python.enable = true;
-  
+
   # DevOps/Backend tools
   dev.tools.build.enable = true;
   dev.tools.kubernetes.enable = true;
@@ -71,7 +71,7 @@
   dev.tools.security.enable = true;
   dev.tools.docs.enable = true;  # Documentation tools
   # dev.tools.virtualization.enable = true;  # Uncomment if needed
-  
+
   # Editors
   editors.vim.enable = true;
   editors.vim.defaultEditor = false;
@@ -88,6 +88,8 @@
   #nm-applet
   services.network-manager-applet.enable = true;
   services.dropbox.enable = true;
+  services.kdeconnect.enable = true;
+  services.kdeconnect.indicator = true;
 
   # Enable home-manager
   programs.home-manager.enable = true;

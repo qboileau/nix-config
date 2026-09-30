@@ -50,6 +50,7 @@
   networking = {
     hostName = "framework-amd";
     useAdvancedDns = true; # Use dnsmasq for advanced DNS setup
+    enableKdeConnect = true;
     customTimeServers = true;
     hosts = {
       "127.0.0.1" = ["framework-amd"];
