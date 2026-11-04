@@ -108,7 +108,7 @@ in {
       unstable.github-copilot-cli
       #unstable.mistral-vibe
       unstable.llama-cpp
-      unstable.oterm
+      oterm # unstable's depends on fastmcp-slim, marked broken there (2026-11)
       unstable.lmstudio
       unstable.tgpt
       unstable.aichat

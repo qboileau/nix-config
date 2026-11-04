@@ -6,8 +6,8 @@
 -- thin wrapper around hl.dispatch(<lua expr>) with no legacy-name path, and spawned processes
 -- have stdout/stderr sent to /dev/null, so the failures were completely silent.
 --
--- Deployed to ~/.config/hypr/i3move.lua and pulled in from the generated hyprland.lua as
--- `local i3move = require("i3move")`. Editor tooling works here: ~/.config/hypr/.luarc.json
+-- Loaded from its store path by the generated hyprland.lua (`dofile`, see ../lua/binds.nix)
+-- and also deployed to ~/.config/hypr/i3move.lua. Editor tooling works here: ~/.config/hypr/.luarc.json
 -- (written by home-manager) points lua-ls at Hyprland's own stubs and declares `hl`.
 --
 -- Test a direction by hand against the running compositor:

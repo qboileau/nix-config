@@ -26,12 +26,12 @@ update-input: ## Update a single flake input (e.g., make update-input INPUT=nixp
 .PHONY: update-system
 update-system: ## Update NixOS configuration (use TAG=mytag to label the generation in boot menu)
 ifdef TAG
-	sudo NIX_CONFIG="$(NIX_CONFIG)" NIXOS_LABEL="$(TAG)" nixos-rebuild switch --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace \
+	sudo NIX_CONFIG="$$NIX_CONFIG" NIXOS_LABEL="$(TAG)" nixos-rebuild switch --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace \
 		--option substituters $(CACHE_URLS) \
 		--option trusted-public-keys $(CACHE_KEYS) \
 		--max-jobs $(BUILD_JOBS) --cores $(BUILD_CORES)
 else
-	sudo NIX_CONFIG="$(NIX_CONFIG)" nixos-rebuild switch --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace \
+	sudo NIX_CONFIG="$$NIX_CONFIG" nixos-rebuild switch --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace \
 		--option substituters $(CACHE_URLS) \
 		--option trusted-public-keys $(CACHE_KEYS) \
 		--max-jobs $(BUILD_JOBS) --cores $(BUILD_CORES)
@@ -40,12 +40,12 @@ endif
 .PHONY: test-system
 test-system: ## Test NixOS configuration (use TAG=mytag to label the generation in boot menu)
 ifdef TAG
-	sudo NIX_CONFIG="$(NIX_CONFIG)" NIXOS_LABEL="$(TAG)" nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace \
+	sudo NIX_CONFIG="$$NIX_CONFIG" NIXOS_LABEL="$(TAG)" nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace \
 		--option substituters $(CACHE_URLS) \
 		--option trusted-public-keys $(CACHE_KEYS) \
 		--max-jobs $(BUILD_JOBS) --cores $(BUILD_CORES)
 else
-	sudo NIX_CONFIG="$(NIX_CONFIG)" nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace \
+	sudo NIX_CONFIG="$$NIX_CONFIG" nixos-rebuild test --flake ".#$(HOSTNAME)" --use-remote-sudo --show-trace \
 		--option substituters $(CACHE_URLS) \
 		--option trusted-public-keys $(CACHE_KEYS) \
 		--max-jobs $(BUILD_JOBS) --cores $(BUILD_CORES)

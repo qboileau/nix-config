@@ -79,6 +79,8 @@
   editors.intellij.enable = true;
   editors.xed.enable = true;
   editors.zed.enable = true;
+  hyprland.configType = "lua";
+  hyprland.layout = "dwindle";
   hyprland.autolock.enable = true;
   hyprland.autostart = [
     "touchegg"

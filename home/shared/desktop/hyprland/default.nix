@@ -16,6 +16,7 @@ let
   hyprPkgs = pkgs.unstable;
   hyprlandPkg = hyprPkgs.hyprland;
   hy3Pkg = hyprPkgs.hyprlandPlugins.hy3;
+  xdph = hyprPkgs.xdg-desktop-portal-hyprland;
 
   # hy3 is versioned after the Hyprland it targets (upstream tags are hl<hyprland ver>.<n>, so
   # 0.56.0.1 -> Hyprland 0.56.x). nixpkgs' mkHyprlandPlugin asserts NOTHING about this, so when
@@ -185,7 +186,9 @@ in
       # be the same build. To fall back to 0.54.3 for the RDNA4 bug, point hyprPkgs at
       # hyprland054 instead of editing these lines; that keeps hy3 in step automatically.
       package = hyprlandPkg;
-      portalPackage = hyprPkgs.xdg-desktop-portal-hyprland;
+      # home-manager's finalPortalPackage calls `.override { hyprland = ...; }`, an argument
+      # xdph >= 1.5.0 no longer takes; neutralise it until home-manager drops that override.
+      portalPackage = xdph // { override = _: xdph; };
       # Only loaded when actually selected — see the hyprland.layout option. Plugins load at
       # compositor start, so switching layout needs a Hyprland restart, not a reload.
       plugins = lib.optional usingHy3 hy3Pkg;

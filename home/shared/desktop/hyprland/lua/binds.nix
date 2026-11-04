@@ -151,14 +151,16 @@ let
     base-bind ++ workspace-to-monitor-bind ++ (if usingHy3 then hy3-bind else dwindle-bind);
 in
 lib.mkIf (config.hyprland.configType == "lua") {
-  # package.path already covers ~/.config/hypr/?.lua, so this is require()-able by name.
   # hy3 does its own group-aware focus/move, so the helper is dwindle-only.
+  # Still deployed to ~/.config/hypr for editor tooling and `hyprctl repl`.
   xdg.configFile."hypr/i3move.lua" = lib.mkIf (!usingHy3) { source = ./i3move.lua; };
 
   wayland.windowManager.hyprland.settings = lib.mkMerge [
     (lib.mkIf (!usingHy3) {
       # `_var` renders as a `local` ahead of every hl.* call, so the binds below can use it.
-      i3move = { _var = mkLuaInline ''require("i3move")''; };
+      # dofile by store path, not require: Hyprland derives package.path from the
+      # symlink-resolved hyprland.lua, i.e. /nix/store, so require("i3move") misses it.
+      i3move = { _var = mkLuaInline ''dofile("${./i3move.lua}")''; };
     })
     {
 
