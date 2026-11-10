@@ -106,7 +106,18 @@ in {
   # Enable SSD TRIM timer https://www.reddit.com/r/NixOS/comments/rbzhb1/if_you_have_a_ssd_dont_forget_to_enable_fstrim/
   services.fstrim.enable = true;
   
-  services.tuned.enable = true;
+  # Force the performance power profile. TuneD keeps its active profile in mutable /etc
+  # files, so ship them: mode = "0644" copies instead of symlinking, which lets tuned still
+  # switch at runtime while every activation/boot resets it back to performance.
+  services.tuned = {
+    enable = true;
+    ppdSettings.main.default = "performance";
+  };
+  environment.etc = {
+    "tuned/active_profile" = { text = "throughput-performance\n"; mode = "0644"; };
+    "tuned/profile_mode" = { text = "manual\n"; mode = "0644"; };
+    "tuned/ppd_base_profile" = { text = "performance\n"; mode = "0644"; };
+  };
 
   services.hardware.openrgb = { 
     enable = true;
