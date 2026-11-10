@@ -24,7 +24,7 @@ in {
     
     (lib.mkIf cfg.brave.enable {
       home.packages = with pkgs; [ 
-        unstable.brave
+        brave # TODO migrate to flatpak
       ];
     })
     
