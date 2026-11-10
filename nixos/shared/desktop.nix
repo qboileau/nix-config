@@ -107,6 +107,12 @@ in {
       # Enable Flatpak for GUI application management
       services.flatpak.enable = true;
 
+      # Enable AppImage support for running portable applications
+      programs.appimage = {
+        enable = true;
+        binfmt = true;
+      };
+
       # XDG Desktop Portal for proper desktop integration (required for Flatpak)
       xdg.portal = {
         enable = true;
