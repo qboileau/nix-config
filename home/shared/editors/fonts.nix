@@ -4,6 +4,7 @@ let
     nerd-fonts.symbols-only
     nerd-fonts.fira-code
     nerd-fonts.noto
+    nerd-fonts.mononoki
     noto-fonts
     noto-fonts-color-emoji
     font-awesome
@@ -29,6 +30,7 @@ in {
   fonts.fontconfig.defaultFonts.monospace = [
     "FiraCode Nerd Font Mono"
     "NotoMono Nerd Font Mono"
+    "Mononoki Nerd Font Mono"
   ];
   fonts.fontconfig.defaultFonts.emoji = [
     "FiraCode Nerd Font Mono"
