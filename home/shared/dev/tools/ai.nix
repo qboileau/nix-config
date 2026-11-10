@@ -111,7 +111,7 @@ in {
       oterm # unstable's depends on fastmcp-slim, marked broken there (2026-11)
       unstable.lmstudio
       unstable.tgpt
-      unstable.aichat
+      # unstable.aichat
       unstable.graphify
       unstable.python314Packages.transformers
       local.boucle-framework-hooks
