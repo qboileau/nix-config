@@ -18,9 +18,14 @@ in
     # it drives both hyprlang and lua configs. nixpkgs 26.05 is still on 0.8.0, which only speaks
     # the legacy hyprlang socket protocol — under a lua config the bar renders but workspace
     # clicks do nothing. Hence unstable.
-    package = pkgs.unstable.ashell;
+    # nixpkgs' cargoUseSystemLibs hook exports AWS_LC_SYS_USE_SYSTEM=1 for every Rust package,
+    # but ashell's derivation omits aws-lc, so aws-lc-sys panics. Drop once nixpkgs adds it.
+    package = pkgs.unstable.ashell.overrideAttrs (old: {
+      buildInputs = old.buildInputs ++ [ pkgs.unstable.aws-lc ];
+    });
     systemd.enable = true;
 
+    # https://malpenzibo.github.io/ashell/docs/configuration
     settings = {
       position = "Bottom";
       layer = "Top"; # ashell defaults to the Bottom layer, i.e. behind windows
@@ -70,7 +75,10 @@ in
       # waybar's look: solid black bar, white text, white accent (same as the Hyprland
       # active-border colour).
       appearance = {
-        style = "Solid";
+        bar = {
+          surface = "solid";
+          radius = "none";
+        };
         font_name = "FiraCode Nerd Font";
         opacity = 0.95;
         primary_color = "#ffffff";
