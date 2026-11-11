@@ -26,8 +26,8 @@ let
   exec = cmd: "hl.dsp.exec_cmd(${toLua cmd})";
 
   # hy3's lua functions live under hl.plugin.hy3, which only exists once the plugin has been
-  # loaded — and home-manager loads plugins from the hyprland.start hook, i.e. AFTER this file
-  # is evaluated. Referencing hl.plugin.hy3.* at the top level would therefore index nil, so
+  # loaded — and hl.plugin.load (see ../default.nix) loads it only after this file has been
+  # evaluated. Referencing hl.plugin.hy3.* at the top level would therefore index nil, so
   # wrap each one in a function: hl.bind also accepts a callback, resolved at keypress time.
   hy3 = call: "function() hl.dispatch(hl.plugin.hy3.${call}) end";
 

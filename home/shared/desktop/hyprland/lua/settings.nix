@@ -28,7 +28,7 @@ let
   # hyprlang's `exec-once` has no lua counterpart; autostart hangs off the start event.
   #
   # ORDERING: home-manager appends its own hyprland.start hook (dbus activation +
-  # hyprland-session.target + `hyprctl plugin load`) AFTER this one, whereas in hyprlang it
+  # hyprland-session.target) AFTER this one, whereas in hyprlang it
   # emitted that as the FIRST exec-once. Harmless here only because the list below runs its
   # own dbus-update-activation-environment; keep those lines if you reshuffle autostart.
   startHook = ''
@@ -167,8 +167,8 @@ lib.mkIf (config.hyprland.configType == "lua") {
 
       # hy3's own options.
       #
-      # These are only known to Hyprland once hy3 has registered them, and the plugin is loaded
-      # from the hyprland.start hook — i.e. after this file is first parsed. That works at
+      # These are only known to Hyprland once hy3 has registered them, and hl.plugin.load
+      # (see ../default.nix) loads it after this file is first parsed. That works at
       # runtime because loading a plugin schedules a full config reload
       # (Hyprland src/plugins/PluginSystem.cpp:135), which re-applies everything below.
       #

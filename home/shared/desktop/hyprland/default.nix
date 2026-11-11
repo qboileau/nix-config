@@ -199,7 +199,12 @@ in
       portalPackage = xdph // { override = _: xdph; };
       # Only loaded when actually selected — see the hyprland.layout option. Plugins load at
       # compositor start, so switching layout needs a Hyprland restart, not a reload.
-      plugins = lib.optional usingHy3 hy3Pkg;
+      # hyprlang only: under lua, home-manager's `hyprctl plugin load` start hook no longer
+      # leaves hy3 loaded on 0.57; the config has to declare it with hl.plugin.load instead.
+      plugins = lib.optional (usingHy3 && config.hyprland.configType == "hyprlang") hy3Pkg;
+      settings = lib.mkIf (usingHy3 && config.hyprland.configType == "lua") {
+        "plugin.load" = "${hy3Pkg}/lib/libhy3.so";
+      };
     };
 
   };
