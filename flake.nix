@@ -3,6 +3,9 @@
 
   inputs = {
     # Nixpkgs
+    # TODO(26.11): once released, bump to nixos-26.11 (glibc 2.44, mesa 26.2.x natively). That
+    # makes the system glibc match Mesa's, so drop the nixpkgs-mesa pin below AND the whole
+    # hardware.graphics package/package32 override in nixos/desktop/hardware-configuration.nix.
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     # Unstable channel used in overlay.
     # Uses the channel URL (not the git branch) so nix flake update always picks
@@ -32,6 +35,13 @@
     # last known-good 0.54.3, taken from the pre-26.05 unstable rev, while keeping the new
     # Mesa/kernel. Wired into home/shared/desktop/hyprland/default.nix. Remove to revert.
     nixpkgs-hyprland-054.url = "github:nixos/nixpkgs/da5ad661ba4e5ef59ba743f0d112cbc30e474f32";
+
+    # Last unstable rev still on glibc 2.42 (2026-08-22), carrying the mesa 26.2.1 AMD VCN
+    # decode fix that is the only reason we override Mesa. Newer unstable is glibc 2.44, and
+    # /run/opengl-driver libs are dlopen'd into processes that already loaded the stable glibc,
+    # which wins on the shared SONAME: "GLIBC_2.43 not found" -> no DRM device -> no greeter.
+    # Pinned separately so nixpkgs-unstable stays free to track HEAD. See TODO on nixpkgs above.
+    nixpkgs-mesa.url = "github:nixos/nixpkgs/2c423e03bbafcff28bfadc6781a4a8257f205cb5";
 
     #hyprland.url = "github:hyprwm/Hyprland?submodules=1&ref=refs/tags/v0.54.2";
     #https://github.com/outfoxxed/hy3
