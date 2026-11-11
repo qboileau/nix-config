@@ -11,7 +11,6 @@ let
 
   cclaudeImage = pkgs.dockerTools.buildLayeredImage {
     name = "cclaude";
-    tag = "latest";
     contents = [ cfg.package pkgs.dockerTools.usrBinEnv ] ++ (with pkgs; [
       bashInteractive coreutils gnugrep gnused which findutils gnumake less
       git cacert gnupg openssh curl wget
@@ -160,6 +159,11 @@ let
         "$(id -u)" "$(id -g)" > "$NSS_DIR/passwd"
       printf 'root:x:0:\nclaude:x:%s:\n' "$(id -g)" > "$NSS_DIR/group"
 
+      # Loaded lazily rather than at activation: `docker load` re-reads the whole
+      # tarball even when unchanged, which stalled boot by ~30s.
+      IMAGE=cclaude:${cclaudeImage.imageTag}
+      docker image inspect "$IMAGE" >/dev/null 2>&1 || docker load -i ${cclaudeImage}
+
       exec docker run --rm -it \
         --name "$NAME" \
         --user "$(id -u):$(id -g)" \
@@ -181,7 +185,7 @@ let
         -v /etc/nix/registry.json:/etc/nix/registry.json:ro \
         -e CLAUDE_CODE_OAUTH_TOKEN \
         -e GITHUB_TOKEN \
-        cclaude:latest --append-system-prompt "$WORKTREE_PROMPT" "$@"
+        "$IMAGE" --append-system-prompt "$WORKTREE_PROMPT" "$@"
     '';
   };
 in {
@@ -199,10 +203,5 @@ in {
     }];
 
     home.packages = [ cclaude ];
-
-    # No-op when the image content hash is unchanged since the last switch.
-    home.activation.cclaudeImage = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      $DRY_RUN_CMD ${dockerPkg}/bin/docker load -i ${cclaudeImage} >/dev/null 2>&1 || true
-    '';
   };
 }
