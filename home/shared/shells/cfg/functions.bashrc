@@ -226,5 +226,3 @@ generate_kubeconfig() {
   fi
   
 }
-
-$*
