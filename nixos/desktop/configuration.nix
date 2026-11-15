@@ -94,6 +94,8 @@
   ];
 
 
+  services.printing.canonMP620.enable = true;
+
   # Custom options
   gaming = { 
     enable = true;
