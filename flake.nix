@@ -73,6 +73,10 @@
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Claude Code / Claude Desktop / Orca. No nixpkgs.follows: upstream requires a current
+    # nixpkgs-unstable (we track stable) and only then serves cache.numtide.com hits.
+    llm-agents.url = "github:numtide/llm-agents.nix";
+
     # Declarative Flatpak management https://github.com/gmodena/nix-flatpak
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.7.0";
   };

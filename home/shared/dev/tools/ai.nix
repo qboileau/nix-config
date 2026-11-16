@@ -1,6 +1,7 @@
-{pkgs, config, lib, ...} :
+{pkgs, config, lib, inputs, ...} :
 let
   cfg = config.dev.tools;
+  llmAgents = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
   boucleHooks = pkgs.local.boucle-framework-hooks;
   claudeSettings = {
     model = "opus";
@@ -99,10 +100,14 @@ in {
     dev.tools.ai = {
       enable = lib.mkEnableOption "AI development and productivity tools";
       amd = lib.mkEnableOption "Enable AMD GPU support for AI tools (e.g. Mistral Vibe, LLaMA.cpp)";
+      claudeCode.enable = lib.mkEnableOption "Claude Code CLI, its `cclaude` sandbox and global CLAUDE.md" // { default = true; };
+      claudeDesktop.enable = lib.mkEnableOption "Claude Desktop app";
+      orca.enable = lib.mkEnableOption "Orca, an IDE for running parallel coding agents";
     };
   };
 
-  config = lib.mkIf cfg.ai.enable {
+  config = lib.mkIf cfg.ai.enable (lib.mkMerge [
+  {
     home.packages = with pkgs; [
       unstable.claude-monitor
       unstable.github-copilot-cli
@@ -152,24 +157,6 @@ in {
       '' + systemToolsInstructions;
     };
 
-
-    programs.claude-code = {
-      enable = true;
-      package = pkgs.unstable.claude-code;
-      settings = claudeSettings;
-    };
-
-    # `cclaude`: same Claude Code, but sandboxed in a container
-    programs.cclaude = {
-      enable = true;
-      package = pkgs.unstable.claude-code;
-    };
-
-    # Claude Code - global instructions via ~/.claude/CLAUDE.md
-    home.file.".claude/CLAUDE.md" = {
-      text = systemToolsInstructions;
-    };
-
     programs.opencode = {
       enable = true;
       package = pkgs.unstable.opencode;
@@ -189,5 +176,31 @@ in {
         theme = "opencode";
       };
     };
-  };
+  }
+
+  (lib.mkIf cfg.ai.claudeCode.enable {
+    programs.claude-code = {
+      enable = true;
+      package = llmAgents.claude-code;
+      settings = claudeSettings;
+    };
+
+    # `cclaude`: same Claude Code, but sandboxed in a container
+    programs.cclaude = {
+      enable = true;
+      package = llmAgents.claude-code;
+    };
+
+    # Claude Code - global instructions via ~/.claude/CLAUDE.md
+    home.file.".claude/CLAUDE.md" = {
+      text = systemToolsInstructions;
+    };
+  })
+
+  {
+    home.packages =
+      lib.optional cfg.ai.claudeDesktop.enable llmAgents.claude-desktop
+      ++ lib.optional cfg.ai.orca.enable llmAgents.orca;
+  }
+  ]);
 }

@@ -2,8 +2,8 @@
 HOSTNAME := $(shell hostname)
 BUILD_JOBS := 5
 BUILD_CORES := 10
-CACHE_URLS := "https://cache.nixos.org https://nix-community.cachix.org"
-CACHE_KEYS := "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+CACHE_URLS := "https://cache.nixos.org https://nix-community.cachix.org https://cache.numtide.com"
+CACHE_KEYS := "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
 
 # Pass GitHub token to Nix to avoid API rate-limiting when fetching flake inputs.
 # Set GITHUB_TOKEN in your shell environment before running make.
