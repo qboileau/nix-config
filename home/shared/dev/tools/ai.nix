@@ -3,8 +3,44 @@ let
   cfg = config.dev.tools;
   llmAgents = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
   boucleHooks = pkgs.local.boucle-framework-hooks;
+  kubeLocalGuard = pkgs.writeShellApplication {
+    name = "kube-local-guard";
+    runtimeInputs = with pkgs; [ jq kubectl gnugrep gnused ];
+    text = builtins.readFile ./kube-local-guard.sh;
+  };
+  # Listed under `ask` so a project's settings or a "don't ask again" click can't allow them.
+  remoteInfraTools = [
+    "aws" "gcloud" "gsutil" "bq" "az" "eksctl"
+    "terraform" "tofu" "terragrunt" "pulumi"
+    "tsh" "tctl" "kubectx" "kubens" "k9s"
+    "ssh" "scp" "sftp" "rsync"
+  ];
   claudeSettings = {
     model = "opus";
+    permissions = {
+      defaultMode = "acceptEdits";
+      allow = [
+        "Bash(eza *)"
+        "Bash(duf *)"
+        "Bash(bat *)"
+        "Bash(rg *)"
+        "Bash(fd *)"
+        "Bash(command cat *)"
+        "Bash(command grep *)"
+        "Bash(command ls *)"
+        "Bash(kubectl *)"
+        "Bash(helm *)"
+        "Bash(flux *)"
+      ];
+      ask = [
+        "Bash(bat *--pager*)"
+        "Bash(rg *--pre*)"
+        "Bash(rg *--hostname-bin*)"
+        "Bash(fd *--exec*)"
+        "Bash(fd *-x*)"
+        "Bash(fd *-X*)"
+      ] ++ map (tool: "Bash(${tool} *)") remoteInfraTools;
+    };
     hooks = {
       PreToolUse = [
         {
@@ -19,6 +55,9 @@ let
           hooks = [{
             type = "command";
             command = "${boucleHooks}/libexec/git-safe/hook.sh";
+          } {
+            type = "command";
+            command = lib.getExe kubeLocalGuard;
           }];
         }
       ];
@@ -47,13 +86,13 @@ let
 
     ## Rules for terminal commands
 
-    - Use `bat` instead of `cat` for reading files. If you need raw output without paging, use `bat --plain --paging=never` or call `$(which cat)` directly.
+    - Use `bat` instead of `cat` for reading files. If you need raw output without paging, use `bat --plain --paging=never` or `command cat`.
     - Use `rg` instead of `grep`. Note: `rg` flags differ from `grep` (e.g., `-E` is not supported, use `-e` for patterns, `--pcre2` for advanced regex).
     - **`rg -r` is NOT recursive** — it means in-place replacement (like `sed`). `rg` is always recursive by default. Use `-r <replacement>` only when doing substitutions (e.g., `rg foo -r bar`).
     - Use `eza` instead of `ls`. Common flags: `--tree`, `--git`, `-lah`.
     - Use `fd` instead of `find`. Syntax: `fd <pattern>` instead of `find . -name <pattern>`.
     - Shell aliases are set: `cat=bat`, `grep=rg`, `ls=eza`, `df=duf`. Avoid piping alias-incompatible flags.
-    - When you need the plain POSIX behavior (e.g., for scripting or parsing), use the full path: `$(which cat)`, `$(which grep)`, `$(which ls)`, `$(which find)`.
+    - When you need the plain POSIX behavior (e.g., for scripting or parsing), bypass the alias with the `command` builtin: `command cat`, `command grep`, `command ls`, `command find`. Never use `$(which …)`: command substitution always triggers a permission prompt.
     - The system runs NixOS. Binaries are in `/run/current-system/sw/bin/` or `~/.nix-profile/bin/`, not `/usr/bin/`.
 
     ## Nix development environments
@@ -63,6 +102,13 @@ let
     - If `shell.nix` exists, wrap every command with: `nix-shell --run '<command>'`
     - Commands that are already prefixed with `nix develop` or `nix-shell` do not need wrapping.
     - A PreToolUse hook enforces this: bare commands will be blocked. Retry with the wrapped version from the hook output.
+
+    ## Remote infrastructure
+
+    - Never change remote or cloud infrastructure yourself (`aws`, `gcloud`, `terraform apply`, `kubectl`/`helm` against a non-local cluster, `ssh` to a server…). Give me the exact command, I run it and paste the output back.
+    - Read-only inspection of remote infrastructure needs my approval: expect a prompt and say why you need it.
+    - Local Kubernetes clusters (k3d, kind, minikube, docker-desktop…) can be used freely with `kubectl`, `helm` and `flux`.
+    - Always pass the target context explicitly (`kubectl --context <ctx>`, `helm --kube-context <ctx>`, `flux --context <ctx>`): never rely on the current context, it may point to a remote cluster. List contexts with `kubectl config get-contexts`; never switch it with `use-context`.
 
     ## Code style principles
 
