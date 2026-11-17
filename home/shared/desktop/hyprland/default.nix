@@ -57,7 +57,7 @@ in
           Status bar to run under Hyprland. Exactly one is enabled; each bar's module owns its
           own config (./waybar.nix, ./ashell.nix, ./ironbar.nix).
 
-          "ashell" is pinned to pkgs.unstable (see ./ashell.nix). "ironbar" is not imported at
+          "ashell" comes from its upstream flake input (see ./ashell.nix). "ironbar" is not imported at
           the moment.
         '';
       };

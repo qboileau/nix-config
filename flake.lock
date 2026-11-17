@@ -20,6 +20,28 @@
         "type": "github"
       }
     },
+    "ashell": {
+      "inputs": {
+        "crane": "crane",
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ],
+        "rust-overlay": "rust-overlay"
+      },
+      "locked": {
+        "lastModified": 1794848482,
+        "narHash": "sha256-AThc69tDeuv0nqRNrso5cr63qleNvK2PsJA8zlKddSc=",
+        "owner": "MalpenZibo",
+        "repo": "ashell",
+        "rev": "973482269bc75e5ed6f1885c3384760bb97e30fa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "MalpenZibo",
+        "repo": "ashell",
+        "type": "github"
+      }
+    },
     "auto-cpufreq": {
       "inputs": {
         "nixpkgs": [
@@ -71,6 +93,21 @@
         "owner": "Mic92",
         "ref": "llm-agents",
         "repo": "bun2nix",
+        "type": "github"
+      }
+    },
+    "crane": {
+      "locked": {
+        "lastModified": 1780532242,
+        "narHash": "sha256-D+BsdpxmtUwtqGoY0IXPhHgTlmqgcZKCEo1oMyn7ep0=",
+        "owner": "ipetkov",
+        "repo": "crane",
+        "rev": "59a82a1222dd3b2080b5cc52a1a2e8d5f1b77f37",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ipetkov",
+        "repo": "crane",
         "type": "github"
       }
     },
@@ -405,6 +442,7 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
+        "ashell": "ashell",
         "auto-cpufreq": "auto-cpufreq",
         "disko": "disko",
         "home-manager": "home-manager",
@@ -422,6 +460,27 @@
         "sddm-chili-qt6": "sddm-chili-qt6",
         "sddm-tui": "sddm-tui",
         "systems": "systems_4"
+      }
+    },
+    "rust-overlay": {
+      "inputs": {
+        "nixpkgs": [
+          "ashell",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1780715792,
+        "narHash": "sha256-4+8gPeiPeud89mjo865RwpqmKwa1MThRsq2SvRxo7mg=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "27b7e78c6935293ee868469cc4172e9b8b17823b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
       }
     },
     "sddm-chili-qt6": {

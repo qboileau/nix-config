@@ -1,7 +1,7 @@
 # ashell (https://malpenzibo.github.io/ashell), selected with `hyprland.bar = "ashell"`.
 # Layout mirrors waybar.nix; audio/network/bluetooth/battery/power all live inside ashell's
 # single Settings menu instead of separate modules.
-{ pkgs, config, ... }:
+{ pkgs, config, inputs, ... }:
 let
   enabled = config.hyprland.bar == "ashell";
 
@@ -14,15 +14,7 @@ in
 {
   programs.ashell = {
     enable = enabled;
-    # 0.9.0 picks its dispatch protocol at runtime from `configProvider` in `hyprctl status`, so
-    # it drives both hyprlang and lua configs. nixpkgs 26.05 is still on 0.8.0, which only speaks
-    # the legacy hyprlang socket protocol — under a lua config the bar renders but workspace
-    # clicks do nothing. Hence unstable.
-    # nixpkgs' cargoUseSystemLibs hook exports AWS_LC_SYS_USE_SYSTEM=1 for every Rust package,
-    # but ashell's derivation omits aws-lc, so aws-lc-sys panics. Drop once nixpkgs adds it.
-    package = pkgs.unstable.ashell.overrideAttrs (old: {
-      buildInputs = old.buildInputs ++ [ pkgs.unstable.aws-lc ];
-    });
+    package = inputs.ashell.packages.${pkgs.stdenv.hostPlatform.system}.default;
     systemd.enable = true;
 
     # https://malpenzibo.github.io/ashell/docs/configuration

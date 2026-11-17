@@ -53,6 +53,9 @@
     # ironbar.url = "github:JakeStanger/ironbar";
     # ironbar.inputs.nixpkgs.follows = "nixpkgs";
 
+    ashell.url = "github:MalpenZibo/ashell";
+    ashell.inputs.nixpkgs.follows = "nixpkgs-unstable";
+
     noctalia.url = "github:noctalia-dev/noctalia-shell";
     noctalia.inputs.nixpkgs.follows = "nixpkgs";
     
