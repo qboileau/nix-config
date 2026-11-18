@@ -15,31 +15,47 @@ let
     "tsh" "tctl" "kubectx" "kubens" "k9s"
     "ssh" "scp" "sftp" "rsync"
   ];
+  # Unsandboxed so allow rules and the kube guard decide instead: local clusters live on the
+  # host loopback, docker needs its socket, gh carries GITHUB_TOKEN, the JVM build tools can't
+  # do Basic auth through the sandbox proxy (407), and nix's libgit2 chokes on the /dev/null
+  # mask the sandbox puts on a missing .gitmodules, so every local flake eval fails inside it.
+  unsandboxedTools = [ "kubectl" "helm" "flux" "gh" "docker" "nix" "nix-shell" "mvn" "./mvnw" "sbt" ];
+  # Builds still run in the nix daemon's own sandbox; run/shell/develop/profile keep prompting.
+  nixReadCommands = [
+    "nix eval" "nix build" "nix log" "nix path-info" "nix search"
+    "nix flake check" "nix flake metadata" "nix flake show"
+  ];
+  ghReadCommands = [
+    "gh release view" "gh release list"
+    "gh pr view" "gh pr list" "gh pr diff" "gh pr checks"
+    "gh issue view" "gh issue list"
+    "gh run view" "gh run list"
+    "gh repo view" "gh search"
+  ];
+  bashRule = cmd: "Bash(${cmd} *)";
   claudeSettings = {
     model = "opus";
+    sandbox = {
+      enabled = true;
+      autoAllowBashIfSandboxed = true;
+      excludedCommands = map (tool: "${tool} *") unsandboxedTools;
+      filesystem = {
+        # Toolchain caches only: bin dirs would let sandboxed code plant binaries run later outside it.
+        allowWrite = [ "~/.cache" "~/go/pkg" "~/.cargo/registry" "~/.cargo/git" "~/.npm" ];
+        denyRead = [ "~/.ssh" "~/.gnupg" "~/.aws" "~/.config/gcloud" "~/.kube" "~/.tsh" "~/.docker" ];
+      };
+      # api.github.com is left out on purpose: GITHUB_TOKEN is in the environment.
+      network.allowedDomains = [
+        "github.com" "*.githubusercontent.com"
+        "proxy.golang.org" "sum.golang.org"
+        "registry.npmjs.org" "pypi.org" "files.pythonhosted.org"
+        "index.crates.io" "static.crates.io"
+      ];
+    };
     permissions = {
       defaultMode = "acceptEdits";
-      allow = [
-        "Bash(eza *)"
-        "Bash(duf *)"
-        "Bash(bat *)"
-        "Bash(rg *)"
-        "Bash(fd *)"
-        "Bash(command cat *)"
-        "Bash(command grep *)"
-        "Bash(command ls *)"
-        "Bash(kubectl *)"
-        "Bash(helm *)"
-        "Bash(flux *)"
-      ];
-      ask = [
-        "Bash(bat *--pager*)"
-        "Bash(rg *--pre*)"
-        "Bash(rg *--hostname-bin*)"
-        "Bash(fd *--exec*)"
-        "Bash(fd *-x*)"
-        "Bash(fd *-X*)"
-      ] ++ map (tool: "Bash(${tool} *)") remoteInfraTools;
+      allow = map bashRule (ghReadCommands ++ nixReadCommands ++ [ "kubectl" "helm" "flux" ]);
+      ask = map bashRule remoteInfraTools ++ [ "Bash(git push*)" ];
     };
     hooks = {
       PreToolUse = [
@@ -70,7 +86,12 @@ let
       }];
     };
   };
-  systemToolsInstructions = ''
+  claudeToolsInstructions = ''
+    # Tools
+
+    - Prefer the built-in Read, Grep and Glob tools over shell commands for reading and searching files.
+  '';
+  cliToolsInstructions = ''
     # System CLI Tool Replacements
 
     This system uses modern CLI replacements. When running terminal commands,
@@ -92,23 +113,23 @@ let
     - Use `eza` instead of `ls`. Common flags: `--tree`, `--git`, `-lah`.
     - Use `fd` instead of `find`. Syntax: `fd <pattern>` instead of `find . -name <pattern>`.
     - Shell aliases are set: `cat=bat`, `grep=rg`, `ls=eza`, `df=duf`. Avoid piping alias-incompatible flags.
-    - When you need the plain POSIX behavior (e.g., for scripting or parsing), bypass the alias with the `command` builtin: `command cat`, `command grep`, `command ls`, `command find`. Never use `$(which …)`: command substitution always triggers a permission prompt.
-    - The system runs NixOS. Binaries are in `/run/current-system/sw/bin/` or `~/.nix-profile/bin/`, not `/usr/bin/`.
+    - When you need the plain POSIX behavior (e.g., for scripting or parsing), bypass the alias with the `command` builtin: `command cat`, `command grep`, `command ls`, `command find`.
+  '';
+  commonInstructions = ''
 
     ## Nix development environments
 
-    Always check for `flake.nix` or `shell.nix` in the project root before running terminal commands.
-    - If `flake.nix` exists, wrap every command with: `nix develop --command bash -c '<command>'`
-    - If `shell.nix` exists, wrap every command with: `nix-shell --run '<command>'`
-    - Commands that are already prefixed with `nix develop` or `nix-shell` do not need wrapping.
-    - A PreToolUse hook enforces this: bare commands will be blocked. Retry with the wrapped version from the hook output.
+    - The system runs NixOS. Binaries are in `/run/current-system/sw/bin/` or `~/.nix-profile/bin/`, not `/usr/bin/`.
+    - If `$IN_NIX_SHELL` is set, the project dev environment is already loaded (direnv): run commands directly, never wrap them.
+    - Otherwise, run project toolchain commands (compilers, linters, test runners…) as `nix develop --command <cmd> <args>` when the project root has a `flake.nix`, or `nix-shell --run '<cmd>'` when it has a `shell.nix`. Never wrap them in `bash -c`.
+    - System tools (`git`, `gh`, `jq`, `kubectl`, `rg`, `fd`…) are always on `PATH`: never wrap them.
+    - Never run binaries you downloaded (e.g. into the scratchpad) or override the toolchain (e.g. `GOTOOLCHAIN`) without asking me first.
 
     ## Remote infrastructure
 
     - Never change remote or cloud infrastructure yourself (`aws`, `gcloud`, `terraform apply`, `kubectl`/`helm` against a non-local cluster, `ssh` to a server…). Give me the exact command, I run it and paste the output back.
     - Read-only inspection of remote infrastructure needs my approval: expect a prompt and say why you need it.
-    - Local Kubernetes clusters (k3d, kind, minikube, docker-desktop…) can be used freely with `kubectl`, `helm` and `flux`.
-    - Always pass the target context explicitly (`kubectl --context <ctx>`, `helm --kube-context <ctx>`, `flux --context <ctx>`): never rely on the current context, it may point to a remote cluster. List contexts with `kubectl config get-contexts`; never switch it with `use-context`.
+    - Local Kubernetes clusters (k3d, kind, minikube, docker-desktop…) can be used freely with `kubectl`, `helm` and `flux`, always passing the target context explicitly (`kubectl --context <ctx>`, `helm --kube-context <ctx>`, `flux --context <ctx>`): the current context may point to a remote cluster. List contexts with `kubectl config get-contexts`; never switch it with `use-context`.
 
     ## Code style principles
 
@@ -139,7 +160,6 @@ let
     - Every plan, todo list or task breakdown that touches code ends with a review step: "check the diff against the code style principles".
     - Before reporting any coding task as done, self-review your own diff and verify: no comment that restates the code, no commented-out code, no avoidable runtime guard for a state the type system could make unrepresentable, no abstraction with a single use.
     - Fix what the self-review finds before reporting completion — don't report it as a known caveat.
-    - After a context compaction or a long session, re-read these principles before continuing to edit code.
   '';
 in {
   options = {
@@ -200,13 +220,13 @@ in {
         applyTo: "**"
         description: "System CLI tool replacements: bat for cat, rg for grep, eza for ls, fd for find. Use when running terminal commands."
         ---
-      '' + systemToolsInstructions;
+      '' + cliToolsInstructions + commonInstructions;
     };
 
     programs.opencode = {
       enable = true;
       package = pkgs.unstable.opencode;
-      context = systemToolsInstructions;
+      context = cliToolsInstructions + commonInstructions;
       agents = {
         # https://github.com/nix-community/home-manager/blob/release-25.11/modules/programs/opencode.nix#L157
       };
@@ -239,7 +259,7 @@ in {
 
     # Claude Code - global instructions via ~/.claude/CLAUDE.md
     home.file.".claude/CLAUDE.md" = {
-      text = systemToolsInstructions;
+      text = claudeToolsInstructions + commonInstructions;
     };
   })
 
