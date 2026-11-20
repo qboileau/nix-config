@@ -41,7 +41,7 @@
           }
         ];
       };
-    };  
+    };
 
     programs.ghostty = lib.mkIf (config.terminal.default == "ghostty") {
       enable = true;
@@ -90,10 +90,11 @@
           load_dotenv = true;
         };
         whitelist = {
-          prefix = [ 
+          prefix = [
             "${config.home.homeDirectory}/projects/perso"
             "${config.home.homeDirectory}/projects/work"
             "${config.home.homeDirectory}/projects/conduktor"
+            "${config.home.homeDirectory}/orca/workspaces"
           ];
         };
       };

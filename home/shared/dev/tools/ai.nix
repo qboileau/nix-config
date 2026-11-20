@@ -5,7 +5,7 @@ let
   boucleHooks = pkgs.local.boucle-framework-hooks;
   kubeLocalGuard = pkgs.writeShellApplication {
     name = "kube-local-guard";
-    runtimeInputs = with pkgs; [ jq kubectl gnugrep gnused ];
+    runtimeInputs = with pkgs; [ jq kubectl shfmt ];
     text = builtins.readFile ./kube-local-guard.sh;
   };
   # Listed under `ask` so a project's settings or a "don't ask again" click can't allow them.
@@ -55,9 +55,17 @@ let
     permissions = {
       defaultMode = "acceptEdits";
       allow = map bashRule (ghReadCommands ++ nixReadCommands ++ [ "kubectl" "helm" "flux" ]);
-      ask = map bashRule remoteInfraTools ++ [ "Bash(git push*)" ];
+      ask = map bashRule remoteInfraTools ++ [ "Bash(git push*)" "Bash(helm push*)" "Bash(flux push*)" ];
     };
     hooks = {
+      # Loads the project's (already `direnv allow`ed) dev env into every Bash command, so sessions
+      # not started from a direnv shell (Orca, IDEs) need no `nix develop`.
+      SessionStart = [{
+        hooks = [{
+          type = "command";
+          command = "${lib.getExe config.programs.direnv.package} export bash >> \"$CLAUDE_ENV_FILE\"";
+        }];
+      }];
       PreToolUse = [
         {
           matcher = "Read";
@@ -121,7 +129,7 @@ let
 
     - The system runs NixOS. Binaries are in `/run/current-system/sw/bin/` or `~/.nix-profile/bin/`, not `/usr/bin/`.
     - If `$IN_NIX_SHELL` is set, the project dev environment is already loaded (direnv): run commands directly, never wrap them.
-    - Otherwise, run project toolchain commands (compilers, linters, test runners…) as `nix develop --command <cmd> <args>` when the project root has a `flake.nix`, or `nix-shell --run '<cmd>'` when it has a `shell.nix`. Never wrap them in `bash -c`.
+    - Otherwise, run project toolchain commands (compilers, linters, test runners…) as `nix develop --command <cmd> <args>` when the project root has a `flake.nix`, or `nix-shell --run '<cmd>'` when it has a `shell.nix`. Never wrap them in `bash -c`, and run them as a standalone command (no pipe, `;` or `&&`).
     - System tools (`git`, `gh`, `jq`, `kubectl`, `rg`, `fd`…) are always on `PATH`: never wrap them.
     - Never run binaries you downloaded (e.g. into the scratchpad) or override the toolchain (e.g. `GOTOOLCHAIN`) without asking me first.
 
